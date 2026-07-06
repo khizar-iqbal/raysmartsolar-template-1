@@ -1,0 +1,367 @@
+---
+import { Image } from 'astro:assets';
+import Layout from '~/layouts/Layout.astro';
+import PageHero from '~/components/PageHero.astro';
+import SectionHead from '~/components/SectionHead.astro';
+import CTABand from '~/components/CTABand.astro';
+import FAQ from '~/components/FAQ.astro';
+import Icon from '~/components/Icon.astro';
+import { site } from '~/config/site';
+import {
+  COMMERCIAL_RATE,
+  COMMERCIAL_PER_KW,
+  PRICES_AS_OF,
+  FINANCING,
+  NET_BILLING,
+} from '~/data/facts';
+import heroBusiness from '~/assets/photos/hero-business.jpg';
+import commWarehouse from '~/assets/photos/comm-warehouse.jpg';
+
+const title = 'Commercial & Industrial Solar (25 kW–1 MW) | RaySmartSolar';
+const description =
+  'Commercial power costs Rs 45–60 a unit all-in. Daytime-heavy loads mean rooftop solar often pays back in under 3 years — honest C&I math from 25 kW to 1 MW.';
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: 'Commercial and industrial solar installation (25 kW–1 MW)',
+    description,
+    provider: { '@id': `${site.url}/#business` },
+    areaServed: ['Lahore', 'Karachi', 'Islamabad', 'Rawalpindi', 'Faisalabad', 'Multan'],
+    serviceType: 'Commercial rooftop solar EPC, financing structures and net-billing paperwork',
+  },
+];
+
+const sizeBands = [
+  {
+    icon: 'building' as const,
+    range: '25–100 kW',
+    body: 'Schools, clinics, plazas, cold rooms, SME workshops. Standard prosumer file, the quickest approvals — the sweet spot for a first system.',
+  },
+  {
+    icon: 'layers' as const,
+    range: '100–250 kW',
+    body: 'Mid-size factories and warehouses. Sanctioned load usually becomes the binding constraint here — upgrading it is often step one, and we run that file too.',
+  },
+  {
+    icon: 'gauge' as const,
+    range: '250 kW – 1 MW',
+    body: 'The regulations require load-flow / technical studies before approval at this scale. We conduct them, design around your transformer, and stage the build so production never waits.',
+  },
+];
+
+const execPoints = [
+  'Phased installation, planned tie-in: structure and panels go up zone by zone during normal operations. The grid tie-in happens in an agreed, written window — usually your off day — and is rehearsed on paper first.',
+  'Voltage stability: generation at the point of use props up sagging daytime voltage on stressed feeders, so drives and compressors run calmer through summer.',
+  'One named project manager: drawings, method statement, daily photo updates, and a WhatsApp number that answers — the same person from survey to commissioning.',
+  'Roof discipline: structural load check before a single rail goes down, clamp systems on sheet roofs, elevated frames on RCC, and walkways that leave maintenance access forever.',
+];
+
+const faqs = [
+  {
+    q: 'Will installation disrupt production?',
+    a: 'That risk gets designed out, not hoped away. Structural and panel work proceeds zone by zone during normal operations; the only interruption is the grid tie-in, done in a written, agreed window — typically your weekly off day — with a rollback plan. A 100 kW roof usually runs 2–3 weeks end to end.',
+  },
+  {
+    q: 'Can our roof carry the weight?',
+    a: 'Panels and mounting spread roughly 15–20 kg per square metre. Pre-engineered sheet roofs take clamp systems that grip the seams without penetration; RCC roofs get elevated frames. Every project starts with a structural assessment, in writing — and if the roof needs remediation first, we say so before you commit a rupee.',
+  },
+  {
+    q: 'What happens to Sunday and holiday generation?',
+    a: `It exports. Under the 2026 net-billing rules exported units earn the NEPRA-set rate — reported around ${NET_BILLING.exportRateRange} per unit — while your imports cost Rs ${COMMERCIAL_RATE.low}–${COMMERCIAL_RATE.high} all-in. That gap is exactly why we size for working-day self-consumption and treat idle-day exports as a bonus, never the business case.`,
+  },
+  {
+    q: 'Do you offer maintenance contracts?',
+    a: 'Yes — cleaning cadence matched to your environment (textile lint and road dust are different problems), thermal scans of every joint, inverter servicing and response commitments, quoted by system size in writing. The full scope lives on the <a href="/maintenance">maintenance page</a>. We also adopt systems other installers left behind.',
+  },
+  {
+    q: 'We operate multiple sites — can you handle that?',
+    a: 'Yes, and it usually comes out cheaper per kW: one survey pass, portfolio pricing, and a staged rollout so lessons from site one reach site five. Each meter still needs its own prosumer application — we run the files in parallel and report every site in one dashboard grouping.',
+  },
+];
+---
+
+<Layout {title} {description} {jsonLd} heroNav>
+  <PageHero
+    eyebrow="Commercial & industrial"
+    title="Your biggest overhead, turned into an asset."
+    titleHtml="Your biggest overhead, <em>turned into an asset.</em>"
+    lede="Commercial connections pay some of Pakistan’s harshest all-in tariffs, and most of your load runs in daylight — exactly the profile solar rewards. Here’s the math your CFO will ask for, before anyone books a meeting."
+    image={heroBusiness}
+    imageAlt="Sun setting over the roofline of a commercial building"
+    imagePosition="50% 42%"
+  >
+    <Fragment slot="actions">
+      <a href="/calculator?type=business" class="btn btn-gold" data-evt="calc_open" data-evt-src="business_hero">
+        <Icon name="calculator" size={18} /> Run the business math
+      </a>
+      <a href="/quote?src=business" class="btn btn-ghost" data-evt="quote_open" data-evt-src="business_hero">
+        Book a site survey <Icon name="arrow-right" size={17} />
+      </a>
+    </Fragment>
+  </PageHero>
+
+  <!-- The C&I math -->
+  <section class="section">
+    <div class="wrap">
+      <SectionHead
+        eyebrow={`The C&I math · ${PRICES_AS_OF}`}
+        title="Why factory roofs pay back fastest"
+        titleHtml="Why factory roofs pay back <em>fastest</em>"
+        lede="Three numbers do most of the convincing. All three are ranges, because honest numbers are."
+      />
+      <div class="grid gap-4 md:grid-cols-3 mt-12" data-reveal-group>
+        <div class="card p-7" data-reveal-child>
+          <p class="mono-num text-4xl sm:text-5xl text-accent">
+            Rs {COMMERCIAL_RATE.low}–{COMMERCIAL_RATE.high}
+          </p>
+          <p class="text-ink-2 mt-3">
+            per unit is what commercial connections actually pay once taxes and adjustments land.
+            Every unit your roof replaces saves the full amount.
+          </p>
+        </div>
+        <div class="card p-7" data-reveal-child>
+          <p class="mono-num text-4xl sm:text-5xl text-accent">60%+</p>
+          <p class="text-ink-2 mt-3">
+            of generation is used on the spot in daytime-heavy operations — six-day weeks, machines
+            running while the sun is up. High self-use is what makes the 2026 net-billing rules work
+            in your favour.
+          </p>
+        </div>
+        <div class="card p-7" data-reveal-child>
+          <p class="mono-num text-4xl sm:text-5xl text-accent">2–3 <span class="text-2xl">yrs</span></p>
+          <p class="text-ink-2 mt-3">
+            typical payback for daytime-heavy single-shift loads — sometimes faster. Night-shift or
+            weekend-idle sites stretch longer; we model yours from actual load data, not a brochure.
+          </p>
+        </div>
+      </div>
+
+      <div class="card p-6 mt-6 border-gold/30" data-reveal>
+        <p class="flex items-start gap-3 text-ink-2">
+          <Icon name="banknote" size={18} class="text-gold mt-0.5 shrink-0" />
+          <span>
+            <strong class="text-ink">Capex, honestly ranged:</strong> at 50–100 kW scale, turnkey
+            Tier-1 currently runs about
+            <strong class="text-ink">Rs {COMMERCIAL_PER_KW.low / 1000}–{COMMERCIAL_PER_KW.high / 1000}k per kW</strong>
+            (as of {PRICES_AS_OF}); larger roofs negotiate lower. Your written proposal itemises
+            hardware, taxes and government fees separately, and the price is confirmed at the site survey.
+          </span>
+        </p>
+      </div>
+
+      <p class="text-sm text-ink-3 mt-6 max-w-2xl" data-reveal>
+        Our sizing logic is the same one in the public calculator: self-used units valued at your
+        full tariff, exports at the NEPRA rate, payback quoted as a range with the assumptions
+        printed. <a href="/calculator?type=business" class="link-gold" data-evt="calc_open" data-evt-src="business_math">Try it with your bill</a>.
+      </p>
+    </div>
+  </section>
+
+  <!-- Sizes -->
+  <section class="section pt-0">
+    <div class="wrap">
+      <SectionHead
+        eyebrow="From plaza to plant"
+        title="25 kW to 1 MW, sized to your sanctioned load"
+        lede={`The 2026 rules are blunt: ${NET_BILLING.sanctionedLoadRule}, with an absolute cap of ${NET_BILLING.capMw} MW. Where you sit in the range changes the engineering and the paperwork.`}
+      />
+      <div class="grid gap-4 md:grid-cols-3 mt-12" data-reveal-group>
+        {
+          sizeBands.map((band) => (
+            <div class="card p-7" data-reveal-child>
+              <span class="biz-icon">
+                <Icon name={band.icon} size={18} />
+              </span>
+              <p class="mono-num text-2xl mt-4 text-accent">{band.range}</p>
+              <p class="text-sm text-ink-2 mt-2">{band.body}</p>
+            </div>
+          ))
+        }
+      </div>
+      <p class="text-sm text-ink-3 mt-6 max-w-2xl" data-reveal>
+        Also real: {NET_BILLING.transformerRule} — one more reason the early movers on an industrial
+        feeder have the easier file.
+      </p>
+    </div>
+  </section>
+
+  <!-- Structures -->
+  <section class="section pt-0">
+    <div class="wrap">
+      <SectionHead
+        eyebrow="Ways to pay"
+        title="Four structures. Zero-upfront exists."
+        lede="From straight capex to paying only per generated unit — all four are standard in Pakistan now. Which one fits depends on your balance sheet, not ours."
+      />
+      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 mt-12" data-reveal-group>
+        <div class="card p-6" data-reveal-child>
+          <span class="biz-icon"><Icon name="banknote" size={18} /></span>
+          <p class="font-display text-[1.15rem] mt-4">Outright purchase</p>
+          <p class="text-sm text-ink-2 mt-2">
+            Fastest payback and the cleanest books — the asset and every saved rupee are yours from
+            day one.
+          </p>
+        </div>
+        <div class="card p-6" data-reveal-child>
+          <span class="biz-icon"><Icon name="filecheck" size={18} /></span>
+          <p class="font-display text-[1.15rem] mt-4">Bank financing</p>
+          <p class="text-sm text-ink-2 mt-2">
+            Live at several banks with tenors up to 10 years — {FINANCING.markupContext}. We prepare
+            the technical file lenders ask for.
+          </p>
+        </div>
+        <div class="card p-6" data-reveal-child>
+          <span class="biz-icon"><Icon name="clock" size={18} /></span>
+          <p class="font-display text-[1.15rem] mt-4">Lease / Ijarah</p>
+          <p class="text-sm text-ink-2 mt-2">
+            Asset-backed, Shariah-compliant options on ~5-year tenors. The sweet spot sits between
+            50 and 500 kW — working capital stays in the business.
+          </p>
+        </div>
+        <div class="card p-6" data-reveal-child>
+          <span class="biz-icon"><Icon name="trending" size={18} /></span>
+          <p class="font-display text-[1.15rem] mt-4">PPA / BOOT</p>
+          <p class="text-sm text-ink-2 mt-2">
+            Above ~500 kW: a developer builds, owns and operates the plant on your roof; you buy the
+            units below your grid rate, zero upfront, asset transfers at term end.
+          </p>
+        </div>
+      </div>
+      <p class="text-sm text-ink-3 mt-6" data-reveal>
+        The honest comparison — including why the dead SBP concessional scheme still haunts sales
+        pitches — lives on the <a href="/financing" class="link-gold">financing page</a>.
+      </p>
+    </div>
+  </section>
+
+  <!-- Execution -->
+  <section class="section theme-night">
+    <div class="wrap">
+      <SectionHead
+        eyebrow="Execution"
+        title="What factory owners actually ask us"
+        lede="Not about panels. About production, roofs and who answers the phone. Fair questions — here are the working answers."
+      />
+      <div class="grid gap-10 md:grid-cols-2 mt-12 items-start">
+        <div class="grid gap-4" data-reveal-group>
+          <p class="text-ink-2" data-reveal-child>
+            The brief from every plant we visit is the same —
+            <em class="fx-it" lang="ur-Latn">kaam nahin rukna chahiye</em>. The install has to fit
+            around production, not the other way around. So:
+          </p>
+          {
+            execPoints.map((item) => (
+              <p class="flex items-start gap-3 text-ink-2" data-reveal-child>
+                <span class="check-dot">
+                  <Icon name="check" size={13} />
+                </span>
+                {item}
+              </p>
+            ))
+          }
+        </div>
+        <figure class="ph rounded-2xl overflow-hidden" data-reveal>
+          <Image
+            src={commWarehouse}
+            alt="Aerial view of solar panels covering a warehouse rooftop"
+            widths={[480, 800, 1200]}
+            sizes="(min-width: 768px) 50vw, 100vw"
+            format="avif"
+            quality={60}
+            loading="lazy"
+          />
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- Monitoring & reporting -->
+  <section class="section">
+    <div class="wrap">
+      <SectionHead
+        eyebrow="After commissioning"
+        title="Dashboards for the owner. Reports for the CFO."
+        lede="A C&I system is a generating asset — it should report like one."
+      />
+      <div class="grid gap-4 md:grid-cols-3 mt-12" data-reveal-group>
+        <div class="card p-7" data-reveal-child>
+          <span class="biz-icon"><Icon name="gauge" size={18} /></span>
+          <p class="font-display text-[1.15rem] mt-4">Live, on your account</p>
+          <p class="text-sm text-ink-2 mt-2">
+            Per-inverter monitoring registered to your company, not to us. We keep read access for
+            alerts and call you when a string sags — before it shows up in a bill.
+          </p>
+        </div>
+        <div class="card p-7" data-reveal-child>
+          <span class="biz-icon"><Icon name="filecheck" size={18} /></span>
+          <p class="font-display text-[1.15rem] mt-4">A monthly page worth reading</p>
+          <p class="text-sm text-ink-2 mt-2">
+            Units generated, self-used vs exported, rupee value at your tariff, and performance
+            against expectation — one page a busy owner will actually open.
+          </p>
+        </div>
+        <div class="card p-7" data-reveal-child>
+          <span class="biz-icon"><Icon name="trending" size={18} /></span>
+          <p class="font-display text-[1.15rem] mt-4">Numbers finance can audit</p>
+          <p class="text-sm text-ink-2 mt-2">
+            CSV exports and savings-vs-projection tracking, so the payback we quoted becomes a line
+            your accountant can verify — not a slide from a pitch deck.
+          </p>
+        </div>
+      </div>
+      <div class="mt-10" data-reveal>
+        <a href="/quote?src=business_monitoring" class="btn btn-gold" data-evt="quote_open" data-evt-src="business_monitoring">
+          <Icon name="filecheck" size={18} /> Get a site assessment
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section pt-0">
+    <div class="wrap max-w-3xl">
+      <SectionHead eyebrow="Straight answers" title="What owners and plant managers ask" />
+      <div class="mt-10">
+        <FAQ items={faqs} schema />
+      </div>
+    </div>
+  </section>
+
+  <section class="section pt-0">
+    <div class="wrap">
+      <CTABand
+        heading="Put your roof on the payroll."
+        sub="Send a recent bill and a photo of the roof — we come back with an honest range, then a survey slot that suits your shift schedule."
+        primaryHref="/quote?src=business"
+        primaryLabel="Book a site survey"
+        primaryIcon="filecheck"
+        evtSrc="business_final"
+      />
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .biz-icon {
+    display: grid;
+    place-items: center;
+    width: 2.4rem;
+    height: 2.4rem;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--gold) 15%, transparent);
+    color: var(--gold);
+  }
+  .check-dot {
+    flex: none;
+    width: 1.45rem;
+    height: 1.45rem;
+    margin-top: 0.15rem;
+    border-radius: 999px;
+    display: grid;
+    place-items: center;
+    background: color-mix(in srgb, var(--gold) 16%, transparent);
+    color: var(--gold);
+  }
+</style>

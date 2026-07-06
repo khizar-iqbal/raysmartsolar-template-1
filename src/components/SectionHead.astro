@@ -1,0 +1,48 @@
+---
+interface Props {
+  eyebrow?: string;
+  title: string;
+  /** Allows rich HTML in the title (e.g. italic gold accents via <em>) */
+  titleHtml?: string;
+  lede?: string;
+  align?: 'left' | 'center';
+  class?: string;
+}
+const { eyebrow, title, titleHtml, lede, align = 'left', class: className = '' } = Astro.props;
+---
+
+<div
+  class:list={[
+    'section-head max-w-2xl',
+    align === 'center' && 'mx-auto text-center',
+    className,
+  ]}
+  data-reveal-group
+>
+  {eyebrow && (
+    <p class:list={['eyebrow mb-4', align === 'center' && 'justify-center']} data-reveal-child>
+      {eyebrow}
+    </p>
+  )}
+  {
+    titleHtml ? (
+      <h2 class="font-display text-h2 text-balance" data-reveal-child set:html={titleHtml} />
+    ) : (
+      <h2 class="font-display text-h2 text-balance" data-reveal-child>
+        {title}
+      </h2>
+    )
+  }
+  {lede && <p class="text-lede text-ink-2 mt-5 text-pretty" data-reveal-child>{lede}</p>}
+</div>
+
+<style>
+  .section-head :global(em) {
+    font-style: italic;
+    font-weight: 420;
+    color: var(--accent-text);
+  }
+  .section-head :global(h2) {
+    letter-spacing: -0.015em;
+  }
+</style>

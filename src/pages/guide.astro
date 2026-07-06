@@ -1,0 +1,333 @@
+---
+import Layout from '~/layouts/Layout.astro';
+import PageHero from '~/components/PageHero.astro';
+import CTABand from '~/components/CTABand.astro';
+import Icon from '~/components/Icon.astro';
+import { site, waLink } from '~/config/site';
+
+const title = 'The Solar Buyer’s Guide (Pakistan, 2026) | RaySmartSolar';
+const description =
+  'The free guide that scam-proofs your solar purchase — 2026 prices and rules, sizing maths, the ten-scam checklist and 12 questions that expose a weak installer.';
+
+const waHref = site.phone.live
+  ? waLink('Assalam-o-alaikum RaySmartSolar — please send me the Solar Buyer’s Guide.')
+  : '/quote?src=guide';
+
+const inside = [
+  { icon: 'shield' as const, text: 'The ten-scam checklist — every pattern in the market, each with “how to catch it”' },
+  { icon: 'filecheck' as const, text: '12 questions to ask any installer (including us), with what good answers sound like' },
+  { icon: 'gauge' as const, text: 'Sizing maths: bill → units → panels → roof, worked through three real bill sizes' },
+  { icon: 'banknote' as const, text: 'True price bands by system size, as of July 2026 — plus what a fair quote itemises' },
+  { icon: 'meter' as const, text: 'Net billing in plain words, and what the 2026 rules do to system design' },
+  { icon: 'panel' as const, text: 'Hardware tiers, documented vs undocumented panels, batteries — and a small Roman-Urdu glossary' },
+];
+---
+
+<Layout {title} {description}>
+  <PageHero
+    eyebrow="Free · read it in 14 minutes"
+    title="The Solar Buyer’s Guide (Pakistan, 2026)"
+    titleHtml="The Solar Buyer’s Guide <em>(Pakistan, 2026)</em>"
+    lede="Everything we’d check before buying solar for our own homes — honest prices, the 2026 rules, the ten scams and the twelve questions that expose a weak installer. Written to work against any company, including us."
+  />
+
+  <section class="section pt-10 sm:pt-14">
+    <div class="wrap grid gap-8 lg:grid-cols-[1.15fr_1fr] lg:gap-14 items-start">
+      <!-- What's inside -->
+      <div>
+        <p class="eyebrow mb-5" data-reveal>What’s inside</p>
+        <div class="grid gap-x-8 gap-y-4" data-reveal-group>
+          {
+            inside.map((item) => (
+              <p class="flex items-start gap-3 text-ink-2" data-reveal-child>
+                <span class="inside-dot">
+                  <Icon name={item.icon} size={15} />
+                </span>
+                {item.text}
+              </p>
+            ))
+          }
+        </div>
+        <p class="text-sm text-ink-3 mt-8 max-w-lg" data-reveal>
+          It ends with a dare: take the checklist to three companies and watch who answers in
+          numbers. We put our own name on that list — that’s how confident we are in the honest
+          maths.
+        </p>
+      </div>
+
+      <!-- Access card -->
+      <div class="card p-7 sm:p-8" data-reveal aria-live="polite">
+        <!-- form panel -->
+        <div data-g-panel="form">
+          <p class="font-display text-h3">Open the guide</p>
+          <p class="text-sm text-ink-2 mt-2">
+            An email <em class="fx-it">or</em> a phone number — either one — and you’re reading in
+            ten seconds. We note the interest, and that’s all we do with it. No spam, ever.
+          </p>
+          <form class="mt-6 grid gap-4" data-guide-form novalidate>
+            <div>
+              <label class="g-label" for="g-name">Name <span class="text-ink-3">(optional)</span></label>
+              <input id="g-name" class="g-input" type="text" autocomplete="name" placeholder="Your name" data-g-name />
+            </div>
+            <div>
+              <label class="g-label" for="g-email">Email</label>
+              <input id="g-email" class="g-input" type="email" inputmode="email" autocomplete="email" placeholder="you@example.com" data-g-email />
+            </div>
+            <p class="g-or" aria-hidden="true">— or —</p>
+            <div>
+              <label class="g-label" for="g-phone">Phone / WhatsApp</label>
+              <input id="g-phone" class="g-input mono-num" type="tel" inputmode="tel" autocomplete="tel" placeholder="03XX XXXXXXX" data-g-phone />
+            </div>
+            <!-- honeypot -->
+            <div class="hp" aria-hidden="true">
+              <label>Website<input type="text" name="website" tabindex="-1" autocomplete="off" data-g-website /></label>
+            </div>
+            <p class="err" data-g-err hidden></p>
+            <button type="submit" class="btn btn-gold btn-lg w-full" data-g-submit data-evt="guide_submit">
+              <Icon name="download" size={18} /> Read the guide now
+            </button>
+            <p class="text-xs text-ink-3 text-center">
+              By continuing you agree to our <a href="/privacy" class="underline underline-offset-2">privacy policy</a>.
+            </p>
+          </form>
+        </div>
+
+        <!-- success panel -->
+        <div data-g-panel="done" hidden>
+          <div class="done-sun" aria-hidden="true">
+            <Icon name="sunrise" size={34} class="text-gold" />
+          </div>
+          <p class="font-display text-h3">It’s yours.</p>
+          <p class="text-sm text-ink-2 mt-2">
+            We’ve noted your interest — no spam, ever. If a question bites while you read, send it
+            to us; hard questions are our favourite kind.
+          </p>
+          <a
+            href="/learn/buyers-guide"
+            class="btn btn-gold btn-lg w-full mt-6"
+            data-g-read
+            data-evt="guide_open"
+            data-evt-src="guide_success"
+          >
+            <Icon name="arrow-right" size={18} /> Read it now
+          </a>
+        </div>
+
+        <!-- failure panel: never gate hard -->
+        <div data-g-panel="fail" hidden>
+          <p class="font-display text-h3">That didn’t send — the guide is still yours.</p>
+          <p class="text-sm text-ink-2 mt-2">
+            A connection hiccup on our side shouldn’t cost you the reading. Go ahead — and if you’d
+            like us to have your details anyway, try again in a minute or ping us directly.
+          </p>
+          <div class="grid gap-3 mt-6">
+            <a
+              href="/learn/buyers-guide"
+              class="btn btn-gold btn-lg w-full"
+              data-evt="guide_open"
+              data-evt-src="guide_fail"
+            >
+              <Icon name="arrow-right" size={18} /> Read it anyway
+            </a>
+            <a
+              href={waHref}
+              target={site.phone.live ? '_blank' : undefined}
+              rel={site.phone.live ? 'noopener' : undefined}
+              class="btn btn-wa w-full"
+              data-evt={site.phone.live ? 'wa_click' : 'quote_open'}
+              data-evt-src="guide_fail"
+            >
+              <Icon name="whatsapp" size={18} />
+              {site.phone.live ? 'Ask for it on WhatsApp' : 'Talk to us instead'}
+            </a>
+            <button type="button" class="btn btn-ghost w-full" data-g-retry>Try sending again</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section pt-0">
+    <div class="wrap">
+      <CTABand
+        heading="Prefer numbers to reading?"
+        sub="The calculator gives you size, price band and payback for your own bill in under a minute — every assumption printed."
+        evtSrc="guide_final"
+      />
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .inside-dot {
+    flex: none;
+    width: 1.6rem;
+    height: 1.6rem;
+    margin-top: 0.1rem;
+    border-radius: 999px;
+    display: grid;
+    place-items: center;
+    background: color-mix(in srgb, var(--gold) 15%, transparent);
+    color: var(--gold);
+  }
+  .g-label {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--text-3);
+    margin-bottom: 0.4rem;
+  }
+  .g-input {
+    width: 100%;
+    border: 1px solid var(--line-strong);
+    border-radius: 0.9rem;
+    background: color-mix(in srgb, var(--bg) 55%, transparent);
+    padding: 0.8rem 1rem;
+    font-size: 1rem;
+    color: var(--text);
+    caret-color: var(--gold);
+    transition: border-color 150ms;
+  }
+  .g-input:focus {
+    outline: none;
+    border-color: var(--gold);
+  }
+  .g-input::placeholder {
+    color: var(--text-3);
+    opacity: 0.55;
+  }
+  .g-or {
+    text-align: center;
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-3);
+    margin: -0.2rem 0;
+  }
+  .err {
+    color: var(--danger);
+    font-size: 0.9rem;
+  }
+  .hp {
+    position: absolute;
+    left: -9999px;
+    top: auto;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+  .done-sun {
+    width: 4rem;
+    height: 4rem;
+    border-radius: 999px;
+    display: grid;
+    place-items: center;
+    background: color-mix(in srgb, var(--gold) 14%, transparent);
+    border: 1px solid color-mix(in srgb, var(--gold) 45%, transparent);
+    margin-bottom: 1.2rem;
+  }
+</style>
+
+<script>
+  import { track } from '~/scripts/app';
+
+  function initGuideForm() {
+    const form = document.querySelector<HTMLFormElement>('[data-guide-form]');
+    if (!form || form.dataset.bound) return;
+    form.dataset.bound = '1';
+
+    const mountedAt = Date.now();
+    const nameEl = document.querySelector<HTMLInputElement>('[data-g-name]')!;
+    const emailEl = document.querySelector<HTMLInputElement>('[data-g-email]')!;
+    const phoneEl = document.querySelector<HTMLInputElement>('[data-g-phone]')!;
+    const hpEl = document.querySelector<HTMLInputElement>('[data-g-website]')!;
+    const errEl = document.querySelector<HTMLElement>('[data-g-err]')!;
+    const btn = document.querySelector<HTMLButtonElement>('[data-g-submit]')!;
+    const panels = new Map<string, HTMLElement>();
+    document.querySelectorAll<HTMLElement>('[data-g-panel]').forEach((el) => panels.set(el.dataset.gPanel!, el));
+
+    const showPanel = (id: string) => {
+      panels.forEach((el, key) => (el.hidden = key !== id));
+      if (id === 'done') document.querySelector<HTMLAnchorElement>('[data-g-read]')?.focus();
+    };
+    const showErr = (msg: string | null) => {
+      errEl.hidden = !msg;
+      if (msg) errEl.textContent = msg;
+    };
+
+    const emailOk = (s: string) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(s);
+    const phoneOk = (s: string) => /^(?:\+?92|0)?3\d{9}$/.test(s.replace(/[^\d+]/g, ''));
+
+    let submitting = false;
+
+    async function submit() {
+      if (submitting) return;
+      const name = nameEl.value.trim();
+      const email = emailEl.value.trim();
+      const phone = phoneEl.value.trim();
+
+      if (!email && !phone) {
+        showErr('An email or a phone number — either one — and you’re in.');
+        emailEl.focus();
+        return;
+      }
+      if (email && !emailOk(email)) {
+        showErr('That email doesn’t look quite right — one more look?');
+        emailEl.focus();
+        return;
+      }
+      if (phone && !phoneOk(phone)) {
+        showErr('That doesn’t look like a Pakistani mobile — 03XX XXXXXXX works best (or just use email).');
+        phoneEl.focus();
+        return;
+      }
+      showErr(null);
+
+      submitting = true;
+      const original = btn.innerHTML;
+      btn.innerHTML = 'Opening…';
+      btn.disabled = true;
+
+      try {
+        const res = await fetch('/api/lead', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            kind: 'guide',
+            name: name || 'Guide reader',
+            email: email || undefined,
+            phone: phone || undefined,
+            page: '/guide',
+            website: hpEl.value || '',
+            t: mountedAt,
+          }),
+        });
+        const data = await res.json().catch(() => ({ ok: false }));
+        if (!res.ok || !data.ok) throw new Error(data.error || 'send_failed');
+        track('guide_success', {});
+        showPanel('done');
+      } catch {
+        track('guide_fail', {});
+        showPanel('fail');
+      } finally {
+        submitting = false;
+        btn.innerHTML = original;
+        btn.disabled = false;
+      }
+    }
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      submit();
+    });
+    document.querySelector<HTMLElement>('[data-g-retry]')?.addEventListener('click', () => {
+      showPanel('form');
+      phoneEl.focus();
+    });
+  }
+
+  document.addEventListener('astro:page-load', initGuideForm);
+</script>

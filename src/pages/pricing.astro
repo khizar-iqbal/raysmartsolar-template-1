@@ -1,0 +1,314 @@
+---
+import Layout from '~/layouts/Layout.astro';
+import PageHero from '~/components/PageHero.astro';
+import SectionHead from '~/components/SectionHead.astro';
+import CTABand from '~/components/CTABand.astro';
+import FAQ from '~/components/FAQ.astro';
+import Icon from '~/components/Icon.astro';
+import { site } from '~/config/site';
+import {
+  PACKAGES,
+  PRICES_AS_OF,
+  BATTERY,
+  COMMERCIAL_PER_KW,
+  NET_BILLING,
+  HARDWARE,
+  TAX_NOTE,
+} from '~/data/facts';
+
+const title = `Solar System Prices in Pakistan — 3 to 25 kW+ (${PRICES_AS_OF})`;
+const description =
+  'Straight turnkey price bands for 3–25 kW solar systems in Pakistan — what’s inside the price, hybrid and battery costs, commercial per-kW rates, honest ranges.';
+
+const panelCount = (kw: number) => Math.ceil((kw * 1000) / HARDWARE.panelWattTypical);
+const lakh = (n: number) => (n / 100000).toFixed(1);
+
+const jsonLd = PACKAGES.map((p) => ({
+  '@context': 'https://schema.org',
+  '@type': 'Product',
+  name: `${p.kw} kW solar system — installed (on-grid, Tier-1)`,
+  description: `Turnkey ${p.kw} kW on-grid solar installation with documented Tier-1 panels and branded inverter. Suits homes using roughly ${p.unitsLow}–${p.unitsHigh} units a month.`,
+  brand: { '@type': 'Brand', name: site.name },
+  offers: {
+    '@type': 'AggregateOffer',
+    priceCurrency: 'PKR',
+    lowPrice: p.low,
+    highPrice: p.high,
+    availability: 'https://schema.org/InStock',
+    seller: { '@id': `${site.url}/#business` },
+  },
+}));
+
+const included = [
+  `Documented Tier-1 panels (${HARDWARE.panelBrands.join(', ')}) — serials verified with you watching`,
+  `Branded inverter (${HARDWARE.inverterBrands.slice(0, 3).join(', ')}…) — named model on the quote, DISCO-approved`,
+  'Engineered mounting structure (standard flat-roof frames)',
+  'DC & AC cabling with proper protection — breakers, surge protection, enclosures',
+  'Real earthing — the part cheap quotes quietly skip',
+  'Installation, testing & commissioning by a certified crew',
+  'Net-metering liaison — your prosumer file prepared, submitted and chased',
+];
+
+const faqs = [
+  {
+    q: 'Why do quotes for the same size vary 2× across the market?',
+    a: 'Component tiers, mostly: documented Tier-1 panels vs relabeled B-grade, branded inverters vs generics — plus what’s quietly missing from cheap quotes: thin cables, skipped earthing, no paperwork liaison. Our bands are for documented Tier-1 hardware and the full checklist above; mid-market for that spec, not for the corner-cut version.',
+  },
+  {
+    q: 'Can I negotiate?',
+    a: 'Our prices aren’t padded for haggling theatre. What genuinely moves the number is component choice (inverter brand, panel class), scope and timing — and we’ll happily re-scope any of it transparently. What we won’t do is quietly thin the copper to win a bargain.',
+  },
+  {
+    q: 'What costs extra?',
+    a: 'Three usual suspects: elevated structures (to clear water tanks, shade or garden space), unusually long cable runs between roof and meter (quoted per metre at the survey), and sanctioned-load upgrades if your connection is smaller than the system needs. Each appears as a line item before you sign — never after.',
+  },
+  {
+    q: 'How long does a quote stay valid?',
+    a: `Your written quote is locked for 14 days after the survey. Past that we re-confirm the panel market before you pay anything — prices move both ways, and you get the current truth either way. The bands on this page are as of ${PRICES_AS_OF}.`,
+  },
+];
+---
+
+<Layout {title} {description} {jsonLd}>
+  <PageHero
+    eyebrow={`Pricing by size · as of ${PRICES_AS_OF}`}
+    title="Straight prices, by size."
+    titleHtml="Straight prices, <em>by size.</em>"
+    lede={`“5 kW solar price in Pakistan?” — here’s the honest answer, and every other size too. Panel prices move with the dollar, so these are real ranges as of ${PRICES_AS_OF}; your exact quote is written and locked after a free survey.`}
+  >
+    <Fragment slot="actions">
+      <a href="/calculator" class="btn btn-gold" data-evt="calc_open" data-evt-src="pricing_hero">
+        <Icon name="calculator" size={18} /> Size me from my bill
+      </a>
+      <a href="/quote?src=pricing" class="btn btn-ghost" data-evt="quote_open" data-evt-src="pricing_hero">
+        Book the free survey <Icon name="arrow-right" size={17} />
+      </a>
+    </Fragment>
+  </PageHero>
+
+  <!-- Packages -->
+  <section class="section">
+    <div class="wrap">
+      <h2 class="sr-only">Package price bands</h2>
+      <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3" data-reveal-group>
+        {
+          PACKAGES.map((p) => (
+            <div class="pkg-card card p-7" data-reveal-child>
+              <div class="flex items-baseline justify-between gap-3">
+                <p class="mono-num text-5xl text-accent">
+                  {p.kw}
+                  <span class="text-2xl">kW</span>
+                </p>
+                <p class="font-mono text-[0.62rem] uppercase tracking-[0.15em] text-ink-3">on-grid · Tier-1</p>
+              </div>
+              <p class="mono-num text-2xl mt-5">
+                Rs {lakh(p.low)} – {lakh(p.high)} lakh
+              </p>
+              <p class="text-sm text-ink-3 mt-1">installed &amp; commissioned</p>
+              <hr class="rule my-5" />
+              <ul class="grid gap-2.5 text-sm text-ink-2">
+                <li class="flex items-start gap-2.5">
+                  <Icon name="banknote" size={16} class="text-gold mt-0.5 shrink-0" />
+                  <span>
+                    Fits bills around{' '}
+                    <strong class="text-ink">
+                      Rs {Math.round(p.billLow / 1000)}–{Math.round(p.billHigh / 1000)}k
+                    </strong>
+                    /month
+                  </span>
+                </li>
+                <li class="flex items-start gap-2.5">
+                  <Icon name="meter" size={16} class="text-gold mt-0.5 shrink-0" />
+                  <span>Covers ~{p.unitsLow}–{p.unitsHigh} units/month</span>
+                </li>
+                <li class="flex items-start gap-2.5">
+                  <Icon name="panel" size={16} class="text-gold mt-0.5 shrink-0" />
+                  <span>≈{panelCount(p.kw)} panels ({HARDWARE.panelWattTypical} W class)</span>
+                </li>
+              </ul>
+            </div>
+          ))
+        }
+
+        <!-- Commercial, beyond the catalog -->
+        <div class="pkg-card card p-7 border-gold/30" data-reveal-child>
+          <div class="flex items-baseline justify-between gap-3">
+            <p class="mono-num text-5xl text-accent">
+              25<span class="text-2xl">kW+</span>
+            </p>
+            <Icon name="building" size={22} class="text-ink-3" />
+          </div>
+          <p class="mono-num text-2xl mt-5">
+            Rs {COMMERCIAL_PER_KW.low / 1000}k – {COMMERCIAL_PER_KW.high / 1000}k
+            <span class="text-base text-ink-3">/ kW</span>
+          </p>
+          <p class="text-sm text-ink-3 mt-1">at 50–100 kW scale · commercial &amp; industrial</p>
+          <hr class="rule my-5" />
+          <p class="text-sm text-ink-2">
+            Above the catalog, price is engineered per roof — load profile, structure, sanctioned
+            load. It starts with a <a href="/quote?src=pricing" class="link-gold">free survey</a>;
+            financing and PPA structures on <a href="/business" class="link-gold">solar for business</a>.
+          </p>
+        </div>
+      </div>
+
+      <!-- Hybrid / battery note -->
+      <div class="card p-6 mt-6 border-gold/30" data-reveal>
+        <p class="flex items-start gap-3 text-ink-2">
+          <Icon name="battery" size={18} class="text-gold mt-0.5 shrink-0" />
+          <span>
+            <strong class="text-ink">Want backup too?</strong> Any package above goes hybrid: add
+            roughly <strong class="text-ink">Rs {(BATTERY.per5kwhLow / 100000).toFixed(0)}–{(BATTERY.per5kwhHigh / 100000).toFixed(0)} lakh
+            per 5 kWh</strong> of lithium storage ({BATTERY.brands.slice(0, 3).join(', ')}…) — that
+            range already includes the hybrid-inverter upgrade. We size backup to the loads you
+            actually run at night — see <a href="/battery-backup" class="link-gold">battery &amp; backup</a>.
+          </span>
+        </p>
+      </div>
+
+      <div class="mt-8 flex flex-wrap items-center gap-4" data-reveal>
+        <a href="/quote?src=pricing" class="btn btn-gold" data-evt="quote_open" data-evt-src="pricing_packages">
+          <Icon name="filecheck" size={18} /> Lock my exact price
+        </a>
+        <p class="text-sm text-ink-3">
+          Not sure which size? <a href="/calculator" class="link-gold" data-evt="calc_open" data-evt-src="pricing_packages">Size it from your bill</a> in sixty seconds.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- What's inside the price -->
+  <section class="section pt-0">
+    <div class="wrap">
+      <SectionHead
+        eyebrow="No surprises"
+        title="What’s inside the price"
+        lede="The same seven things, every quote — and the two things we deliberately keep outside it, so you can see them."
+      />
+      <div class="grid gap-10 lg:grid-cols-[1.15fr_1fr] mt-12 items-start">
+        <div class="grid gap-4" data-reveal-group>
+          {
+            included.map((item) => (
+              <p class="flex items-start gap-3 text-ink-2" data-reveal-child>
+                <span class="check-dot">
+                  <Icon name="check" size={13} />
+                </span>
+                {item}
+              </p>
+            ))
+          }
+        </div>
+        <div class="grid gap-4" data-reveal-group>
+          <div class="card p-6" data-reveal-child>
+            <span class="side-icon"><Icon name="banknote" size={17} /></span>
+            <h3 class="font-medium mt-4">Taxes — itemised, never buried</h3>
+            <p class="text-sm text-ink-2 mt-2">{TAX_NOTE}</p>
+          </div>
+          <div class="card p-6" data-reveal-child>
+            <span class="side-icon"><Icon name="filecheck" size={17} /></span>
+            <h3 class="font-medium mt-4">Government fees — passed through at cost</h3>
+            <p class="text-sm text-ink-2 mt-2">
+              NEPRA’s processing fee (Rs {NET_BILLING.nepraFeePerKw.toLocaleString('en-PK')} per kW)
+              and the bidirectional meter ({NET_BILLING.meterCostRange}, DISCO-dependent) go on your
+              quote at cost, receipts included — zero markup. They change from time to time; your
+              quote shows the current numbers.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Why ranges -->
+  <section class="section theme-night">
+    <div class="wrap">
+      <SectionHead
+        eyebrow="The honesty bit"
+        title="Why we publish ranges, not exact prices"
+        titleHtml="Why we publish <em>ranges,</em> not exact prices"
+        lede="Anyone printing one bold number, forever, is either updating their website daily or lying to you. We know which is more common."
+      />
+      <div class="grid gap-4 md:grid-cols-3 mt-12" data-reveal-group>
+        <div class="card p-7" data-reveal-child>
+          <p class="font-mono text-[0.68rem] uppercase tracking-[0.18em] text-ink-3">Reason one</p>
+          <p class="font-display text-h3 mt-3">The 2× spread is real</p>
+          <p class="text-ink-2 mt-3">
+            Ask five installers about “5 kW” and the quotes can span double. The difference hides in
+            the parts — documented vs undocumented panels, branded vs generic inverters, copper vs
+            corner-cutting. A range is the only honest shape for this market.
+          </p>
+        </div>
+        <div class="card p-7" data-reveal-child>
+          <p class="font-mono text-[0.68rem] uppercase tracking-[0.18em] text-ink-3">Reason two</p>
+          <p class="font-display text-h3 mt-3">Panels move weekly</p>
+          <p class="text-ink-2 mt-3">
+            Panel prices track the dollar and every budget’s tax rumours — mid-2026 saw them jump on
+            a tax scare, then ease when the tax was dropped. Yesterday’s exact price is tomorrow’s
+            small print.
+          </p>
+        </div>
+        <div class="card p-7" data-reveal-child>
+          <p class="font-mono text-[0.68rem] uppercase tracking-[0.18em] text-ink-3">So instead</p>
+          <p class="font-display text-h3 mt-3">Exact, in writing, locked</p>
+          <p class="text-ink-2 mt-3">
+            These bands are honest as of {PRICES_AS_OF}. After your free survey you get an exact,
+            itemised quote — hardware named, taxes and fees separated — locked for 14 days.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section">
+    <div class="wrap max-w-3xl">
+      <SectionHead eyebrow="Price questions" title="Asked at every survey" />
+      <div class="mt-10">
+        <FAQ items={faqs} schema />
+      </div>
+    </div>
+  </section>
+
+  <section class="section pt-0">
+    <div class="wrap">
+      <CTABand
+        heading="Your exact number needs a roof measurement."
+        sub="Free survey → itemised written quote, locked for 14 days. Koi zabardasti nahi."
+        primaryHref="/quote?src=pricing"
+        primaryLabel="Book my free survey"
+        primaryIcon="filecheck"
+        evtSrc="pricing_final"
+      />
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .pkg-card {
+    transition: transform 300ms var(--ease-out), border-color 200ms;
+  }
+  .pkg-card:hover {
+    transform: translateY(-4px);
+    border-color: color-mix(in srgb, var(--gold) 45%, transparent);
+  }
+  .check-dot {
+    flex: none;
+    width: 1.45rem;
+    height: 1.45rem;
+    margin-top: 0.15rem;
+    border-radius: 999px;
+    display: grid;
+    place-items: center;
+    background: color-mix(in srgb, var(--gold) 16%, transparent);
+    color: var(--gold);
+  }
+  .side-icon {
+    width: 2.1rem;
+    height: 2.1rem;
+    border-radius: 999px;
+    display: grid;
+    place-items: center;
+    background: color-mix(in srgb, var(--gold) 15%, transparent);
+    color: var(--gold);
+  }
+</style>

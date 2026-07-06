@@ -1,0 +1,275 @@
+---
+import Layout from '~/layouts/Layout.astro';
+import PageHero from '~/components/PageHero.astro';
+import SectionHead from '~/components/SectionHead.astro';
+import CTABand from '~/components/CTABand.astro';
+import FAQ from '~/components/FAQ.astro';
+import Icon from '~/components/Icon.astro';
+import { site } from '~/config/site';
+import { NET_BILLING } from '~/data/facts';
+import pylon from '~/assets/photos/pylon.jpg';
+
+const title = 'Net Metering in Pakistan (2026 rules) — filed & handled | RaySmartSolar';
+const description =
+  'NEPRA replaced net metering with net billing in February 2026. We explain what that actually means for your bill — and we file, chase and complete your entire DISCO prosumer application for you.';
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: 'Net metering / prosumer application handling',
+    description,
+    provider: { '@id': `${site.url}/#business` },
+    areaServed: ['Lahore', 'Karachi', 'Islamabad', 'Rawalpindi', 'Faisalabad', 'Multan'],
+    serviceType: 'Solar net metering paperwork and grid interconnection',
+  },
+];
+
+const checklist = [
+  'Prosumer application, prepared complete and first-time-right',
+  'Sanctioned-load verification (and guidance if yours needs upgrading)',
+  'Single-line diagram & installation drawings',
+  'DISCO-approved inverter documentation & test reports',
+  'NEPRA processing fee payment & receipts, itemised at cost',
+  'Bidirectional (green) meter procurement & installation coordination',
+  'Inspection scheduling — and being there when the inspector comes',
+  'Weekly follow-ups with the DISCO until your meter is live',
+];
+
+const faqs = [
+  {
+    q: 'Can I still get “net metering” in 2026?',
+    a: `Yes — the connection still exists, but since ${NET_BILLING.effectiveDate} new applicants sign up under NEPRA’s <strong>net billing</strong> rules (the ${NET_BILLING.regsName}). You still export surplus power and get paid for it; the difference is the rate: exports earn a regulated wholesale price (reported around ${NET_BILLING.exportRateRange}/unit and revised by NEPRA), while imports cost full retail. We handle the entire application either way.`,
+  },
+  {
+    q: 'I already have net metering. Do the new rules affect me?',
+    a: 'Existing consumers were protected: your old agreement keeps its original unit-for-unit terms <strong>until it expires</strong>. One big caveat — materially modifying your system (like adding panels or a bigger inverter) can void that protection and shift you to net billing. Talk to us before you expand; sometimes it’s worth it, sometimes it isn’t.',
+  },
+  {
+    q: 'Is solar still worth it without the old 1:1 exchange?',
+    a: 'Yes — but the design has to change. Under net billing, a unit you use yourself is worth Rs 40–65 (what you didn’t buy), while an exported unit earns roughly Rs 8–13. So we size systems for <strong>self-consumption first</strong>, add batteries to carry evenings, and treat exports as a bonus. Payback on a well-designed system still lands around 3–5 years. Our <a href="/calculator">calculator</a> uses exactly this math.',
+  },
+  {
+    q: 'How long does approval actually take?',
+    a: `The regulations set a fast clock on paper (acknowledgment in 5 working days, technical review in 15). Reality varies by DISCO and their backlog — recent LESCO cases have run 10–15 weeks, while K-Electric often completes residential cases in 4–6 weeks. We quote the honest current timeline for your DISCO before you sign, then chase your file weekly.`,
+  },
+  {
+    q: 'What does the process cost?',
+    a: `Government-side costs currently include NEPRA’s processing fee (Rs ${NET_BILLING.nepraFeePerKw.toLocaleString('en-PK')} per kW) and the bidirectional meter (${NET_BILLING.meterCostRange} depending on DISCO and meter type). These change from time to time — your written quote itemises them separately, at cost, so you can see exactly what goes to the government and what goes to work.`,
+  },
+  {
+    q: 'Are there limits on system size?',
+    a: 'Under the 2026 regulations your system can’t exceed your sanctioned load (and caps out at 1 MW). There’s also a transformer-level rule: once solar on your local transformer reaches 80% of its capacity, new connections there pause. We check both at the survey — and if your sanctioned load is the constraint, we’ll walk you through upgrading it.',
+  },
+];
+---
+
+<Layout {title} {description} {jsonLd} heroNav>
+  <PageHero
+    eyebrow="NEPRA · DISCO paperwork"
+    title="Net metering, handled — under the real 2026 rules."
+    titleHtml="Net metering, handled — <em>under the real 2026 rules.</em>"
+    lede="In February 2026, Pakistan replaced net metering with net billing. Most solar companies haven’t updated their pitch. We’ll tell you exactly what the new rules mean for your bill — then file every page of the paperwork for you."
+    image={pylon}
+    imageAlt="Transmission pylon silhouetted against an orange sunset sky"
+    imagePosition="50% 38%"
+  >
+    <Fragment slot="actions">
+      <a href="/calculator" class="btn btn-gold" data-evt="calc_open" data-evt-src="netmetering_hero">
+        <Icon name="calculator" size={18} /> Run the 2026 math
+      </a>
+      <a href="/quote?src=netmetering" class="btn btn-ghost" data-evt="quote_open" data-evt-src="netmetering_hero">
+        Get it handled <Icon name="arrow-right" size={17} />
+      </a>
+    </Fragment>
+  </PageHero>
+
+  <!-- What changed -->
+  <section class="section">
+    <div class="wrap">
+      <SectionHead
+        eyebrow="February 2026"
+        title="What actually changed"
+        titleHtml="What <em>actually</em> changed"
+        lede="Three facts cover 90% of it. Anyone who can’t explain these three shouldn’t be quoting you a system."
+      />
+      <div class="grid gap-4 md:grid-cols-3 mt-12" data-reveal-group>
+        <div class="card p-7" data-reveal-child>
+          <p class="font-mono text-[0.68rem] uppercase tracking-[0.18em] text-ink-3">The old world</p>
+          <p class="font-display text-h3 mt-3">1 : 1 unit exchange</p>
+          <p class="text-ink-2 mt-3">
+            Every exported unit cancelled an imported one. Oversizing your roof was free money.
+            That deal closed to new applicants on {NET_BILLING.effectiveDate}.
+          </p>
+        </div>
+        <div class="card p-7" data-reveal-child>
+          <p class="font-mono text-[0.68rem] uppercase tracking-[0.18em] text-ink-3">The new world</p>
+          <p class="font-display text-h3 mt-3">Net billing</p>
+          <p class="text-ink-2 mt-3">
+            Imports cost full retail (Rs 40–65 all-in at typical usage). Exports earn a floating
+            NEPRA-set rate — reported around <strong class="text-ink">{NET_BILLING.exportRateRange}/unit</strong>.
+            Agreements now run {NET_BILLING.agreementYears} years.
+          </p>
+        </div>
+        <div class="card p-7" data-reveal-child>
+          <p class="font-mono text-[0.68rem] uppercase tracking-[0.18em] text-ink-3">What it means</p>
+          <p class="font-display text-h3 mt-3">Self-use wins</p>
+          <p class="text-ink-2 mt-3">
+            The money is in the units you <em class="fx-it">don’t buy</em>, not the ones you sell.
+            Right-sizing, daytime-heavy usage and evening batteries now beat oversized arrays.
+          </p>
+        </div>
+      </div>
+
+      <div class="card p-6 mt-6 border-gold/30" data-reveal>
+        <p class="flex items-start gap-3 text-ink-2">
+          <Icon name="alert" size={18} class="text-gold mt-0.5 shrink-0" />
+          <span>
+            <strong class="text-ink">Already on old-rules net metering?</strong> You keep your
+            original terms until your agreement expires — but expanding your system can void that
+            protection and move you to net billing. Get advice before adding a single panel;
+            we give it straight, even when the answer is “don’t”.
+          </span>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- What we file -->
+  <section class="section pt-0">
+    <div class="wrap">
+      <SectionHead
+        eyebrow="The service"
+        title="You sign twice. We do the rest."
+        lede="The prosumer file is where solar projects go to die — missing documents, wrong inverter papers, unanswered queries. Ours go in complete, first time."
+      />
+      <div class="grid gap-x-10 gap-y-4 md:grid-cols-2 mt-10 max-w-4xl" data-reveal-group>
+        {
+          checklist.map((item) => (
+            <p class="flex items-start gap-3 text-ink-2" data-reveal-child>
+              <span class="check-dot">
+                <Icon name="check" size={13} />
+              </span>
+              {item}
+            </p>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Honest timeline -->
+  <section class="section theme-night">
+    <div class="wrap">
+      <SectionHead
+        eyebrow="Timelines"
+        title="The clock on paper vs. the clock in real life"
+        lede="The 2026 regulations promise a fast process. DISCOs have backlogs. You deserve both numbers."
+      />
+      <div class="overflow-x-auto mt-10" data-reveal>
+        <table class="tl-table">
+          <thead>
+            <tr>
+              <th>Stage</th>
+              <th>Regulation says</th>
+              <th>Recent reality</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Application acknowledged</td>
+              <td class="mono-num">5 working days</td>
+              <td class="mono-num">usually holds</td>
+            </tr>
+            <tr>
+              <td>Technical review</td>
+              <td class="mono-num">15 days</td>
+              <td class="mono-num">2–8 weeks, DISCO-dependent</td>
+            </tr>
+            <tr>
+              <td>Meter installed after payment</td>
+              <td class="mono-num">15 days</td>
+              <td class="mono-num">2–6 weeks</td>
+            </tr>
+            <tr>
+              <td>End-to-end (LESCO, 2026)</td>
+              <td class="mono-num">—</td>
+              <td class="mono-num">~10–15 weeks amid backlog</td>
+            </tr>
+            <tr>
+              <td>End-to-end (K-Electric, ≤10 kW)</td>
+              <td class="mono-num">—</td>
+              <td class="mono-num">~4–6 weeks</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="text-sm text-ink-3 mt-5 max-w-2xl" data-reveal>
+        Timelines move with DISCO workloads — these reflect reporting as of July 2026. We quote the
+        live number for your DISCO at the survey, in writing, and your system generates savings on
+        self-consumed power from day one while the export meter is in process.
+      </p>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section">
+    <div class="wrap max-w-3xl">
+      <SectionHead eyebrow="Straight answers" title="The questions everyone asks" />
+      <div class="mt-10">
+        <FAQ items={faqs} schema />
+      </div>
+    </div>
+  </section>
+
+  <section class="section pt-0">
+    <div class="wrap">
+      <CTABand
+        heading="Paperwork is our problem. Sunlight is yours."
+        sub="Free survey, honest DISCO timeline, and a file that moves — from a Lahore office you can visit."
+        primaryHref="/quote?src=netmetering"
+        primaryLabel="Start my file"
+        primaryIcon="filecheck"
+        evtSrc="netmetering_final"
+      />
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .check-dot {
+    flex: none;
+    width: 1.45rem;
+    height: 1.45rem;
+    margin-top: 0.15rem;
+    border-radius: 999px;
+    display: grid;
+    place-items: center;
+    background: color-mix(in srgb, var(--gold) 16%, transparent);
+    color: var(--gold);
+  }
+  .tl-table {
+    width: 100%;
+    min-width: 34rem;
+    border-collapse: collapse;
+  }
+  .tl-table th {
+    text-align: left;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--text-3);
+    padding: 0.7rem 1rem;
+    border-bottom: 1px solid var(--line-strong);
+  }
+  .tl-table td {
+    padding: 0.85rem 1rem;
+    border-bottom: 1px solid var(--line);
+    color: var(--text-2);
+  }
+  .tl-table td:first-child {
+    color: var(--text);
+    font-weight: 540;
+  }
+</style>

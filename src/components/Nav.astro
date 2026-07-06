@@ -1,0 +1,414 @@
+---
+import Logo from './Logo.astro';
+import Icon from './Icon.astro';
+import { site, waLink, WA_DEFAULT_MESSAGE } from '~/config/site';
+
+interface Props {
+  heroNav?: boolean;
+}
+const { heroNav = false } = Astro.props;
+
+const links = [
+  { href: '/homes', label: 'Homes' },
+  { href: '/business', label: 'Business' },
+  { href: '/pricing', label: 'Pricing' },
+  { href: '/net-metering', label: 'Net metering' },
+  { href: '/learn', label: 'Learn' },
+];
+
+const menuServices = [
+  { href: '/homes', label: 'Solar for homes' },
+  { href: '/business', label: 'Solar for business' },
+  { href: '/battery-backup', label: 'Battery & backup' },
+  { href: '/net-metering', label: 'Net metering' },
+  { href: '/maintenance', label: 'Maintenance' },
+  { href: '/financing', label: 'Financing' },
+];
+const menuCompany = [
+  { href: '/pricing', label: 'Pricing' },
+  { href: '/about', label: 'About us' },
+  { href: '/contact', label: 'Contact' },
+  { href: '/faq', label: 'FAQ' },
+  { href: '/learn', label: 'Learn' },
+  { href: '/guide', label: 'Buyer’s guide' },
+];
+const menuCities = [
+  { href: '/lahore', label: 'Lahore' },
+  { href: '/karachi', label: 'Karachi' },
+  { href: '/islamabad', label: 'Islamabad · Rawalpindi' },
+  { href: '/faisalabad', label: 'Faisalabad' },
+  { href: '/multan', label: 'Multan' },
+];
+
+const path = Astro.url.pathname;
+const isActive = (href: string) => path === href || (href !== '/' && path.startsWith(href + '/'));
+---
+
+<header class:list={['site-nav', { 'nav-hero': heroNav }]} data-nav>
+  <div class="wrap flex items-center justify-between gap-3">
+    <a
+      href="/"
+      class="shrink-0 rounded-md text-ink"
+      aria-label="RaySmartSolar — home"
+      data-evt="nav_logo"
+    >
+      <Logo size={30} />
+    </a>
+
+    <nav class="hidden lg:flex items-center gap-7" aria-label="Primary">
+      {
+        links.map((l) => (
+          <a
+            href={l.href}
+            class:list={[
+              'nav-link text-[0.95rem] font-medium',
+              isActive(l.href) ? 'text-accent' : 'text-ink-2 hover:text-ink',
+            ]}
+            aria-current={isActive(l.href) ? 'page' : undefined}
+          >
+            {l.label}
+          </a>
+        ))
+      }
+    </nav>
+
+    <div class="flex items-center gap-2.5">
+      <button
+        type="button"
+        class="theme-btn"
+        data-theme-toggle
+        aria-label="Switch between day and night theme"
+      >
+        <span class="theme-btn-sun"><Icon name="sun" size={17} /></span>
+        <span class="theme-btn-moon"><Icon name="moon" size={16} /></span>
+      </button>
+
+      <a href="/calculator" class="btn btn-gold btn-sm hidden min-[430px]:inline-flex" data-evt="nav_estimate">
+        <span class="hidden sm:inline">Get estimate</span>
+        <span class="sm:hidden">Estimate</span>
+      </a>
+
+      <button
+        type="button"
+        class="menu-btn lg:hidden"
+        data-menu-open
+        aria-label="Open menu"
+        aria-expanded="false"
+        aria-controls="site-menu"
+      >
+        <span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ── Full-screen menu sheet ── -->
+<div class="menu theme-night" id="site-menu" data-menu aria-hidden="true">
+  <div class="menu-inner wrap">
+    <div class="flex items-center justify-between pt-5">
+      <a href="/" aria-label="RaySmartSolar — home" class="text-ink"><Logo size={30} /></a>
+      <button type="button" class="menu-close" data-menu-close aria-label="Close menu">
+        <Icon name="x" size={22} />
+      </button>
+    </div>
+
+    <nav class="menu-primary" aria-label="Menu">
+      <a href="/" class="menu-big" style="--i:0">Home</a>
+      <a href="/homes" class="menu-big" style="--i:1">Solar for homes</a>
+      <a href="/business" class="menu-big" style="--i:2">Solar for business</a>
+      <a href="/calculator" class="menu-big menu-big-gold" style="--i:3">
+        Savings calculator <Icon name="arrow-up-right" size={26} />
+      </a>
+    </nav>
+
+    <div class="menu-cols" style="--i:4">
+      <div>
+        <p class="menu-col-title">Services</p>
+        {menuServices.map((l) => <a href={l.href} class="menu-small">{l.label}</a>)}
+      </div>
+      <div>
+        <p class="menu-col-title">Company</p>
+        {menuCompany.map((l) => <a href={l.href} class="menu-small">{l.label}</a>)}
+      </div>
+      <div>
+        <p class="menu-col-title">Cities</p>
+        {menuCities.map((l) => <a href={l.href} class="menu-small">{l.label}</a>)}
+      </div>
+    </div>
+
+    <div class="menu-foot" style="--i:5">
+      {
+        site.phone.live ? (
+          <a
+            href={waLink(WA_DEFAULT_MESSAGE)}
+            target="_blank"
+            rel="noopener"
+            class="btn btn-wa w-full"
+            data-evt="wa_click"
+            data-evt-src="menu"
+          >
+            <Icon name="whatsapp" size={19} /> WhatsApp us
+          </a>
+        ) : (
+          <a href="/quote" class="btn btn-wa w-full" data-evt="quote_open" data-evt-src="menu">
+            <Icon name="whatsapp" size={19} /> Talk to us
+          </a>
+        )
+      }
+      <p class="mt-4 text-sm text-ink-3">{site.address.full}</p>
+      <a href={`mailto:${site.email}`} class="link-gold text-sm">{site.email}</a>
+    </div>
+  </div>
+</div>
+
+<style>
+  .site-nav {
+    position: fixed;
+    inset-inline: 0;
+    top: 0;
+    z-index: 100;
+    padding-block: 0.9rem;
+    background: transparent;
+    border-bottom: 1px solid transparent;
+    transition:
+      padding-block 300ms var(--ease-out),
+      background-color 300ms var(--ease-out),
+      border-color 300ms var(--ease-out),
+      transform 350ms var(--ease-out);
+  }
+  .site-nav.nav-solid {
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    border-bottom-color: var(--line);
+    backdrop-filter: blur(14px) saturate(1.4);
+    -webkit-backdrop-filter: blur(14px) saturate(1.4);
+  }
+  .site-nav.nav-tight {
+    padding-block: 0.55rem;
+  }
+  /* Weak devices skip the blur — solid tint instead */
+  :global(html[data-motion='lite']) .site-nav.nav-solid,
+  :global(html[data-motion='off']) .site-nav.nav-solid {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: color-mix(in srgb, var(--bg) 96%, transparent);
+  }
+  /* On hero pages the nav floats in night colors until solid */
+  .nav-hero:not(.nav-solid) {
+    --text: var(--n-text);
+    --text-2: var(--n-text-2);
+    color: var(--n-text);
+  }
+
+  .nav-link {
+    position: relative;
+    padding-block: 0.3rem;
+    transition: color 180ms var(--ease-out);
+  }
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    width: 100%;
+    height: 1.5px;
+    background: var(--gold);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 320ms var(--ease-out);
+  }
+  .nav-link:hover::after,
+  .nav-link[aria-current='page']::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+
+  .theme-btn {
+    position: relative;
+    width: 2.4rem;
+    height: 2.4rem;
+    display: grid;
+    place-items: center;
+    border-radius: 999px;
+    border: 1px solid var(--line-strong);
+    color: var(--text-2);
+    cursor: pointer;
+    transition: color 180ms, border-color 180ms, transform 300ms var(--ease-out);
+  }
+  .theme-btn:hover {
+    color: var(--accent-text);
+    border-color: var(--gold);
+  }
+  .theme-btn-sun,
+  .theme-btn-moon {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    transition: opacity 250ms var(--ease-out), transform 400ms var(--ease-out);
+  }
+  :global([data-theme='dusk']) .theme-btn-sun {
+    opacity: 1;
+    transform: none;
+  }
+  :global([data-theme='dusk']) .theme-btn-moon {
+    opacity: 0;
+    transform: rotate(-60deg) scale(0.5);
+  }
+  :global([data-theme='day']) .theme-btn-sun {
+    opacity: 0;
+    transform: rotate(60deg) scale(0.5);
+  }
+  :global([data-theme='day']) .theme-btn-moon {
+    opacity: 1;
+    transform: none;
+  }
+
+  .menu-btn {
+    width: 2.6rem;
+    height: 2.4rem;
+    display: grid;
+    place-items: center;
+    align-content: center;
+    gap: 7px;
+    border-radius: 0.6rem;
+    cursor: pointer;
+  }
+  .menu-btn span {
+    display: block;
+    width: 1.4rem;
+    height: 1.75px;
+    background: currentColor;
+    border-radius: 2px;
+    transition: transform 300ms var(--ease-out);
+  }
+  .menu-btn:hover span:first-child {
+    transform: translateY(-1.5px);
+  }
+  .menu-btn:hover span:last-child {
+    transform: translateY(1.5px);
+  }
+
+  /* ── sheet ── */
+  .menu {
+    position: fixed;
+    inset: 0;
+    z-index: 120;
+    background: var(--n-bg);
+    color: var(--n-text);
+    overflow-y: auto;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 380ms var(--ease-out), visibility 0s 380ms;
+  }
+  .menu.open {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 380ms var(--ease-out);
+  }
+  .menu-inner {
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: max(2rem, env(safe-area-inset-bottom));
+  }
+  .menu-primary {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    margin-top: clamp(2rem, 6vh, 4rem);
+  }
+  .menu-big {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 7.5vw, 3.2rem);
+    line-height: 1.15;
+    font-weight: 480;
+    letter-spacing: -0.01em;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    width: fit-content;
+    transition: color 200ms var(--ease-out), transform 300ms var(--ease-out);
+  }
+  .menu-big:hover {
+    color: var(--gold);
+    transform: translateX(6px);
+  }
+  .menu-big-gold {
+    color: var(--gold);
+  }
+  .menu-cols {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem 1.5rem;
+    margin-top: clamp(2rem, 5vh, 3.5rem);
+  }
+  @media (min-width: 640px) {
+    .menu-cols {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  .menu-col-title {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--n-text-3);
+    margin-bottom: 0.8rem;
+  }
+  .menu-small {
+    display: block;
+    padding-block: 0.32rem;
+    color: var(--n-text-2);
+    transition: color 150ms;
+  }
+  .menu-small:hover {
+    color: var(--gold);
+  }
+  .menu-foot {
+    margin-top: auto;
+    padding-top: clamp(2rem, 5vh, 3rem);
+    max-width: 26rem;
+  }
+  .menu-close {
+    width: 2.75rem;
+    height: 2.75rem;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--n-line-strong);
+    border-radius: 999px;
+    color: var(--n-text-2);
+    cursor: pointer;
+    transition: color 180ms, border-color 180ms, transform 400ms var(--ease-out);
+  }
+  .menu-close:hover {
+    color: var(--gold);
+    border-color: var(--gold);
+    transform: rotate(90deg);
+  }
+
+  /* staggered entrance of sheet content */
+  .menu .menu-big,
+  .menu .menu-cols,
+  .menu .menu-foot {
+    opacity: 0;
+    transform: translateY(22px);
+    transition: opacity 500ms var(--ease-out), transform 500ms var(--ease-out);
+    transition-delay: 0ms;
+  }
+  .menu.open .menu-big,
+  .menu.open .menu-cols,
+  .menu.open .menu-foot {
+    opacity: 1;
+    transform: none;
+    transition-delay: calc(60ms + var(--i, 0) * 55ms);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .menu,
+    .menu .menu-big,
+    .menu .menu-cols,
+    .menu .menu-foot {
+      transition: opacity 150ms !important;
+      transform: none !important;
+    }
+  }
+</style>

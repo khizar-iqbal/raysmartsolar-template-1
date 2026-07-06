@@ -1,0 +1,67 @@
+---
+import Icon from './Icon.astro';
+import { site, waLink, WA_DEFAULT_MESSAGE } from '~/config/site';
+
+interface Props {
+  heading?: string;
+  sub?: string;
+  primaryHref?: string;
+  primaryLabel?: string;
+  primaryIcon?: 'calculator' | 'arrow-right' | 'filecheck';
+  evtSrc?: string;
+  class?: string;
+}
+const {
+  heading = 'Ready when the sun is.',
+  sub = 'Free survey, written quote, straight answers. No pressure — koi zabardasti nahi.',
+  primaryHref = '/calculator',
+  primaryLabel = 'See my savings',
+  primaryIcon = 'calculator',
+  evtSrc = 'band',
+  class: className = '',
+} = Astro.props;
+
+const waHref = site.phone.live ? waLink(WA_DEFAULT_MESSAGE) : '/quote?src=band';
+---
+
+<div class:list={['cta-band card', className]} data-reveal>
+  <div class="cta-band-glow" aria-hidden="true"></div>
+  <div class="relative grid gap-6 md:grid-cols-[1.4fr_auto] md:items-center p-7 sm:p-10">
+    <div>
+      <p class="font-display text-h3 text-balance">{heading}</p>
+      <p class="text-ink-2 mt-2 max-w-md">{sub}</p>
+    </div>
+    <div class="flex flex-wrap gap-3">
+      <a href={primaryHref} class="btn btn-gold" data-evt="cta_primary" data-evt-src={evtSrc}>
+        <Icon name={primaryIcon} size={18} />
+        {primaryLabel}
+      </a>
+      <a
+        href={waHref}
+        target={site.phone.live ? '_blank' : undefined}
+        rel={site.phone.live ? 'noopener' : undefined}
+        class="btn btn-wa"
+        data-evt={site.phone.live ? 'wa_click' : 'quote_open'}
+        data-evt-src={evtSrc}
+      >
+        <Icon name="whatsapp" size={18} />
+        {site.phone.live ? 'WhatsApp us' : 'Talk to us'}
+      </a>
+    </div>
+  </div>
+</div>
+
+<style>
+  .cta-band {
+    position: relative;
+    overflow: hidden;
+  }
+  .cta-band-glow {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(60% 120% at 8% 110%, rgb(242 166 60 / 0.16), transparent 60%),
+      radial-gradient(40% 90% at 95% -10%, rgb(242 166 60 / 0.08), transparent 60%);
+    pointer-events: none;
+  }
+</style>

@@ -1,0 +1,324 @@
+---
+import { Image } from 'astro:assets';
+import Layout from '~/layouts/Layout.astro';
+import PageHero from '~/components/PageHero.astro';
+import SectionHead from '~/components/SectionHead.astro';
+import CTABand from '~/components/CTABand.astro';
+import FAQ from '~/components/FAQ.astro';
+import Icon from '~/components/Icon.astro';
+import { site } from '~/config/site';
+import { cityBySlug } from '~/data/cities';
+import { BATTERY, NET_BILLING, PRICES_AS_OF } from '~/data/facts';
+import heroImg from '~/assets/photos/city-multan.jpg';
+import ruralImg from '~/assets/photos/roof-rural.jpg';
+
+const city = cityBySlug('multan')!;
+
+const title = 'Solar in Multan — heat-ready, hybrid-first, MEPCO handled | RaySmartSolar';
+const description = city.metaDescription;
+
+const areasLine =
+  city.neighbourhoods.slice(0, -1).join(', ') + ' and ' + city.neighbourhoods.at(-1);
+
+const batteryLakh = `${(BATTERY.per5kwhLow / 100000).toFixed(0)}–${(BATTERY.per5kwhHigh / 100000).toFixed(0)}`;
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: 'Solar panel installation in Multan and South Punjab',
+    description,
+    provider: { '@id': `${site.url}/#business` },
+    areaServed: [
+      'Multan',
+      'South Punjab',
+      'Bahawalpur',
+      'Dera Ghazi Khan',
+      'Rahim Yar Khan',
+      'Muzaffargarh',
+      'Vehari',
+    ],
+    serviceType: 'Heat-rated hybrid solar installation and MEPCO net-metering paperwork',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: site.url },
+      { '@type': 'ListItem', position: 2, name: 'Cities', item: `${site.url}/#cities` },
+      { '@type': 'ListItem', position: 3, name: 'Multan', item: `${site.url}/multan` },
+    ],
+  },
+];
+
+/* What the heat does — and what we do back. */
+const heatPairs = [
+  {
+    heat: 'Panel output falls as cell temperature climbs — and a Multan roof in June runs far hotter than the air above it.',
+    fix: 'N-type panels with better temperature coefficients, so less output is lost in exactly the hours the sun gives most.',
+  },
+  {
+    heat: 'Flush, unventilated mounting traps heat under the glass and cooks output quietly, panel by panel.',
+    fix: 'Ventilated mounting with a real air gap underneath — the afternoon breeze becomes free cooling.',
+  },
+  {
+    heat: 'Inverters derate and age fastest when boxed into shade-less corners that face the western sun.',
+    fix: 'Inverters placed in shade with room to breathe — positioned at the survey, not improvised on install day.',
+  },
+];
+
+const faqs = [
+  {
+    q: 'Multan is sunnier than Lahore — why isn’t the yield figure much higher?',
+    a: `Heat. Panels lose efficiency as they warm, so a 45°C afternoon partly cancels the extra sunshine — real-world output per kW ends up closer to Lahore’s than the sky suggests. We quote ≈${city.monthlyUnitsPerKw} units per kW per month, flag it honestly as an interpolated estimate, and claw back losses with N-type panels and ventilated mounting.`,
+  },
+  {
+    q: 'Is a hybrid system really worth the extra cost here?',
+    a: `For most MEPCO-territory homes, yes — rural and semi-rural feeders around South Punjab carry some of the longest cuts in the province, and a battery keeps fans, lights, fridge and Wi-Fi running through them. Storage typically adds Rs ${batteryLakh} lakh per ~5 kWh (${PRICES_AS_OF}, brand-dependent — confirmed at your survey). If your feeder genuinely behaves, we’ll say so and quote on-grid.`,
+  },
+  {
+    q: 'Do you install outside Multan city — Bahawalpur, D.G. Khan, Rahim Yar Khan?',
+    a: `Yes. MEPCO covers ${city.disco.areas} — and so do we. The drive doesn’t change the hardware spec or the paperwork service; we quote travel plainly on larger out-of-city jobs instead of hiding it in the system price.`,
+  },
+  {
+    q: 'Can solar run a tube-well?',
+    a: 'Very well — daytime pumping is the best-shaped solar load there is, and often needs no battery at all. Diesel and grid tube-wells across South Punjab are steadily converting. Pump size, head and duty hours decide the array, so bring those numbers (or let us measure them) at the survey.',
+  },
+  {
+    q: 'How long does MEPCO net metering take?',
+    a: `MEPCO’s territory is huge and largely rural, so file quality decides your timeline — incomplete applications sit. Across DISCOs, approvals are ${NET_BILLING.approvalReality}; we submit complete files, track them weekly, and put MEPCO’s honest current figure in writing before you sign. Your panels start saving on self-used power from commissioning day.`,
+  },
+];
+---
+
+<Layout {title} {description} {jsonLd} heroNav>
+  <PageHero
+    eyebrow="Multan · MEPCO territory"
+    title="Solar in Multan, made for the heat."
+    titleHtml="Solar in Multan, <em>made for the heat.</em>"
+    lede="South Punjab has the fiercest sun of our five cities — and the grid that needs solar most. On MEPCO’s long rural feeders we quote hybrid by default and spec hardware that keeps working when the roof turns into an oven."
+    image={heroImg}
+    imageAlt="Tomb of Shah Rukn-e-Alam rising over Multan"
+    imageCredit="Photo: Junaidahmadj · CC BY-SA 3.0 · Wikimedia Commons"
+  >
+    <Fragment slot="actions">
+      <a href="/calculator?city=multan" class="btn btn-gold" data-evt="city_calc" data-evt-src="multan_hero">
+        <Icon name="calculator" size={18} /> Run Multan’s numbers
+      </a>
+      <a href="/quote?src=multan" class="btn btn-ghost" data-evt="quote_open" data-evt-src="multan_hero">
+        Book a free survey <Icon name="arrow-right" size={17} />
+      </a>
+    </Fragment>
+  </PageHero>
+
+  <!-- The numbers -->
+  <section class="section">
+    <div class="wrap">
+      <SectionHead
+        eyebrow="Measured, not marketed"
+        title="The numbers in Multan"
+        lede="Including the one most installers wouldn’t print: how sure we actually are about the yield figure."
+      />
+      <div class="grid gap-4 md:grid-cols-3 mt-12" data-reveal-group>
+        <div class="card p-7" data-reveal-child>
+          <p class="font-mono text-[0.68rem] uppercase tracking-[0.18em] text-ink-3">Yield</p>
+          <p class="mono-num text-5xl text-accent mt-3">
+            ≈{city.monthlyUnitsPerKw}<span class="text-2xl"> units</span>
+          </p>
+          <p class="text-ink-2 mt-3">
+            per installed kW per month, averaged across the year —
+            {city.yieldPerKwYear.toLocaleString('en-PK')} kWh per kW annually, quoted
+            conservatively for the reason in the honesty card.
+          </p>
+        </div>
+        <div class="card p-7" data-reveal-child>
+          <p class="font-mono text-[0.68rem] uppercase tracking-[0.18em] text-ink-3">Your DISCO</p>
+          <p class="font-display text-h3 mt-3 text-accent">{city.disco.code}</p>
+          <p class="text-ink-2 mt-3">
+            {city.disco.fullName} — covering {city.disco.areas}. The biggest, most rural patch of
+            any DISCO we work with.
+          </p>
+        </div>
+        <div class="card p-7" data-reveal-child>
+          <p class="font-mono text-[0.68rem] uppercase tracking-[0.18em] text-ink-3">The honest note</p>
+          <p class="text-ink-2 mt-3">
+            Multan’s figure is an interpolated estimate — measured atlas points exist for Lahore
+            and for Sindh, and Multan sits between them. We flag it, quote it conservatively, and
+            replace it with a roof-specific model at your free survey.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Heat derating — the Multan section -->
+  <section class="section pt-0">
+    <div class="wrap">
+      <p class="eyebrow mb-4" lang="ur-Latn" data-reveal>{city.greeting}</p>
+      <h2 class="font-display text-h2 text-balance max-w-[20ch]" data-reveal>
+        Fierce sun isn’t free output.
+      </h2>
+      <p class="text-lede text-ink-2 mt-5 max-w-2xl" data-reveal>{city.climateNote}</p>
+
+      <div class="mt-12 grid gap-4" data-reveal-group>
+        {
+          heatPairs.map((p) => (
+            <div class="card p-6 grid gap-4 md:grid-cols-2" data-reveal-child>
+              <p class="flex items-start gap-3 text-ink-2">
+                <span class="pair-ico is-heat">
+                  <Icon name="x" size={13} />
+                </span>
+                {p.heat}
+              </p>
+              <p class="flex items-start gap-3 text-ink-2 md:border-l md:border-[var(--line)] md:pl-6">
+                <span class="pair-ico is-fix">
+                  <Icon name="check" size={13} />
+                </span>
+                {p.fix}
+              </p>
+            </div>
+          ))
+        }
+      </div>
+      <p class="text-sm text-ink-3 mt-6 max-w-2xl" data-reveal>
+        Left: what 45°C+ summers do to solar hardware. Right: what your quote already includes
+        because of it.
+      </p>
+    </div>
+  </section>
+
+  <!-- Hybrid by default -->
+  <section class="section theme-night">
+    <div class="wrap">
+      <SectionHead
+        eyebrow="Backup, not luxury"
+        title="Hybrid is the default quote here, not the upgrade"
+        titleHtml="Hybrid is the <em>default quote</em> here, not the upgrade"
+        lede="In most cities a battery is a comfort decision. On South Punjab’s feeders, it’s usually the point."
+      />
+      <div class="grid gap-10 lg:grid-cols-2 mt-12">
+        <div data-reveal>
+          <p class="text-ink-2">{city.disco.sheddingReality}</p>
+          <p class="text-ink-2 mt-4">
+            The pattern matters as much as the hours: cuts cluster into summer evenings, exactly
+            when the house needs moving air most and the grid voltage sags even between outages.
+            An on-grid system shuts down with the grid; a hybrid rides through without you
+            noticing.
+          </p>
+        </div>
+        <div data-reveal>
+          <p class="text-ink-2">
+            So Multan quotes come hybrid by default: a lithium battery sized to the loads that
+            matter — fans, lights, fridge, Wi-Fi, the difference between a bad hour and a bad
+            night — typically adding Rs {batteryLakh} lakh per ~5 kWh of storage ({PRICES_AS_OF},
+            brand-dependent, confirmed at your survey).
+          </p>
+          <p class="text-ink-2 mt-4">
+            And if your feeder is one of the well-behaved urban ones? We’ll tell you, and quote
+            on-grid without the battery. Hybrid-by-default means we start from your grid’s
+            reality — not that we upsell storage to everyone.
+          </p>
+          <a
+            href="/calculator?city=multan"
+            class="link-gold inline-flex items-center gap-1.5 mt-5 font-medium"
+            data-evt="city_calc"
+            data-evt-src="multan_hybrid"
+          >
+            Price both versions for my roof <Icon name="arrow-up-right" size={15} />
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- South Punjab coverage & agri -->
+  <section class="section">
+    <div class="wrap">
+      <div class="grid gap-10 lg:grid-cols-[1.2fr_1fr] lg:items-center">
+        <div>
+          <SectionHead
+            eyebrow="All of South Punjab"
+            title="From city Cantt to tube-well"
+            lede="MEPCO’s thirteen districts hold Pakistan’s strongest, steadiest sunshine — and its most solar-hungry loads."
+          />
+          <div class="mt-8" data-reveal-group>
+            <p class="text-ink-2" data-reveal-child>
+              We quote and install across MEPCO territory — {city.disco.areas}. Recent surveys
+              across {areasLine}; Bahawalpur, D.G. Khan and Rahim Yar Khan are a drive, not a
+              different service.
+            </p>
+            <p class="text-ink-2 mt-4" data-reveal-child>
+              Beyond the rooftops, South Punjab’s quiet shift is agricultural: diesel and grid
+              tube-wells converting to solar, because daytime pumping matches daytime generation
+              with no battery needed. If you farm, bring your pump’s size and duty hours to the
+              survey — or we’ll measure them on site.
+            </p>
+            <p class="text-ink-2 mt-4" data-reveal-child>{city.disco.netMeteringReality}</p>
+            <p class="text-ink-2 mt-4" data-reveal-child>
+              That’s the whole trick with a huge rural DISCO: the file that goes in complete is the
+              file that comes out approved. Sanctioned load verified, drawings that match the roof,
+              approved-inverter papers attached — then weekly follow-ups until the meter spins both
+              ways.
+            </p>
+          </div>
+        </div>
+        <figure data-reveal>
+          <div class="ph rounded-2xl">
+            <Image
+              src={ruralImg}
+              alt="Solar panels mounted in a rural South Punjab setting"
+              widths={[480, 800, 1200]}
+              sizes="(min-width: 1024px) 40vw, 100vw"
+              format="avif"
+              quality={60}
+              loading="lazy"
+            />
+          </div>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section pt-0">
+    <div class="wrap max-w-3xl">
+      <SectionHead eyebrow="Asked in Multan" title="Multan questions, straight answers" />
+      <div class="mt-10">
+        <FAQ items={faqs} schema />
+      </div>
+    </div>
+  </section>
+
+  <section class="section pt-0">
+    <div class="wrap">
+      <CTABand
+        heading="The sun already does its part here. Your roof’s turn."
+        sub="Hybrid-first quotes, heat-rated hardware, and MEPCO paperwork handled — across all of South Punjab."
+        primaryHref="/calculator?city=multan"
+        primaryLabel="Run Multan’s numbers"
+        primaryIcon="calculator"
+        evtSrc="multan_final"
+      />
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .pair-ico {
+    flex: none;
+    width: 1.45rem;
+    height: 1.45rem;
+    margin-top: 0.15rem;
+    border-radius: 999px;
+    display: grid;
+    place-items: center;
+  }
+  .pair-ico.is-heat {
+    background: color-mix(in srgb, var(--danger, #e5484d) 14%, transparent);
+    color: var(--danger, #e5484d);
+  }
+  .pair-ico.is-fix {
+    background: color-mix(in srgb, var(--green, #4cd787) 14%, transparent);
+    color: var(--green, #4cd787);
+  }
+</style>

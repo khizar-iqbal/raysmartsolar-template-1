@@ -1,0 +1,1019 @@
+---
+import { Image } from 'astro:assets';
+import Layout from '~/layouts/Layout.astro';
+import Icon from '~/components/Icon.astro';
+import SectionHead from '~/components/SectionHead.astro';
+import CTABand from '~/components/CTABand.astro';
+import { site } from '~/config/site';
+import { PACKAGES, PRICES_AS_OF, PAYBACK_TYPICAL } from '~/data/facts';
+import { cities } from '~/data/cities';
+
+import heroHome from '~/assets/photos/hero-home.jpg';
+import roofLahore from '~/assets/photos/roof-lahore.jpg';
+import heroBusiness from '~/assets/photos/hero-business.jpg';
+
+const title = 'RaySmartSolar — Solar that kills the bill. Lahore & all major cities';
+const description =
+  'Solar installation for Pakistani homes and businesses — honest savings math under the 2026 net-billing rules, Tier-1 hardware with verifiable serials, and every page of the LESCO / NEPRA paperwork handled. Lahore-based. Free survey.';
+
+const teaserPackages = PACKAGES.filter((p) => [3, 5, 10].includes(p.kw));
+
+const fears = [
+  {
+    icon: 'pin' as const,
+    fear: '“They took the advance and disappeared.”',
+    answer: `We have a real office you can walk into — ${site.address.full} — and payments are staged against delivered work, never lump-sum up front.`,
+  },
+  {
+    icon: 'shield' as const,
+    fear: '“The panels weren’t what they promised.”',
+    answer:
+      'Every panel’s serial number is verified in the manufacturer’s own app, with you watching, before we leave the roof. Datasheets and warranty cards go in your file.',
+  },
+  {
+    icon: 'trending' as const,
+    fear: '“The savings were oversold.”',
+    answer:
+      'We quote ranges, not fantasies — sized for the 2026 net-billing rules, not the dead 1:1 net-metering math. Every assumption is printed on your proposal (and in our calculator).',
+  },
+  {
+    icon: 'filecheck' as const,
+    fear: '“The net-metering file never moved.”',
+    answer:
+      'We submit complete, first-time-right applications, chase your DISCO weekly, and tell you the honest current timeline before you sign — not after.',
+  },
+];
+
+const steps = [
+  {
+    n: '01',
+    title: 'Free survey & straight talk',
+    body: 'We measure the roof, check your sanctioned load and shading, and read your actual bills. If solar doesn’t make sense for you yet, we say so — that honesty is cheaper than your regret.',
+    meta: 'Same-week in Lahore',
+  },
+  {
+    n: '02',
+    title: 'A written quote you can hold us to',
+    body: 'Named panel and inverter models, serial-verified Tier-1 hardware, taxes and government fees itemised separately, savings shown as ranges with the assumptions printed.',
+    meta: 'Valid 14 days, price-locked',
+  },
+  {
+    n: '03',
+    title: 'Install day — done properly',
+    body: 'Certified crew, engineered mounting, real earthing, DC cabling that won’t cook in August. The monitoring app goes on your account, not ours.',
+    meta: '1–2 days for most homes',
+  },
+  {
+    n: '04',
+    title: 'Paperwork & power-on',
+    body: 'We file your complete DISCO / NEPRA prosumer application, chase it weekly, and keep you posted. Meter installed, system commissioned, savings begin.',
+    meta: 'DISCO timelines vary — we quote them honestly',
+  },
+];
+---
+
+<Layout {title} {description} heroNav>
+  <!-- ═══════════════════ HERO ═══════════════════ -->
+  <section class="hero theme-night" data-hero>
+    <div class="hero-media" data-hero-media aria-hidden="true">
+      <Image
+        src={heroHome}
+        alt=""
+        widths={[480, 800, 1200, 1600, 2400]}
+        sizes="100vw"
+        format="avif"
+        quality={62}
+        loading="eager"
+        fetchpriority="high"
+        class="hero-img"
+      />
+      <div class="hero-scrim"></div>
+    </div>
+    <div class="hero-glow" data-hero-glow aria-hidden="true"></div>
+
+    <div class="wrap hero-content">
+      <p class="eyebrow mb-5" data-hero-stage style="--stage:0">
+        Solar, done properly · Pakistan
+      </p>
+      <h1 class="font-display text-display max-w-[13ch] text-balance" data-hero-title>
+        The sun doesn’t do load&#8209;shedding.
+      </h1>
+      <p class="text-lede text-ink-2 max-w-xl mt-6" data-hero-stage style="--stage:1">
+        Cut your bill by up to <strong class="text-ink">90%</strong>, keep the fans turning through
+        every outage — and we file every page of the {site.homeDisco} paperwork under the
+        <strong class="text-ink">real 2026 rules</strong>.
+      </p>
+
+      <div class="mt-9 flex flex-wrap items-center gap-3.5" data-hero-stage style="--stage:2">
+        <a
+          href="/calculator"
+          class="btn btn-gold btn-lg w-full sm:w-auto"
+          data-evt="calc_open"
+          data-evt-src="hero"
+        >
+          <Icon name="calculator" size={19} /> See my savings
+        </a>
+        <a href="#bill-slider" class="btn btn-ghost btn-lg w-full sm:w-auto" data-evt="hero_secondary">
+          Try the 10-second version <Icon name="chevron-down" size={18} />
+        </a>
+      </div>
+
+      <ul class="hero-chips mt-10" data-hero-stage style="--stage:3">
+        <li class="chip"><Icon name="filecheck" size={15} class="text-gold" /> Net-metering file handled, start to finish</li>
+        <li class="chip"><Icon name="shield" size={15} class="text-gold" /> Tier-1 panels, serials you can verify</li>
+        <li class="chip"><Icon name="pin" size={15} class="text-gold" /> A Lahore office you can visit</li>
+      </ul>
+    </div>
+
+    <div class="hero-cue" data-hero-stage style="--stage:4" aria-hidden="true">
+      <span class="hero-cue-line"></span>
+      <span class="font-mono text-[0.65rem] tracking-[0.25em] uppercase text-ink-3">Scroll</span>
+    </div>
+  </section>
+
+  <!-- ═══════════════ HONEST NUMBERS ═══════════════ -->
+  <section class="section">
+    <div class="wrap">
+      <SectionHead
+        eyebrow="The honest math"
+        title="Numbers first. Sales talk never."
+        titleHtml="Numbers first. <em>Sales talk</em> never."
+        lede="Pakistan’s tariffs are brutal and its sunshine is free — solar here pays back faster than almost anywhere on earth. Here’s the honest shape of it, before you give us a single detail."
+      />
+      <div class="grid gap-4 sm:grid-cols-3 mt-12" data-reveal-group>
+        <div class="card p-7" data-reveal-child>
+          <p class="mono-num text-5xl text-accent">
+            <span data-count-to="90">0</span><span class="text-3xl">%</span>
+          </p>
+          <p class="mt-3 text-ink-2">
+            of a typical bill gone — right-sized system with evening storage. Even without a
+            battery, most homes clear half.
+          </p>
+        </div>
+        <div class="card p-7" data-reveal-child>
+          <p class="mono-num text-5xl text-accent">
+            <span data-count-to="3">0</span><span class="text-3xl">–5 yrs</span>
+          </p>
+          <p class="mt-3 text-ink-2">
+            typical payback at today’s tariffs. After that: ~20 years of essentially free daytime
+            power.
+          </p>
+        </div>
+        <div class="card p-7" data-reveal-child>
+          <p class="mono-num text-5xl text-accent">
+            <span data-count-to="25">0</span><span class="text-3xl">yrs</span>
+          </p>
+          <p class="mt-3 text-ink-2">
+            performance warranty on Tier-1 panels — written, manufacturer-backed, serial-verifiable.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ BILL SLIDER TEASER ═══════════════ -->
+  <section class="section pt-0" id="bill-slider">
+    <div class="wrap max-w-3xl">
+      <div class="card p-7 sm:p-10 slider-card" data-reveal>
+        <p class="eyebrow mb-3">The 10-second answer</p>
+        <h2 class="font-display text-h3">Drag your bill. Watch it shrink.</h2>
+
+        <div class="mt-8">
+          <div class="flex items-baseline justify-between gap-4 flex-wrap">
+            <p class="text-sm text-ink-3">Your monthly bill</p>
+            <p class="mono-num text-3xl text-ink" data-bs="bill">Rs 25,000</p>
+          </div>
+          <input
+            type="range"
+            min="8000"
+            max="200000"
+            step="1000"
+            value="25000"
+            class="bill-range mt-3"
+            aria-label="Monthly electricity bill in rupees"
+            data-bs-range
+          />
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 mt-8">
+          <div>
+            <p class="text-xs font-mono uppercase tracking-[0.16em] text-ink-3">New bill ≈</p>
+            <p class="mono-num text-xl sm:text-2xl text-money mt-1" data-bs="newBill">—</p>
+          </div>
+          <div>
+            <p class="text-xs font-mono uppercase tracking-[0.16em] text-ink-3">System</p>
+            <p class="mono-num text-xl sm:text-2xl mt-1"><span data-bs="size">—</span> kW</p>
+          </div>
+          <div class="col-span-2 sm:col-span-1">
+            <p class="text-xs font-mono uppercase tracking-[0.16em] text-ink-3">Pays back in</p>
+            <p class="mono-num text-xl sm:text-2xl mt-1" data-bs="payback">—</p>
+          </div>
+        </div>
+
+        <p class="text-xs text-ink-3 mt-6">
+          Quick estimate — Lahore home with evening battery, 2026 net-billing rules. The full
+          calculator shows every assumption.
+        </p>
+        <a
+          href="/calculator"
+          class="btn btn-gold mt-5"
+          data-bs-link
+          data-evt="calc_open"
+          data-evt-src="slider"
+        >
+          Open the honest calculator <Icon name="arrow-right" size={17} />
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ FORK: HOME / BUSINESS ═══════════════ -->
+  <section class="section pt-0">
+    <div class="wrap">
+      <SectionHead
+        eyebrow="Two different problems"
+        title="A house feels the outage. A business counts it."
+        lede="Different pains, different math, different paperwork — so we treat them as different worlds."
+      />
+      <div class="grid gap-5 md:grid-cols-2 mt-12" data-reveal-group>
+        <a href="/homes" class="fork-card ph" data-reveal-child data-evt="fork" data-evt-kind="homes">
+          <Image
+            src={roofLahore}
+            alt="Solar panels installed on a flat concrete rooftop in Lahore"
+            widths={[480, 800, 1200]}
+            sizes="(min-width: 768px) 50vw, 100vw"
+            format="avif"
+            quality={60}
+            loading="lazy"
+          />
+          <div class="fork-body">
+            <p class="eyebrow mb-2">For your home</p>
+            <p class="font-display text-h3">Sleep through the outage. Watch the bill shrink.</p>
+            <span class="fork-cta">Solar for homes <Icon name="arrow-right" size={17} /></span>
+          </div>
+        </a>
+        <a href="/business" class="fork-card ph" data-reveal-child data-evt="fork" data-evt-kind="business">
+          <Image
+            src={heroBusiness}
+            alt="Large solar array at sunset"
+            widths={[480, 800, 1200]}
+            sizes="(min-width: 768px) 50vw, 100vw"
+            format="avif"
+            quality={60}
+            loading="lazy"
+          />
+          <div class="fork-body">
+            <p class="eyebrow mb-2">For your business</p>
+            <p class="font-display text-h3">Your biggest overhead, turned into an asset.</p>
+            <span class="fork-cta">Solar for business <Icon name="arrow-right" size={17} /></span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ JOURNEY ═══════════════ -->
+  <section class="section" id="journey" data-scene="steps">
+    <div class="wrap">
+      <SectionHead
+        eyebrow="How it works"
+        title="From first call to a meter that finally behaves."
+        lede="Four steps. You’ll know exactly where things stand at every one of them — starting with whether solar even makes sense for you."
+      />
+      <div class="journey mt-14">
+        <div class="journey-line" aria-hidden="true"><span data-steps-line></span></div>
+        <ol class="journey-list">
+          {
+            steps.map((s) => (
+              <li class="journey-step" data-reveal>
+                <div class="journey-dot" aria-hidden="true">
+                  <span class="mono-num">{s.n}</span>
+                </div>
+                <div class="journey-card card p-6 sm:p-7">
+                  <div class="flex flex-wrap items-baseline justify-between gap-2">
+                    <h3 class="font-display text-h3">{s.title}</h3>
+                    <p class="font-mono text-[0.7rem] uppercase tracking-[0.15em] text-accent">{s.meta}</p>
+                  </div>
+                  <p class="text-ink-2 mt-3 max-w-2xl">{s.body}</p>
+                </div>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+      <div class="mt-10 flex justify-center" data-reveal>
+        <a href="/quote" class="btn btn-gold btn-lg" data-evt="quote_open" data-evt-src="journey">
+          Start with the free survey <Icon name="arrow-right" size={18} />
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ METER SCROLLY (2026 rules) ═══════════════ -->
+  <section class="meter-scene theme-night" data-scene="meter">
+    <div class="meter-pin" data-meter-pin>
+      <div class="wrap meter-layout">
+        <div class="meter-copy">
+          <p class="eyebrow mb-4">Net metering, 2026 edition</p>
+          <h2 class="font-display text-h2 max-w-[16ch]">
+            The rules changed. <em class="fx-it">Our math changed with them.</em>
+          </h2>
+          <div class="meter-captions">
+            <p class="meter-caption" data-meter-caption>
+              <strong class="text-ink">Daytime:</strong> your roof runs the house directly — every
+              unit you don’t buy saves you the full Rs 40–65. Leftovers export to the grid for a
+              small credit.
+            </p>
+            <p class="meter-caption" data-meter-caption>
+              <strong class="text-ink">Evening:</strong> the battery carries fans, lights and Wi-Fi
+              through peak hours and outages — the expensive units you’d otherwise buy back from
+              the grid.
+            </p>
+            <p class="meter-caption" data-meter-caption>
+              <strong class="text-ink">Month end:</strong> a bill that finally behaves — and every
+              page of the prosumer paperwork was ours to handle, not yours.
+            </p>
+          </div>
+          <a href="/net-metering" class="link-gold inline-flex items-center gap-1.5 mt-2 font-medium" data-evt="netmetering_more">
+            How the 2026 rules actually work <Icon name="arrow-up-right" size={15} />
+          </a>
+        </div>
+
+        <div class="meter-stage" aria-hidden="true">
+          <svg viewBox="0 0 520 420" fill="none" class="meter-svg">
+            <!-- sun -->
+            <g data-meter-sun>
+              <circle cx="260" cy="78" r="26" fill="url(#sunfill)"></circle>
+              <g stroke="var(--gold)" stroke-width="2.5" stroke-linecap="round" opacity="0.85">
+                <path d="M260 34v-12M300 46l8-8M220 46l-8-8M312 78h12M208 78h-12"></path>
+              </g>
+            </g>
+            <!-- house -->
+            <g stroke="var(--n-text)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round">
+              <path d="M52 232 116 180l64 52" opacity="0.9"></path>
+              <path d="M66 232v84h100v-84" opacity="0.9"></path>
+              <rect x="96" y="266" width="40" height="50" rx="3" fill="rgb(242 166 60 / 0.16)" stroke-opacity="0.9"></rect>
+              <path d="M96 200h0" opacity="0"></path>
+            </g>
+            <!-- panels on house roof -->
+            <g stroke="var(--gold)" stroke-width="2" opacity="0.95">
+              <path d="M78 214 116 184l38 30" fill="rgb(242 166 60 / 0.1)"></path>
+              <path d="M91 204l50 0M84 210l58 0" opacity="0.55"></path>
+            </g>
+            <!-- battery -->
+            <g data-meter-batt>
+              <rect x="182" y="286" width="34" height="30" rx="4" stroke="var(--green)" stroke-width="2.25" fill="rgb(76 215 135 / 0.08)"></rect>
+              <path d="M191 281h16" stroke="var(--green)" stroke-width="2.25" stroke-linecap="round"></path>
+              <path d="M195 294l-4 8h6l-4 8" stroke="var(--green)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"></path>
+            </g>
+            <!-- meter -->
+            <g>
+              <rect x="234" y="238" width="88" height="78" rx="10" stroke="var(--n-text)" stroke-width="2.5" fill="rgb(17 26 49 / 0.85)"></rect>
+              <rect x="248" y="254" width="60" height="26" rx="4" fill="#0A0F1E" stroke="rgb(242 166 60 / 0.4)" stroke-width="1.5"></rect>
+              <text x="278" y="272" text-anchor="middle" font-family="Spline Sans Mono, monospace" font-size="15" fill="var(--gold)" data-meter-digits>640</text>
+              <text x="278" y="299" text-anchor="middle" font-family="Spline Sans Mono, monospace" font-size="9" letter-spacing="2" fill="var(--n-text-3)">UNITS · MONTH</text>
+              <circle cx="278" cy="308" r="2.5" fill="var(--green)"></circle>
+            </g>
+            <!-- pylon -->
+            <g stroke="var(--n-text-2)" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" opacity="0.9">
+              <path d="M424 316 442 208h24l18 108M436 240h36M430 272h48M424 316h60"></path>
+              <path d="M442 208l24 32m0-32-24 32" opacity="0.6"></path>
+            </g>
+            <!-- flows: house -> meter -> grid (day export) -->
+            <g data-meter-out stroke="var(--gold)" stroke-width="2.5" stroke-linecap="round">
+              <path d="M170 254c22 0 40 6 58 6" stroke-dasharray="6 8" class="flow"></path>
+              <path d="M326 268c34 0 62 10 90 22" stroke-dasharray="6 8" class="flow"></path>
+              <path d="M410 284l12 8-14 4" fill="none"></path>
+            </g>
+            <!-- flows: battery -> house (evening) -->
+            <g data-meter-in stroke="var(--green)" stroke-width="2.5" stroke-linecap="round">
+              <path d="M196 282c0-18 -12-34 -30-42" stroke-dasharray="5 7" class="flow"></path>
+              <path d="M172 246l-8-10 12-2" fill="none"></path>
+            </g>
+            <!-- ground -->
+            <path d="M30 316h460" stroke="var(--n-line-strong)" stroke-width="2" stroke-linecap="round"></path>
+            <defs>
+              <radialGradient id="sunfill" cx="0.4" cy="0.35" r="1">
+                <stop offset="0" stop-color="#FFD27A"></stop>
+                <stop offset="1" stop-color="#F2A63C"></stop>
+              </radialGradient>
+            </defs>
+          </svg>
+
+          <!-- the month-end bill chip -->
+          <div class="meter-bill card" data-meter-bill>
+            <p class="text-[0.65rem] font-mono uppercase tracking-[0.18em] text-ink-3">Month-end bill</p>
+            <p class="mono-num text-lg">
+              <span class="line-through text-ink-3 decoration-danger/70">Rs 43,750</span>
+              <span class="text-money ml-2">Rs 3,900</span>
+            </p>
+            <p class="text-[0.62rem] text-ink-3 mt-1">illustrative example — yours is computed honestly</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ PACKAGES TEASER ═══════════════ -->
+  <section class="section">
+    <div class="wrap">
+      <SectionHead
+        eyebrow={`Straight prices · ${PRICES_AS_OF}`}
+        title="“5kW solar price?” Asked constantly. Answered here."
+        lede="Turnkey bands for Tier-1 hardware, honestly ranged — because panel prices move with the dollar. Your exact quote gets locked in writing after the free survey."
+      />
+      <div class="grid gap-4 md:grid-cols-3 mt-12" data-reveal-group>
+        {
+          teaserPackages.map((p) => (
+            <a href="/pricing" class="pkg card p-7 block" data-reveal-child data-evt="pkg_card" data-evt-kw={String(p.kw)}>
+              <div class="flex items-baseline justify-between">
+                <p class="mono-num text-5xl text-accent">
+                  {p.kw}
+                  <span class="text-2xl">kW</span>
+                </p>
+                <Icon name="arrow-up-right" size={20} class="text-ink-3 pkg-arrow" />
+              </div>
+              <p class="mono-num text-xl mt-4">
+                Rs {(p.low / 100000).toFixed(1)} – {(p.high / 100000).toFixed(1)} lakh
+              </p>
+              <p class="text-sm text-ink-3 mt-1">installed · on-grid · Tier-1</p>
+              <hr class="rule my-5" />
+              <p class="text-sm text-ink-2">
+                Fits bills around{' '}
+                <strong class="text-ink">
+                  Rs {Math.round(p.billLow / 1000)}–{Math.round(p.billHigh / 1000)}k
+                </strong>
+                /month ({p.unitsLow}–{p.unitsHigh} units)
+              </p>
+            </a>
+          ))
+        }
+      </div>
+      <div class="mt-8 flex flex-wrap items-center gap-4" data-reveal>
+        <a href="/pricing" class="btn btn-ghost" data-evt="pricing_all">
+          All sizes &amp; what’s inside the price <Icon name="arrow-right" size={16} />
+        </a>
+        <p class="text-sm text-ink-3">Hybrid &amp; battery options priced on the <a href="/pricing" class="link-gold">pricing page</a>.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ TRUST / ANTI-SCAM ═══════════════ -->
+  <section class="section theme-night trust-band">
+    <div class="wrap">
+      <SectionHead
+        eyebrow="Let’s address it directly"
+        title="You’ve heard the horror stories. So have we."
+        lede="This market burned a lot of people — vanishing installers, relabeled panels, oversold savings, files that never moved. Here’s our answer to each, in writing."
+      />
+      <div class="grid gap-4 md:grid-cols-2 mt-12" data-reveal-group>
+        {
+          fears.map((f) => (
+            <div class="card p-7 fear-card" data-reveal-child>
+              <p class="font-display text-[1.2rem] leading-snug text-ink-2 italic">{f.fear}</p>
+              <div class="flex items-start gap-3 mt-4">
+                <span class="fear-icon">
+                  <Icon name={f.icon} size={17} />
+                </span>
+                <p class="text-ink-2">
+                  <strong class="text-ink">Our answer: </strong>
+                  {f.answer}
+                </p>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+
+      <!-- Certifications bar — structure ready, owner supplies documents.
+           See CONTENT-TODO.md §3. Never fake credentials. -->
+      <div class="cert-bar card mt-6 p-6" data-reveal data-todo="certifications">
+        <div class="flex flex-wrap items-center gap-x-8 gap-y-3">
+          <p class="font-mono text-[0.68rem] uppercase tracking-[0.2em] text-ink-3">Credentials</p>
+          <p class="text-sm text-ink-2 flex items-center gap-2">
+            <Icon name="shield" size={15} class="text-gold" /> PPIB installer certification
+            <span class="todo-chip">certificate № — being added</span>
+          </p>
+          <p class="text-sm text-ink-2 flex items-center gap-2">
+            <Icon name="filecheck" size={15} class="text-gold" /> {site.homeDisco}-registered vendor
+            <span class="todo-chip">docs on request</span>
+          </p>
+          <p class="text-sm text-ink-2 flex items-center gap-2">
+            <Icon name="users" size={15} class="text-gold" /> Verify us in person — {site.address.area}, {site.address.city}
+          </p>
+        </div>
+      </div>
+
+      <p class="mt-6 text-sm text-ink-3 max-w-2xl" data-reveal>
+        Customer reviews will appear here as they come in — real ones, with names and dates, never
+        purchased. Until then: come meet us, or WhatsApp us hard questions. We like those.
+      </p>
+    </div>
+  </section>
+
+  <!-- ═══════════════ CITIES ═══════════════ -->
+  <section class="section">
+    <div class="wrap">
+      <SectionHead
+        eyebrow="Where we work"
+        title="Local sun, local rules, local answers."
+        lede="Every DISCO behaves differently — timelines, paperwork, moods. Each city page is written for its own grid, not copy-pasted."
+      />
+      <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-5 mt-10" data-reveal-group>
+        {
+          cities.map((c) => (
+            <a href={`/${c.slug}`} class="city-card card p-5" data-reveal-child data-evt="city_card" data-evt-city={c.slug}>
+              <p class="font-display text-[1.15rem] flex items-center justify-between gap-2">
+                {c.name.split(' & ')[0]}
+                <Icon name="arrow-up-right" size={16} class="text-ink-3 city-arrow" />
+              </p>
+              <p class="mono-num text-[0.68rem] uppercase tracking-[0.14em] text-accent mt-2">{c.disco.code}</p>
+              <p class="text-xs text-ink-3 mt-1">≈{c.monthlyUnitsPerKw} units/kW/month</p>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ LEARN + GUIDE ═══════════════ -->
+  <section class="section pt-0">
+    <div class="wrap">
+      <SectionHead
+        eyebrow="Do your homework"
+        title="Read first. Decide later. We’ll wait."
+        lede="Straight guides to prices, the 2026 rules, and sizing — written to be useful even if you never call us."
+      />
+      <div class="grid gap-4 md:grid-cols-3 mt-10" data-reveal-group>
+        <a href="/learn/solar-prices-pakistan-2026" class="card p-6 learn-card" data-reveal-child>
+          <p class="eyebrow mb-3">Prices</p>
+          <p class="font-display text-h3">What solar really costs in Pakistan right now</p>
+          <span class="learn-more">Read <Icon name="arrow-right" size={15} /></span>
+        </a>
+        <a href="/learn/net-metering-2026" class="card p-6 learn-card" data-reveal-child>
+          <p class="eyebrow mb-3">The 2026 rules</p>
+          <p class="font-display text-h3">Net metering is gone. Here’s what replaced it.</p>
+          <span class="learn-more">Read <Icon name="arrow-right" size={15} /></span>
+        </a>
+        <a href="/learn/how-many-solar-panels" class="card p-6 learn-card" data-reveal-child>
+          <p class="eyebrow mb-3">Sizing</p>
+          <p class="font-display text-h3">How many panels your bill actually needs</p>
+          <span class="learn-more">Read <Icon name="arrow-right" size={15} /></span>
+        </a>
+      </div>
+      <div class="mt-6" data-reveal>
+        <a href="/guide" class="guide-banner card p-6 flex flex-wrap items-center justify-between gap-4" data-evt="guide_open">
+          <div class="flex items-center gap-4">
+            <span class="guide-icon"><Icon name="download" size={20} /></span>
+            <div>
+              <p class="font-medium">The Solar Buyer’s Guide (Pakistan, 2026)</p>
+              <p class="text-sm text-ink-3">The scam checklist alone is worth the download.</p>
+            </div>
+          </div>
+          <span class="btn btn-ghost btn-sm">Get the free guide</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ FINAL CTA ═══════════════ -->
+  <section class="section pt-0">
+    <div class="wrap">
+      <CTABand
+        heading="Talk to a human in Lahore."
+        sub={`Free survey, written quote, straight answers — from ${site.address.area}, not a call centre. Koi zabardasti nahi.`}
+        evtSrc="home_final"
+      />
+    </div>
+  </section>
+</Layout>
+
+<style>
+  /* ── hero ── */
+  .hero {
+    position: relative;
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    overflow: clip;
+    background: var(--n-bg);
+    color: var(--n-text);
+  }
+  .hero-media {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+  .hero-media :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 32% 30%;
+    filter: saturate(0.9) contrast(1.06) brightness(0.82);
+  }
+  @media (min-width: 900px) {
+    .hero-media :global(img) {
+      object-position: 50% 34%;
+    }
+  }
+  .hero-scrim {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(to top, rgb(8 12 24 / 0.92) 0%, rgb(8 12 24 / 0.55) 34%, rgb(8 12 24 / 0.18) 60%, rgb(8 12 24 / 0.38) 100%),
+      linear-gradient(100deg, rgb(8 12 24 / 0.55) 0%, transparent 55%);
+  }
+  .hero-glow {
+    position: absolute;
+    z-index: 1;
+    inset: 0;
+    pointer-events: none;
+    background: radial-gradient(58% 36% at 50% 104%, rgb(242 166 60 / 0.2), transparent 70%);
+  }
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    padding-top: 7.5rem;
+    padding-bottom: clamp(6.5rem, 13vh, 9rem);
+  }
+  .hero-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    padding: 0;
+    list-style: none;
+  }
+  .hero .chip {
+    background: rgb(10 15 30 / 0.55);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+  .hero-cue {
+    position: absolute;
+    z-index: 2;
+    left: 50%;
+    bottom: 1.1rem;
+    transform: translateX(-50%);
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  @media (min-width: 768px) {
+    .hero-cue {
+      display: flex;
+    }
+  }
+  .hero-cue-line {
+    width: 1px;
+    height: 2.4rem;
+    background: linear-gradient(to bottom, transparent, var(--gold));
+    animation: cue 2.6s var(--ease-inout) infinite;
+    transform-origin: top;
+  }
+  @keyframes cue {
+    0%, 100% { transform: scaleY(0.35); opacity: 0.4; }
+    50% { transform: scaleY(1); opacity: 1; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hero-cue-line { animation: none; }
+  }
+
+  /* ── bill slider ── */
+  .slider-card {
+    background:
+      radial-gradient(70% 120% at 100% 0%, rgb(242 166 60 / 0.07), transparent 55%),
+      var(--surface);
+  }
+  .bill-range {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 6px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--gold) var(--fill, 12%), var(--line) var(--fill, 12%));
+    outline-offset: 6px;
+  }
+  .bill-range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 30px;
+    height: 30px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, var(--sun-a), var(--gold));
+    border: 3px solid #201405;
+    box-shadow: var(--glow-gold);
+    cursor: grab;
+    transition: transform 150ms var(--ease-out);
+  }
+  .bill-range::-webkit-slider-thumb:active {
+    cursor: grabbing;
+    transform: scale(1.15);
+  }
+  .bill-range::-moz-range-thumb {
+    width: 28px;
+    height: 28px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, var(--sun-a), var(--gold));
+    border: 3px solid #201405;
+    box-shadow: var(--glow-gold);
+    cursor: grab;
+  }
+
+  /* ── fork cards ── */
+  .fork-card {
+    position: relative;
+    display: block;
+    border-radius: var(--radius-card);
+    min-height: 21rem;
+    isolation: isolate;
+    transition: transform 350ms var(--ease-out);
+  }
+  .fork-card:hover {
+    transform: translateY(-4px);
+  }
+  .fork-card :global(img) {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    transition: transform 700ms var(--ease-out);
+  }
+  .fork-card:hover :global(img) {
+    transform: scale(1.04);
+  }
+  .fork-card::after {
+    border-radius: inherit;
+  }
+  .fork-body {
+    position: absolute;
+    inset: auto 0 0 0;
+    z-index: 2;
+    padding: 1.6rem;
+    color: var(--n-text);
+  }
+  .fork-body .eyebrow { color: var(--gold); }
+  .fork-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.9rem;
+    font-weight: 560;
+    color: var(--gold);
+  }
+
+  /* ── journey ── */
+  .journey {
+    position: relative;
+  }
+  .journey-line {
+    position: absolute;
+    left: 1.35rem;
+    top: 0.5rem;
+    bottom: 0.5rem;
+    width: 2px;
+    background: var(--line);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .journey-line span {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, var(--sun-a), var(--gold));
+    transform: scaleY(0);
+    transform-origin: top;
+  }
+  html[data-motion='lite'] .journey-line span,
+  html[data-motion='off'] .journey-line span {
+    transform: none;
+  }
+  .journey-list {
+    display: grid;
+    gap: 1.25rem;
+    list-style: none;
+    padding: 0;
+  }
+  .journey-step {
+    display: grid;
+    grid-template-columns: 2.75rem 1fr;
+    gap: 1rem;
+    align-items: start;
+  }
+  .journey-dot {
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 999px;
+    display: grid;
+    place-items: center;
+    background: var(--surface);
+    border: 1px solid var(--line-strong);
+    color: var(--accent-text);
+    font-size: 0.8rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ── meter scene ── */
+  .meter-scene {
+    background:
+      radial-gradient(80rem 40rem at 110% -10%, rgb(242 166 60 / 0.06), transparent 60%),
+      var(--n-bg);
+    color: var(--n-text);
+    border-block: 1px solid var(--n-line);
+  }
+  .meter-pin {
+    min-height: 100svh;
+    display: flex;
+    align-items: center;
+    padding-block: clamp(3rem, 8vh, 5rem);
+  }
+  .meter-layout {
+    display: grid;
+    gap: 2.5rem;
+    align-items: center;
+  }
+  @media (min-width: 900px) {
+    .meter-layout {
+      grid-template-columns: 1.05fr 1fr;
+      gap: 4rem;
+    }
+  }
+  .meter-captions {
+    position: relative;
+    margin-top: 1.75rem;
+    min-height: 7.5rem;
+  }
+  .meter-caption {
+    color: var(--n-text-2);
+    max-width: 34rem;
+  }
+  /* scrolly mode: captions stack & crossfade; static mode: list them */
+  .is-scrolly .meter-caption {
+    position: absolute;
+    inset: 0 auto auto 0;
+    opacity: 0;
+  }
+  .meter-scene:not(.is-scrolly) .meter-caption + .meter-caption {
+    margin-top: 0.9rem;
+  }
+  .meter-scene:not(.is-scrolly) .meter-pin {
+    min-height: 0;
+  }
+  .meter-stage {
+    position: relative;
+  }
+  .meter-svg {
+    width: 100%;
+    max-width: 30rem;
+    margin-inline: auto;
+    display: block;
+  }
+  .flow {
+    animation: flowdash 1.4s linear infinite;
+  }
+  @keyframes flowdash {
+    to {
+      stroke-dashoffset: -28;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .flow { animation: none; }
+  }
+  .meter-bill {
+    position: absolute;
+    right: 4%;
+    bottom: -0.5rem;
+    padding: 0.8rem 1rem;
+  }
+  .is-scrolly .meter-bill {
+    opacity: 0;
+  }
+
+  /* ── packages ── */
+  .pkg {
+    transition: transform 300ms var(--ease-out), border-color 200ms;
+  }
+  .pkg:hover {
+    transform: translateY(-4px);
+    border-color: color-mix(in srgb, var(--gold) 45%, transparent);
+  }
+  .pkg-arrow { transition: transform 300ms var(--ease-out), color 200ms; }
+  .pkg:hover .pkg-arrow {
+    transform: translate(3px, -3px);
+    color: var(--accent-text);
+  }
+
+  /* ── trust ── */
+  .trust-band {
+    background:
+      radial-gradient(70rem 30rem at -10% 110%, rgb(242 166 60 / 0.05), transparent 55%),
+      var(--n-bg);
+    border-block: 1px solid var(--n-line);
+  }
+  .fear-card .fear-icon {
+    flex: none;
+    width: 2.1rem;
+    height: 2.1rem;
+    border-radius: 999px;
+    display: grid;
+    place-items: center;
+    background: color-mix(in srgb, var(--gold) 15%, transparent);
+    color: var(--gold);
+    margin-top: 0.15rem;
+  }
+  .todo-chip {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    padding: 0.2rem 0.55rem;
+    border-radius: 999px;
+    border: 1px dashed var(--line-strong);
+    color: var(--text-3);
+  }
+
+  /* ── cities ── */
+  .city-card {
+    transition: transform 300ms var(--ease-out), border-color 200ms;
+  }
+  .city-card:hover {
+    transform: translateY(-3px);
+    border-color: color-mix(in srgb, var(--gold) 40%, transparent);
+  }
+  .city-arrow { transition: transform 300ms var(--ease-out); }
+  .city-card:hover .city-arrow { transform: translate(2px, -2px); color: var(--accent-text); }
+
+  /* ── learn ── */
+  .learn-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    transition: transform 300ms var(--ease-out), border-color 200ms;
+  }
+  .learn-card:hover {
+    transform: translateY(-4px);
+    border-color: color-mix(in srgb, var(--gold) 40%, transparent);
+  }
+  .learn-more {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--accent-text);
+    font-weight: 550;
+    margin-top: auto;
+    padding-top: 1.25rem;
+  }
+  .guide-banner {
+    transition: border-color 200ms, transform 300ms var(--ease-out);
+  }
+  .guide-banner:hover {
+    border-color: color-mix(in srgb, var(--gold) 45%, transparent);
+    transform: translateY(-2px);
+  }
+  .guide-icon {
+    width: 2.9rem;
+    height: 2.9rem;
+    border-radius: 999px;
+    display: grid;
+    place-items: center;
+    background: color-mix(in srgb, var(--gold) 15%, transparent);
+    color: var(--gold);
+  }
+</style>
+
+<script>
+  import { calculate } from '~/lib/calc';
+  import { track } from '~/scripts/app';
+
+  function initBillSlider() {
+    const range = document.querySelector<HTMLInputElement>('[data-bs-range]');
+    if (!range || range.dataset.bound) return;
+    range.dataset.bound = '1';
+
+    const out = (k: string) => document.querySelector<HTMLElement>(`[data-bs="${k}"]`)!;
+    const link = document.querySelector<HTMLAnchorElement>('[data-bs-link]')!;
+    let tracked = false;
+
+    const render = () => {
+      const bill = Number(range.value);
+      const pct = ((bill - Number(range.min)) / (Number(range.max) - Number(range.min))) * 100;
+      range.style.setProperty('--fill', `${pct}%`);
+      out('bill').textContent = `Rs ${bill.toLocaleString('en-PK')}`;
+      const r = calculate({ bill, citySlug: 'lahore', type: 'home', battery: true });
+      if (!r) return;
+      out('newBill').textContent = `Rs ${r.newBillLow.toLocaleString('en-PK')}–${r.newBillHigh.toLocaleString('en-PK')}`;
+      out('size').textContent = String(r.sizeKw);
+      out('payback').textContent =
+        r.paybackHigh > 25 ? '8+ yrs' : `${r.paybackLow}–${r.paybackHigh} yrs`;
+      link.href = `/calculator?bill=${bill}`;
+      if (!tracked) {
+        tracked = true;
+        track('slider_use', {});
+      }
+    };
+    range.addEventListener('input', render);
+    render();
+  }
+
+  document.addEventListener('astro:page-load', initBillSlider);
+</script>

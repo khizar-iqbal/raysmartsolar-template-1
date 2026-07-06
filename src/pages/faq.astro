@@ -1,0 +1,223 @@
+---
+import Layout from '~/layouts/Layout.astro';
+import PageHero from '~/components/PageHero.astro';
+import SectionHead from '~/components/SectionHead.astro';
+import CTABand from '~/components/CTABand.astro';
+import FAQ from '~/components/FAQ.astro';
+import Icon from '~/components/Icon.astro';
+import { site } from '~/config/site';
+import {
+  PRICES_AS_OF,
+  PACKAGES,
+  NET_BILLING,
+  BATTERY,
+  HARDWARE,
+  FINANCING,
+  PAYBACK_TYPICAL,
+  BILL_CUT_TYPICAL,
+} from '~/data/facts';
+
+const title = 'Solar FAQ — savings, 2026 net billing, prices, warranties';
+const description =
+  'Every question we get about going solar in Pakistan — honest savings math, the 2026 net-billing rules, prices, DISCO timelines, batteries and warranties.';
+
+const p5 = PACKAGES.find((p) => p.kw === 5)!;
+
+const gettingStarted = [
+  {
+    q: 'Where do I even start?',
+    a: 'Two lazy-proof options: run your monthly bill through the <a href="/calculator">honest calculator</a> (sixty seconds, every assumption shown), or just <a href="/quote">request the free survey</a> and we’ll do the math on your actual roof and bills. No payment, no obligation either way.',
+  },
+  {
+    q: 'What size system do I need?',
+    a: 'It’s driven by your bill, your daytime usage and your sanctioned load — under the 2026 rules a system can’t exceed the load your connection is sanctioned for. Our catalog runs 3–25 kW, and the <a href="/pricing">pricing page</a> shows which bill range each size fits. The <a href="/calculator">calculator</a> gives you a number in a minute; the survey makes it exact.',
+  },
+  {
+    q: 'Is my roof suitable?',
+    a: 'Most Pakistani flat roofs are. At the survey we check unshaded space (south-facing helps), structural condition, and where the cabling will run. Water tanks and washing lines aren’t dealbreakers — elevated structures solve them, at an extra cost we quote up front. Rented roof? Possible with the owner’s written consent.',
+  },
+  {
+    q: 'How long does the whole thing take?',
+    a: `The install itself: 1–2 days for most homes. The DISCO’s export-meter paperwork runs separately — ${NET_BILLING.approvalReality} — and we chase it weekly. Meanwhile the system already cuts your bill on every unit you self-consume, from day one.`,
+  },
+  {
+    q: 'Do you only work in Lahore?',
+    a: `Lahore is home turf — the office is in ${site.address.area} — and we also work across <a href="/karachi">Karachi</a>, <a href="/islamabad">Islamabad &amp; Rawalpindi</a>, <a href="/faisalabad">Faisalabad</a> and <a href="/multan">Multan</a>, plus most of Punjab. Somewhere else? <a href="/contact">Ask</a> — worst case we say no honestly.`,
+  },
+];
+
+const money = [
+  {
+    q: 'How much of my bill will solar actually cut?',
+    a: `A right-sized system with an evening battery typically cuts <strong>${BILL_CUT_TYPICAL}</strong> of the bill; without a battery most homes still clear around half. The exact figure depends on how much of your usage happens in daylight — which is precisely what the <a href="/calculator">calculator</a> models, assumptions printed.`,
+  },
+  {
+    q: 'What’s the honest payback period?',
+    a: `Typically <strong>${PAYBACK_TYPICAL}</strong> at today’s tariffs. Bigger bills pay back faster (they sit in crueller slabs); smaller bills pay back slower — and sometimes the honest answer is “not yet”. We’ll tell you that too.`,
+  },
+  {
+    q: 'What does a system cost right now?',
+    a: `As of ${PRICES_AS_OF}, a 5 kW on-grid system runs about <strong>Rs ${(p5.low / 100000).toFixed(1)}–${(p5.high / 100000).toFixed(1)} lakh</strong> installed, with documented Tier-1 hardware. Every size, what’s inside the price, and battery add-ons live on the <a href="/pricing">pricing page</a>.`,
+  },
+  {
+    q: 'Can I finance it instead of paying cash?',
+    a: `Yes — banks like ${FINANCING.banks.map((b) => b.name).join(', ')} run consumer solar financing, including Shariah-compliant plans; ${FINANCING.markupContext}. One warning: ${FINANCING.sbpSchemeStatus}. Details on the <a href="/financing">financing page</a>.`,
+  },
+  {
+    q: 'Why do you publish ranges instead of exact prices?',
+    a: 'Because panel prices move with the dollar and with tax announcements — sometimes weekly. Printing one bold number forever is how this market lies. You get honest bands on the site, then an exact itemised quote after the free survey, locked for 14 days.',
+  },
+];
+
+const rules2026 = [
+  {
+    q: 'Is net metering finished in Pakistan?',
+    a: `For new connections, the old 1:1 exchange ended on ${NET_BILLING.effectiveDate} — the ${NET_BILLING.regsName} replaced it with <strong>net billing</strong>: imports at full retail, exports at a floating regulated rate (reported around ${NET_BILLING.exportRateRange}/unit). The grid connection itself very much still exists, and <a href="/net-metering">we handle the whole application</a>.`,
+  },
+  {
+    q: 'I already have net metering — do the new rules hit me?',
+    a: 'No — existing agreements keep their original unit-for-unit terms until they expire. The trap: materially expanding your system (more panels, a bigger inverter) can void that protection and shift you to net billing. Talk to us before you touch anything.',
+  },
+  {
+    q: 'Is solar still worth it under net billing?',
+    a: `Yes — the design just changed. A unit you use yourself is worth the Rs 40–65 you didn’t buy; an exported unit earns roughly ${NET_BILLING.exportRateRange}. So we size for <strong>self-consumption first</strong>, add batteries to carry evenings, and treat exports as a bonus. Payback still lands around ${PAYBACK_TYPICAL} — the <a href="/calculator">calculator</a> runs exactly this math.`,
+  },
+  {
+    q: 'How long does DISCO approval really take?',
+    a: 'The regulations promise a fast clock on paper; reality depends on your DISCO’s backlog. Recent LESCO cases have run 10–15 weeks; K-Electric often completes residential files in 4–6 weeks. We quote the live timeline for your DISCO in writing before you sign — <a href="/net-metering">full breakdown here</a>.',
+  },
+];
+
+const installation = [
+  {
+    q: 'What hardware do you install?',
+    a: `Documented Tier-1 panels (${HARDWARE.panelBrands.join(', ')}) in the ~${HARDWARE.panelWattTypical} W N-type class, with branded inverters (${HARDWARE.inverterBrands.join(', ')}). Every panel’s serial number is verified in the manufacturer’s own app before we leave — with you watching.`,
+  },
+  {
+    q: 'What warranties do I actually get?',
+    a: `Written, manufacturer-backed ones: <strong>${HARDWARE.panelWarranty.performanceYears}-year performance</strong> and ${HARDWARE.panelWarranty.productYears}-year product warranty on panels, and ${HARDWARE.inverterWarrantyYears} years on inverters depending on model. Warranty cards and datasheets go in your file. A verbal “25-year warranty” from anyone, us included, is worth exactly nothing.`,
+  },
+  {
+    q: 'Do I need a battery?',
+    a: `Only if outages hurt or your evenings are usage-heavy — then it earns its keep carrying fans, lights and Wi-Fi through peak hours. Budget roughly <strong>Rs ${(BATTERY.per5kwhLow / 100000).toFixed(0)}–${(BATTERY.per5kwhHigh / 100000).toFixed(0)} lakh per 5 kWh</strong> of lithium (${BATTERY.brands.slice(0, 3).join(', ')}…), hybrid-inverter upgrade included. More on the <a href="/battery-backup">battery &amp; backup page</a>.`,
+  },
+  {
+    q: 'What happens in winter and smog season?',
+    a: 'Output falls — honestly, a lot. A Lahore December day can produce half (or less) of a June day, and the worst smog days cut deeper still. We size on year-round numbers, not summer marketing, and panel cleaning matters most November–February. Any quote that ignores winter is ignoring a quarter of the year.',
+  },
+];
+
+const aftercare = [
+  {
+    q: 'What maintenance does solar actually need?',
+    a: 'Not much, but not nothing: panel cleaning (most important through smog-and-dust season), an occasional check of connections and mounting, and a monitoring app that flags output dips before you’d ever notice them on a bill. See <a href="/maintenance">maintenance &amp; care</a>.',
+  },
+  {
+    q: 'What if something breaks after installation?',
+    a: 'You’ll likely know before we do — the monitoring app sits on <strong>your</strong> account, not ours, so faults are visible to you directly. Warranty claims run through us against named models with real local backing, and your file already holds every serial and document a claim needs.',
+  },
+  {
+    q: 'What if you disappear like the last installer?',
+    a: `A fair fear — it’s this market’s signature scam. Our structure answers it: payments staged against delivered work (your money never runs ahead of the job), a walk-in office at ${site.address.full}, and every document — serials, datasheets, warranty cards, the DISCO file — living in <em>your</em> folder, not ours. Worst case, any competent installer could take over from your paperwork alone. <a href="/about">How we’re built to be checked</a>.`,
+  },
+  {
+    q: 'How do I check a solar company is actually certified?',
+    a: 'Ask for their PPIB certificate number — PPIB (formerly AEDB) certifies installers in categories C-1 to C-3 — and look it up at <a href="https://www.ppib.gov.pk/" target="_blank" rel="noopener">ppib.gov.pk</a>. Apply that test to everyone, us included: our certificate entry is being added to the <a href="/about">about page</a>, and until it’s up we’d rather show the gap than fake it.',
+  },
+];
+
+const groups = [
+  {
+    id: 'getting-started',
+    eyebrow: '01 · Basics',
+    title: 'Getting started',
+    lede: 'The first questions everyone asks — before any numbers.',
+    items: gettingStarted,
+  },
+  {
+    id: 'money',
+    eyebrow: '02 · Money',
+    title: 'Money & savings',
+    lede: 'The part you actually came for.',
+    items: money,
+  },
+  {
+    id: 'rules-2026',
+    eyebrow: '03 · Policy',
+    title: 'The 2026 rules',
+    lede: 'Net billing replaced net metering in February 2026. Most sales pitches haven’t caught up.',
+    items: rules2026,
+  },
+  {
+    id: 'installation',
+    eyebrow: '04 · Hardware & install',
+    title: 'Installation',
+    lede: 'Panels, inverters, batteries, warranties — and winter, named honestly.',
+    items: installation,
+  },
+  {
+    id: 'aftercare',
+    eyebrow: '05 · Afterwards',
+    title: 'Aftercare',
+    lede: 'What happens after the crew leaves — including the uncomfortable question.',
+    items: aftercare,
+  },
+];
+---
+
+<Layout {title} {description}>
+  <PageHero
+    eyebrow="Straight answers"
+    title="Every question, answered straight."
+    titleHtml="Every question, answered <em>straight.</em>"
+    lede="Twenty-two questions we actually get — about money, the 2026 rules, hardware, winters and the awkward trust ones. Answered the way we’d want them answered."
+  >
+    <Fragment slot="actions">
+      {groups.map((g) => <a href={`#${g.id}`} class="chip jump-chip">{g.title}</a>)}
+    </Fragment>
+  </PageHero>
+
+  {
+    groups.map((g, i) => (
+      <section class:list={['section', i > 0 && 'pt-0']} id={g.id}>
+        <div class="wrap max-w-3xl">
+          <SectionHead eyebrow={g.eyebrow} title={g.title} lede={g.lede} />
+          <div class="mt-10">
+            <FAQ items={g.items} schema={i === 0} />
+          </div>
+          {g.id === 'money' && (
+            <div class="mt-8 flex flex-wrap items-center gap-4" data-reveal>
+              <a href="/calculator" class="btn btn-gold" data-evt="calc_open" data-evt-src="faq_money">
+                <Icon name="calculator" size={18} /> Run your own numbers
+              </a>
+              <p class="text-sm text-ink-3">Your bill in, honest savings out — assumptions printed.</p>
+            </div>
+          )}
+        </div>
+      </section>
+    ))
+  }
+
+  <section class="section pt-0">
+    <div class="wrap">
+      <CTABand
+        heading="Question not on the list?"
+        sub={`Ask a human — WhatsApp, email, or across a desk in ${site.address.area}. No scripts, no pressure.`}
+        primaryHref="/contact"
+        primaryLabel="Ask us directly"
+        primaryIcon="arrow-right"
+        evtSrc="faq_final"
+      />
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .jump-chip {
+    transition: border-color 150ms, color 150ms;
+  }
+  .jump-chip:hover {
+    border-color: var(--gold);
+    color: var(--accent-text);
+  }
+</style>

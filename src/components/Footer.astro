@@ -1,0 +1,171 @@
+---
+import Logo from './Logo.astro';
+import Icon from './Icon.astro';
+import { site, waLink, WA_DEFAULT_MESSAGE, telLink } from '~/config/site';
+
+const year = new Date().getFullYear();
+
+const cols = [
+  {
+    title: 'Services',
+    links: [
+      { href: '/homes', label: 'Solar for homes' },
+      { href: '/business', label: 'Solar for business' },
+      { href: '/battery-backup', label: 'Battery & backup' },
+      { href: '/net-metering', label: 'Net metering' },
+      { href: '/maintenance', label: 'Maintenance & care' },
+      { href: '/financing', label: 'Financing' },
+      { href: '/pricing', label: 'Pricing by size' },
+    ],
+  },
+  {
+    title: 'Cities',
+    links: [
+      { href: '/lahore', label: 'Solar in Lahore' },
+      { href: '/karachi', label: 'Solar in Karachi' },
+      { href: '/islamabad', label: 'Islamabad · Rawalpindi' },
+      { href: '/faisalabad', label: 'Solar in Faisalabad' },
+      { href: '/multan', label: 'Solar in Multan' },
+    ],
+  },
+  {
+    title: 'Company',
+    links: [
+      { href: '/about', label: 'About us' },
+      { href: '/contact', label: 'Contact' },
+      { href: '/calculator', label: 'Savings calculator' },
+      { href: '/quote', label: 'Get a quote' },
+      { href: '/learn', label: 'Learn' },
+      { href: '/guide', label: 'Buyer’s guide' },
+      { href: '/faq', label: 'FAQ' },
+    ],
+  },
+];
+---
+
+<footer class="theme-night footer" aria-labelledby="footer-heading">
+  <h2 id="footer-heading" class="sr-only">Footer</h2>
+  <div class="wrap">
+    <div class="grid gap-12 lg:grid-cols-[1.3fr_2fr] py-14 lg:py-20">
+      <div class="max-w-sm">
+        <a href="/" aria-label="RaySmartSolar — home" class="inline-block text-ink">
+          <Logo size={34} />
+        </a>
+        <p class="mt-4 text-ink-2 leading-relaxed">
+          Solar, done properly, from Lahore. Straight numbers, tier-1 hardware, and every page of
+          the net-metering paperwork handled for you.
+        </p>
+
+        <address class="mt-7 not-italic space-y-3 text-[0.95rem]">
+          <a
+            href={site.address.mapsUrl}
+            target="_blank"
+            rel="noopener"
+            class="flex items-start gap-3 text-ink-2 hover:text-ink transition-colors"
+            data-evt="maps_click"
+          >
+            <Icon name="pin" size={18} class="mt-0.5 shrink-0 text-gold" />
+            <span>{site.address.full} <Icon name="arrow-up-right" size={12} class="inline opacity-60" /></span>
+          </a>
+          <a
+            href={`mailto:${site.email}`}
+            class="flex items-center gap-3 text-ink-2 hover:text-ink transition-colors"
+            data-evt="email_click"
+          >
+            <Icon name="mail" size={18} class="shrink-0 text-gold" />
+            <span>{site.email}</span>
+          </a>
+          {
+            site.phone.live ? (
+              <a
+                href={telLink()}
+                class="flex items-center gap-3 text-ink-2 hover:text-ink transition-colors"
+                data-evt="tel_click"
+                data-evt-src="footer"
+              >
+                <Icon name="phone" size={18} class="shrink-0 text-gold" />
+                <span class="mono-num">{site.phone.display}</span>
+              </a>
+            ) : (
+              <span class="flex items-center gap-3 text-ink-3">
+                <Icon name="phone" size={18} class="shrink-0 text-gold" />
+                <span>
+                  <span class="mono-num">{site.phone.display}</span>
+                  <span class="ml-2 text-xs uppercase tracking-wider">({site.phone.placeholderNote})</span>
+                </span>
+              </span>
+            )
+          }
+          <p class="flex items-center gap-3 text-ink-3">
+            <Icon name="clock" size={18} class="shrink-0 text-gold" />
+            <span>{site.hours.days}, {site.hours.time}</span>
+          </p>
+        </address>
+
+        {
+          site.phone.live ? (
+            <a
+              href={waLink(WA_DEFAULT_MESSAGE)}
+              target="_blank"
+              rel="noopener"
+              class="btn btn-wa btn-sm mt-7"
+              data-evt="wa_click"
+              data-evt-src="footer"
+            >
+              <Icon name="whatsapp" size={17} /> WhatsApp us
+            </a>
+          ) : (
+            <a href="/quote" class="btn btn-wa btn-sm mt-7" data-evt="quote_open" data-evt-src="footer">
+              <Icon name="whatsapp" size={17} /> Request a call back
+            </a>
+          )
+        }
+      </div>
+
+      <nav class="grid grid-cols-2 sm:grid-cols-3 gap-8" aria-label="Footer">
+        {
+          cols.map((col) => (
+            <div>
+              <p class="font-mono text-[0.68rem] uppercase tracking-[0.2em] text-ink-3 mb-4">
+                {col.title}
+              </p>
+              <ul class="space-y-2.5">
+                {col.links.map((l) => (
+                  <li>
+                    <a href={l.href} class="text-[0.95rem] text-ink-2 hover:text-gold transition-colors">
+                      {l.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+      </nav>
+    </div>
+
+    <div class="rule"></div>
+
+    <div class="flex flex-wrap items-center justify-between gap-4 py-7 text-sm text-ink-3">
+      <p>© {year} {site.name}. Lahore, Pakistan.</p>
+      <div class="flex items-center gap-5">
+        <a href="/privacy" class="hover:text-ink-2 transition-colors">Privacy</a>
+        <a href="/credits" class="hover:text-ink-2 transition-colors">Image credits</a>
+        <span class="inline-flex items-center gap-1.5 text-gold/90">
+          <Icon name="sun" size={14} />
+          <span lang="ur-Latn">Roshan rahiye</span>
+        </span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background:
+      radial-gradient(90rem 30rem at 85% -10%, rgb(242 166 60 / 0.07), transparent 60%),
+      var(--n-bg);
+    color: var(--n-text);
+    border-top: 1px solid var(--n-line);
+  }
+</style>

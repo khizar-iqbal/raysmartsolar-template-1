@@ -1,0 +1,368 @@
+---
+import { Image } from 'astro:assets';
+import Layout from '~/layouts/Layout.astro';
+import PageHero from '~/components/PageHero.astro';
+import SectionHead from '~/components/SectionHead.astro';
+import CTABand from '~/components/CTABand.astro';
+import FAQ from '~/components/FAQ.astro';
+import Icon from '~/components/Icon.astro';
+import { site } from '~/config/site';
+import { cityBySlug } from '~/data/cities';
+import { NET_BILLING, PAYBACK_TYPICAL, PERFORMANCE_NOTE } from '~/data/facts';
+import heroImg from '~/assets/photos/city-lahore.jpg';
+import towerImg from '~/assets/photos/city-lahore-2.jpg';
+
+const city = cityBySlug('lahore')!;
+
+const title = 'Solar in Lahore — LESCO paperwork & smog-honest sizing | RaySmartSolar';
+const description = city.metaDescription;
+
+const areasLine =
+  city.neighbourhoods.slice(0, -1).join(', ') + ' and ' + city.neighbourhoods.at(-1);
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: 'Solar panel installation in Lahore',
+    description,
+    provider: { '@id': `${site.url}/#business` },
+    areaServed: ['Lahore', 'Kasur', 'Sheikhupura', 'Okara', 'Nankana Sahib'],
+    serviceType: 'Solar system design, installation and LESCO net-metering paperwork',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: site.url },
+      { '@type': 'ListItem', position: 2, name: 'Cities', item: `${site.url}/#cities` },
+      { '@type': 'ListItem', position: 3, name: 'Lahore', item: `${site.url}/lahore` },
+    ],
+  },
+];
+
+const roofNotes = [
+  {
+    icon: 'layers' as const,
+    head: 'Flat RCC slabs',
+    body: 'Lahore’s default roof — and solar’s favourite. Elevated frames angle the panels properly and keep the slab usable underneath, so the water tank and the evening charpai both stay.',
+  },
+  {
+    icon: 'building' as const,
+    head: 'Parapets, mumtys, water tanks',
+    body: 'Winter sun sits low, so December shadows from parapet walls, stair rooms and the neighbour’s extra floor reach much further than June’s. Our survey maps December shade, not just June’s.',
+  },
+  {
+    icon: 'wrench' as const,
+    head: 'Engineered, not improvised',
+    body: 'Frames load-calculated for the slab, anchored and earthed properly — no bricks-on-legs specials. Wind load matters more on elevated structures, so we bolt, never balance.',
+  },
+];
+
+const faqs = [
+  {
+    q: 'How often do panels need cleaning in Lahore’s smog season?',
+    a: 'Rain does most of the work from spring through monsoon. November to February is different: smog film plus dust builds fast, in exactly the months output is already at its yearly low. Your handover pack includes a season-by-season cleaning plan for your specific roof — stepped up for smog season — and we offer scheduled cleans if you’d rather never climb a ladder.',
+  },
+  {
+    q: 'How long is LESCO net metering actually taking?',
+    a: `Straight answer: slower than the rulebook. LESCO has carried a real backlog in 2026 — across DISCOs, approvals are ${NET_BILLING.approvalReality}, and LESCO has sat at the slower end lately. We quote the live timeline in writing before you sign, submit a first-time-right file, and chase it weekly. Meanwhile your panels save on every self-used unit from commissioning day — the export meter only adds the bonus.`,
+  },
+  {
+    q: 'Old-city house or DHA plot — does the roof change the install?',
+    a: 'Completely. In the old city, tight streets and shared walls mean hand-carried panels, structural checks on older slabs, and sometimes a smaller array on a taller frame. In DHA, Bahria or Valencia the fight is usually mumty shading and aesthetics instead. Same hardware standard either way — the free survey settles what your roof can carry.',
+  },
+  {
+    q: 'Is solar still worth it in Lahore under the 2026 net-billing rules?',
+    a: `Yes — because the honest math never rested on exports. A Lahore roof averages ≈${city.monthlyUnitsPerKw} units per kW per month, and every unit you use yourself offsets the full retail rate, while exports earn the smaller, floating ${NET_BILLING.exportRateRange}/unit. Sized for self-consumption, typical payback still lands around ${PAYBACK_TYPICAL}. The <a href="/calculator?city=lahore">calculator</a> shows the full working.`,
+  },
+  {
+    q: 'Do you work outside Lahore city — Kasur, Sheikhupura, Okara?',
+    a: `LESCO territory is our patch: ${city.disco.areas}. A Sheikhupura factory roof or a Kasur house gets the same crew, the same hardware and the same paperwork service as Gulberg — and the survey is free either way.`,
+  },
+];
+---
+
+<Layout {title} {description} {jsonLd} heroNav>
+  <PageHero
+    eyebrow="Lahore · LESCO territory"
+    title="Solar in Lahore, from Lahore."
+    titleHtml="Solar in Lahore, <em>from</em> Lahore."
+    lede="We’re a Lahore company on LESCO wires ourselves — office in Allama Iqbal Town, surveys the same week. Here’s what solar honestly returns in this city, smog season and LESCO queue included."
+    image={heroImg}
+    imageAlt="Badshahi Mosque at sunset, Lahore"
+    imageCredit="Photo: Muddiii · CC BY-SA 4.0 · Wikimedia Commons"
+    imagePosition="50% 55%"
+  >
+    <Fragment slot="actions">
+      <a href="/calculator?city=lahore" class="btn btn-gold" data-evt="city_calc" data-evt-src="lahore_hero">
+        <Icon name="calculator" size={18} /> Run Lahore’s numbers
+      </a>
+      <a href="/quote?src=lahore" class="btn btn-ghost" data-evt="quote_open" data-evt-src="lahore_hero">
+        Book a free survey <Icon name="arrow-right" size={17} />
+      </a>
+    </Fragment>
+  </PageHero>
+
+  <!-- The numbers -->
+  <section class="section">
+    <div class="wrap">
+      <SectionHead
+        eyebrow="Measured, not marketed"
+        title="The numbers in Lahore"
+        lede="Three figures decide whether solar makes sense on your roof. Here are ours, sources and caveats attached."
+      />
+      <div class="grid gap-4 md:grid-cols-3 mt-12" data-reveal-group>
+        <div class="card p-7" data-reveal-child>
+          <p class="font-mono text-[0.68rem] uppercase tracking-[0.18em] text-ink-3">Yield</p>
+          <p class="mono-num text-5xl text-accent mt-3">
+            ≈{city.monthlyUnitsPerKw}<span class="text-2xl"> units</span>
+          </p>
+          <p class="text-ink-2 mt-3">
+            per installed kW per month, averaged honestly across the whole year —
+            {city.yieldPerKwYear.toLocaleString('en-PK')} kWh per kW annually (Global Solar Atlas).
+          </p>
+        </div>
+        <div class="card p-7" data-reveal-child>
+          <p class="font-mono text-[0.68rem] uppercase tracking-[0.18em] text-ink-3">Your DISCO</p>
+          <p class="font-display text-h3 mt-3 text-accent">{city.disco.code}</p>
+          <p class="text-ink-2 mt-3">
+            {city.disco.fullName} — covering {city.disco.areas}. Pakistan’s busiest DISCO for solar
+            files, with the queue to prove it.
+          </p>
+        </div>
+        <div class="card p-7" data-reveal-child>
+          <p class="font-mono text-[0.68rem] uppercase tracking-[0.18em] text-ink-3">The honest note</p>
+          <p class="text-ink-2 mt-3">{city.climateNote}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Smog season honesty — the Lahore section -->
+  <section class="section pt-0">
+    <div class="wrap">
+      <SectionHead
+        eyebrow="November – January"
+        title="The smog paragraph other installers skip"
+        titleHtml="The smog paragraph other installers <em>skip</em>"
+        lede="Every solar pitch in Lahore is written in June. Yours should survive December — when the city sits under its fifth season and a dusty panel quietly stops earning."
+      />
+      <div class="grid gap-4 md:grid-cols-3 mt-12" data-reveal-group>
+        <div class="card p-7" data-reveal-child>
+          <p class="flex items-center gap-2.5 font-medium">
+            <span class="ico-dot"><Icon name="sun" size={15} /></span> Sized on the annual number
+          </p>
+          <p class="text-ink-2 mt-3">
+            Your quote is built on ≈{city.monthlyUnitsPerKw} units per kW per month — the
+            twelve-month average — never a May screenshot. December is already priced in.
+          </p>
+        </div>
+        <div class="card p-7" data-reveal-child>
+          <p class="flex items-center gap-2.5 font-medium">
+            <span class="ico-dot"><Icon name="wrench" size={15} /></span> A cleaning cadence that matters
+          </p>
+          <p class="text-ink-2 mt-3">
+            Smog film costs real units in exactly the months they’re scarcest. Your handover pack
+            includes a stepped-up winter cleaning plan — and we’ll do the climbing if you’d rather not.
+          </p>
+        </div>
+        <div class="card p-7" data-reveal-child>
+          <p class="flex items-center gap-2.5 font-medium">
+            <span class="ico-dot"><Icon name="gauge" size={15} /></span> Winter, in writing
+          </p>
+          <p class="text-ink-2 mt-3">
+            Your proposal shows summer and winter expectations separately, assumptions printed. If
+            a pitch only quotes June, ask what happens in December. We already answered.
+          </p>
+        </div>
+      </div>
+      <p class="text-sm text-ink-3 mt-6 max-w-2xl" data-reveal>{PERFORMANCE_NOTE}</p>
+    </div>
+  </section>
+
+  <!-- Lahore roofs -->
+  <section class="section pt-0">
+    <div class="wrap">
+      <div class="grid gap-10 lg:grid-cols-[1fr_1.15fr] lg:items-start">
+        <div>
+          <SectionHead
+            eyebrow="Local vernacular"
+            title="Built for the Lahore roof"
+            lede="A Lahore roof is a living room in disguise — the charpai, the tank, the pigeons’ landing strip. Solar has to share it politely."
+          />
+          <p class="text-ink-2 mt-6 max-w-xl" data-reveal>
+            Flat reinforced-concrete slabs are the best solar real estate in Punjab — if the
+            structure respects how the roof is actually used, and how low the smog-season sun
+            really sits. That’s a design job, and it’s done at the survey, not on install day.
+          </p>
+          <a
+            href="/calculator?city=lahore"
+            class="link-gold inline-flex items-center gap-1.5 mt-6 font-medium"
+            data-evt="city_calc"
+            data-evt-src="lahore_roofs"
+          >
+            See what your roof size supports <Icon name="arrow-up-right" size={15} />
+          </a>
+        </div>
+        <div class="grid gap-4" data-reveal-group>
+          {
+            roofNotes.map((r) => (
+              <div class="card p-6 flex items-start gap-4" data-reveal-child>
+                <span class="ico-dot mt-0.5">
+                  <Icon name={r.icon} size={16} />
+                </span>
+                <div>
+                  <p class="font-medium">{r.head}</p>
+                  <p class="text-ink-2 mt-1.5">{r.body}</p>
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LESCO, honestly -->
+  <section class="section theme-night">
+    <div class="wrap">
+      <SectionHead
+        eyebrow="Your DISCO, unvarnished"
+        title="LESCO, honestly"
+        titleHtml="LESCO, <em>honestly</em>"
+        lede="More solar applications flow through LESCO than any DISCO in Pakistan. That volume shows up in two places: the paperwork queue and the wires."
+      />
+      <div class="grid gap-5 md:grid-cols-2 mt-12" data-reveal-group>
+        <div class="card p-7" data-reveal-child>
+          <p class="flex items-center gap-2.5 font-medium">
+            <span class="ico-dot"><Icon name="filecheck" size={15} /></span> The paperwork queue
+          </p>
+          <p class="text-ink-2 mt-4">{city.disco.netMeteringReality}</p>
+          <p class="text-ink-2 mt-4">
+            In practice, your file’s quality decides its speed: incomplete applications restart the
+            clock, complete ones move. Ours go in with sanctioned load verified, the single-line
+            diagram drawn and approved-inverter papers attached — then we chase LESCO weekly, in
+            person when a counter visit moves things faster than a phone call.
+          </p>
+          <p class="text-ink-2 mt-4">
+            The wait costs less than it sounds. From commissioning day your panels already offset
+            every daytime unit at full retail value — the green meter, when it lands, only adds the
+            export credits on top.
+          </p>
+        </div>
+        <div class="card p-7" data-reveal-child>
+          <p class="flex items-center gap-2.5 font-medium">
+            <span class="ico-dot"><Icon name="bolt" size={15} /></span> The power cuts
+          </p>
+          <p class="text-ink-2 mt-4">{city.disco.sheddingReality}</p>
+          <p class="text-ink-2 mt-4">
+            So we design for the grid Lahore actually has: inverters that ride through summer
+            voltage sags, and — where evenings or outages genuinely hurt — a battery sized to the
+            loads you run, not the whole house. Fans, lights, Wi-Fi and one inverter AC is a much
+            cheaper battery than “everything”.
+          </p>
+          <p class="text-ink-2 mt-4">
+            And if your feeder behaves? We’ll say so, and quote you on-grid without the battery.
+            Selling you hardware you don’t need is how this industry earned its reputation.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Home city -->
+  <section class="section">
+    <div class="wrap">
+      <div class="grid gap-10 lg:grid-cols-[1.15fr_1fr] lg:items-center">
+        <div>
+          <p class="eyebrow mb-4" lang="ur-Latn" data-reveal>{city.greeting}</p>
+          <h2 class="font-display text-h2 text-balance" data-reveal>This is our home city.</h2>
+          <p class="text-lede text-ink-2 mt-5" data-reveal>
+            RaySmartSolar doesn’t “cover” Lahore from somewhere else. The office is real, the
+            kettle works, and the people who quote your roof drive past it on the way home.
+          </p>
+          <div class="card p-6 mt-7 flex items-start gap-4" data-reveal>
+            <span class="ico-dot mt-0.5"><Icon name="pin" size={16} /></span>
+            <div>
+              <p class="font-medium">{site.address.full}</p>
+              <p class="text-sm text-ink-3 mt-1">{site.hours.days} · {site.hours.time}</p>
+              <p class="text-ink-2 mt-2.5">
+                Walk in with a bill; walk out with the math. Surveys across the city usually happen
+                the same week.
+              </p>
+            </div>
+          </div>
+          <div class="mt-7 flex flex-wrap gap-3.5" data-reveal>
+            <a href="/quote?src=lahore" class="btn btn-gold" data-evt="quote_open" data-evt-src="lahore_office">
+              <Icon name="filecheck" size={18} /> Book the free survey
+            </a>
+            <a
+              href={site.address.mapsUrl}
+              target="_blank"
+              rel="noopener"
+              class="btn btn-ghost"
+              data-evt="maps_open"
+              data-evt-src="lahore_office"
+            >
+              Get directions <Icon name="arrow-up-right" size={16} />
+            </a>
+          </div>
+          <p class="text-sm text-ink-3 mt-8 max-w-xl" data-reveal>
+            Recent surveys across {areasLine}. Not on the list? It only means your street hasn’t
+            asked yet — LESCO territory is our patch, all of it.
+          </p>
+        </div>
+        <figure data-reveal>
+          <div class="ph rounded-2xl">
+            <Image
+              src={towerImg}
+              alt="Landmark tower rising over Lahore"
+              widths={[480, 800, 1200]}
+              sizes="(min-width: 1024px) 45vw, 100vw"
+              format="avif"
+              quality={60}
+              loading="lazy"
+            />
+          </div>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section pt-0">
+    <div class="wrap max-w-3xl">
+      <SectionHead eyebrow="Asked in Lahore" title="Lahore questions, straight answers" />
+      <div class="mt-10">
+        <FAQ items={faqs} schema />
+      </div>
+    </div>
+  </section>
+
+  <section class="section pt-0">
+    <div class="wrap">
+      <CTABand
+        heading="Lahore sun, Lahore office, straight answers."
+        sub="Free survey, a written LESCO timeline, and sizing that already survived a smog season."
+        primaryHref="/calculator?city=lahore"
+        primaryLabel="Run Lahore’s numbers"
+        primaryIcon="calculator"
+        evtSrc="lahore_final"
+      />
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .ico-dot {
+    flex: none;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 999px;
+    display: grid;
+    place-items: center;
+    background: color-mix(in srgb, var(--gold) 15%, transparent);
+    color: var(--gold);
+  }
+</style>

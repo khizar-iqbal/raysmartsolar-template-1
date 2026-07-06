@@ -1,0 +1,100 @@
+---
+/**
+ * Accordion FAQ built on native <details> (works without JS).
+ * Pass `schema` to emit FAQPage JSON-LD (use on at most one block per page).
+ */
+interface QA {
+  q: string;
+  a: string; // plain text or simple HTML
+}
+interface Props {
+  items: QA[];
+  schema?: boolean;
+  class?: string;
+}
+const { items, schema = false, class: className = '' } = Astro.props;
+
+const ld = schema
+  ? {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: items.map((i) => ({
+        '@type': 'Question',
+        name: i.q,
+        acceptedAnswer: { '@type': 'Answer', text: i.a.replace(/<[^>]+>/g, '') },
+      })),
+    }
+  : null;
+---
+
+{ld && <script type="application/ld+json" set:html={JSON.stringify(ld)} />}
+
+<div class:list={['faq-list', className]} data-reveal-group>
+  {
+    items.map((item) => (
+      <details class="faq card" data-reveal-child>
+        <summary>
+          <span class="faq-q">{item.q}</span>
+          <span class="faq-icon" aria-hidden="true">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round">
+              <path d="M7 1v12M1 7h12" class="faq-plus-v" />
+            </svg>
+          </span>
+        </summary>
+        <div class="faq-a" set:html={item.a} />
+      </details>
+    ))
+  }
+</div>
+
+<style>
+  .faq-list {
+    display: grid;
+    gap: 0.7rem;
+  }
+  .faq summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.05rem 1.3rem;
+    cursor: pointer;
+    list-style: none;
+    font-weight: 540;
+  }
+  .faq summary::-webkit-details-marker {
+    display: none;
+  }
+  .faq-q {
+    font-size: 1rem;
+    line-height: 1.45;
+  }
+  .faq-icon {
+    flex: none;
+    width: 1.9rem;
+    height: 1.9rem;
+    border-radius: 999px;
+    border: 1px solid var(--line-strong);
+    display: grid;
+    place-items: center;
+    color: var(--accent-text);
+    transition: transform 300ms var(--ease-out), background-color 200ms;
+  }
+  .faq[open] .faq-icon {
+    transform: rotate(45deg);
+    background: color-mix(in srgb, var(--gold) 14%, transparent);
+  }
+  .faq-a {
+    padding: 0 1.3rem 1.2rem;
+    color: var(--text-2);
+    max-width: 60ch;
+  }
+  .faq-a :global(a) {
+    color: var(--accent-text);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .faq-a :global(strong) {
+    color: var(--text);
+  }
+</style>

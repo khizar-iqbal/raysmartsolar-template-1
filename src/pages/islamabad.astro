@@ -1,0 +1,345 @@
+---
+import { Image } from 'astro:assets';
+import Layout from '~/layouts/Layout.astro';
+import PageHero from '~/components/PageHero.astro';
+import SectionHead from '~/components/SectionHead.astro';
+import CTABand from '~/components/CTABand.astro';
+import FAQ from '~/components/FAQ.astro';
+import Icon from '~/components/Icon.astro';
+import { site } from '~/config/site';
+import { cities, cityBySlug } from '~/data/cities';
+import { NET_BILLING, HARDWARE } from '~/data/facts';
+import heroImg from '~/assets/photos/city-islamabad.jpg';
+import nightImg from '~/assets/photos/night-city.jpg';
+
+const city = cityBySlug('islamabad')!;
+const lahoreYield = cityBySlug('lahore')!.yieldPerKwYear;
+
+const title = 'Solar in Islamabad & Rawalpindi — IESCO handled | RaySmartSolar';
+const description = city.metaDescription;
+
+const areasLine =
+  city.neighbourhoods.slice(0, -1).join(', ') + ' and ' + city.neighbourhoods.at(-1);
+
+/* City-vs-city yield comparison, straight from the shared city data. */
+const maxYield = Math.max(...cities.map((c) => c.yieldPerKwYear));
+const yieldRows = [...cities]
+  .sort((a, b) => b.yieldPerKwYear - a.yieldPerKwYear)
+  .map((c) => ({
+    slug: c.slug,
+    label: c.slug === 'islamabad' ? 'Islamabad · Pindi' : c.name,
+    value: c.yieldPerKwYear,
+    pct: Math.round((c.yieldPerKwYear / maxYield) * 100),
+    est: c.yieldConfidence !== 'high',
+  }));
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: 'Solar panel installation in Islamabad and Rawalpindi',
+    description,
+    provider: { '@id': `${site.url}/#business` },
+    areaServed: ['Islamabad', 'Rawalpindi', 'Attock', 'Jhelum', 'Chakwal'],
+    serviceType: 'Solar system design, installation and IESCO net-metering paperwork',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: site.url },
+      { '@type': 'ListItem', position: 2, name: 'Cities', item: `${site.url}/#cities` },
+      { '@type': 'ListItem', position: 3, name: 'Islamabad & Rawalpindi', item: `${site.url}/islamabad` },
+    ],
+  },
+];
+
+const faqs = [
+  {
+    q: 'Are solar yields really better in Islamabad than Lahore?',
+    a: `Yes, measurably. Global Solar Atlas puts the twin cities at ${city.yieldPerKwYear.toLocaleString('en-PK')} kWh per installed kW per year against Lahore’s ${lahoreYield.toLocaleString('en-PK')} — roughly 6% more, thanks to clearer air and cooler panel temperatures. It’s the highest high-confidence figure of any city we serve, and your proposal is built on it.`,
+  },
+  {
+    q: 'What about hailstorms — do panels survive them?',
+    a: `Twin-city hail is rare but real, so we spec panels with tested impact ratings and mount them at angles that shed debris rather than collect it. Behind that sits the manufacturer’s ${HARDWARE.panelWarranty.performanceYears}-year performance warranty on documented Tier-1 hardware — written, serial-verifiable, and worth exactly nothing if someone sells you relabeled panels instead. Ours you can check in the maker’s own app.`,
+  },
+  {
+    q: 'Is net metering still open with IESCO in 2026?',
+    a: `Yes — the connection exists, but new applicants sign under NEPRA’s net-billing rules (in force since ${NET_BILLING.effectiveDate}), while existing consumers keep their old terms until their agreement expires. IESCO’s February circulars caused real confusion mid-transition; that’s settled now. We check which rules apply to your case before quoting — the details live on our <a href="/net-metering">net-metering page</a>.`,
+  },
+  {
+    q: 'Do you cover Rawalpindi — Bahria, DHA, Satellite Town?',
+    a: `Fully. Same crew, same hardware, same timeline on both sides of Faizabad — and IESCO’s wider territory (${city.disco.areas}) by arrangement. Distance doesn’t change the spec.`,
+  },
+];
+---
+
+<Layout {title} {description} {jsonLd} heroNav>
+  <PageHero
+    eyebrow="Twin cities · IESCO territory"
+    title="Solar in Islamabad & Rawalpindi."
+    titleHtml="Solar in Islamabad <em>&amp; Rawalpindi.</em>"
+    lede="The best confirmed solar numbers of the five cities we serve, under IESCO — historically one of the smoother DISCOs to file with. If solar makes sense anywhere in Pakistan, it makes sense here. Here’s the honest version, hail and all."
+    image={heroImg}
+    imageAlt="Faisal Mosque at golden hour, Islamabad"
+    imagePosition="50% 60%"
+  >
+    <Fragment slot="actions">
+      <a href="/calculator?city=islamabad" class="btn btn-gold" data-evt="city_calc" data-evt-src="islamabad_hero">
+        <Icon name="calculator" size={18} /> Run the twin-city numbers
+      </a>
+      <a href="/quote?src=islamabad" class="btn btn-ghost" data-evt="quote_open" data-evt-src="islamabad_hero">
+        Book a free survey <Icon name="arrow-right" size={17} />
+      </a>
+    </Fragment>
+  </PageHero>
+
+  <!-- City vs city -->
+  <section class="section">
+    <div class="wrap">
+      <SectionHead
+        eyebrow="City vs city"
+        title="The sunniest math we quote with a straight face"
+        titleHtml="The sunniest math we quote <em>with a straight face</em>"
+        lede="Annual output per installed kW, Global Solar Atlas long-run values. Clearer air and cooler days beat the hazy plains — panels are semiconductors, and heat costs them voltage."
+      />
+      <div class="card p-6 sm:p-8 mt-12" data-reveal>
+        <div class="grid gap-4">
+          {
+            yieldRows.map((r) => (
+              <div class="yield-row">
+                <p class:list={['yield-label', r.slug === 'islamabad' && 'font-medium text-ink']}>
+                  {r.label}{r.est && <span class="text-ink-3">*</span>}
+                </p>
+                <div class="yield-track">
+                  <span
+                    class:list={['yield-bar', r.slug === 'islamabad' && 'is-hero']}
+                    style={`width:${r.pct}%`}
+                  />
+                </div>
+                <p class:list={['mono-num text-sm text-right', r.slug === 'islamabad' ? 'text-accent' : 'text-ink-2']}>
+                  {r.value.toLocaleString('en-PK')}
+                </p>
+              </div>
+            ))
+          }
+        </div>
+        <p class="text-xs text-ink-3 mt-5">
+          kWh per kW per year. *Karachi’s figure is a coastal estimate with a wider band; Multan’s
+          is interpolated. Islamabad’s {city.yieldPerKwYear.toLocaleString('en-PK')} is the highest
+          high-confidence number on the list — which is why we’ll happily put it in your proposal.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- The numbers -->
+  <section class="section pt-0">
+    <div class="wrap">
+      <SectionHead
+        eyebrow="Measured, not marketed"
+        title="The numbers in Islamabad & Rawalpindi"
+        lede="What a kilowatt actually does here, who runs your wires, and the caveat we print instead of hiding."
+      />
+      <div class="grid gap-4 md:grid-cols-3 mt-12" data-reveal-group>
+        <div class="card p-7" data-reveal-child>
+          <p class="font-mono text-[0.68rem] uppercase tracking-[0.18em] text-ink-3">Yield</p>
+          <p class="mono-num text-5xl text-accent mt-3">
+            ≈{city.monthlyUnitsPerKw}<span class="text-2xl"> units</span>
+          </p>
+          <p class="text-ink-2 mt-3">
+            per installed kW per month, averaged across the year —
+            {city.yieldPerKwYear.toLocaleString('en-PK')} kWh per kW annually (Global Solar Atlas,
+            high confidence).
+          </p>
+        </div>
+        <div class="card p-7" data-reveal-child>
+          <p class="font-mono text-[0.68rem] uppercase tracking-[0.18em] text-ink-3">Your DISCO</p>
+          <p class="font-display text-h3 mt-3 text-accent">{city.disco.code}</p>
+          <p class="text-ink-2 mt-3">
+            {city.disco.fullName} — covering {city.disco.areas}. One of the better-run DISCOs on
+            losses and recovery, and historically among the smoother solar processors.
+          </p>
+        </div>
+        <div class="card p-7" data-reveal-child>
+          <p class="font-mono text-[0.68rem] uppercase tracking-[0.18em] text-ink-3">The honest note</p>
+          <p class="text-ink-2 mt-3">{city.climateNote}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Climate quirks -->
+  <section class="section pt-0">
+    <div class="wrap">
+      <div class="grid gap-10 lg:grid-cols-[1.2fr_1fr] lg:items-center">
+        <div>
+          <SectionHead
+            eyebrow="Margalla weather"
+            title="Cool air helps. Hail gets planned for."
+            lede="The same foothills climate that boosts output brings two things worth engineering around — neither of which should be discovered after install day."
+          />
+          <div class="grid gap-4 sm:grid-cols-2 mt-10" data-reveal-group>
+            <div class="card p-6" data-reveal-child>
+              <p class="flex items-center gap-2.5 font-medium">
+                <span class="ico-dot"><Icon name="shield" size={15} /></span> Monsoon & hail
+              </p>
+              <p class="text-ink-2 mt-3">
+                Rare, real, survivable: monsoon cells off the Margallas occasionally throw hail. We
+                spec panels with tested impact ratings, mounting angles that shed debris, and
+                drainage that doesn’t pond around your slab’s waterproofing.
+              </p>
+            </div>
+            <div class="card p-6" data-reveal-child>
+              <p class="flex items-center gap-2.5 font-medium">
+                <span class="ico-dot"><Icon name="bolt" size={15} /></span> Backup for the laptop class
+              </p>
+              <p class="text-ink-2 mt-3">
+                Scheduled cuts here are shorter than most of the country — but a two-hour evening
+                cut lands exactly on dinner, devices and deadlines. Most twin-city clients add a
+                compact battery for continuity, not survival. We size it to the desk, the router
+                and the fans — not the whole house.
+              </p>
+            </div>
+          </div>
+        </div>
+        <figure data-reveal>
+          <div class="ph rounded-2xl">
+            <Image
+              src={nightImg}
+              alt="City lights at night seen from a hilltop"
+              widths={[480, 800, 1200]}
+              sizes="(min-width: 1024px) 40vw, 100vw"
+              format="avif"
+              quality={60}
+              loading="lazy"
+            />
+          </div>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- IESCO & the February story -->
+  <section class="section">
+    <div class="wrap">
+      <div class="grid gap-10 lg:grid-cols-2 lg:items-start">
+        <SectionHead
+          eyebrow="Your DISCO"
+          title="IESCO, and the February that confused everyone"
+          lede="A short, honest history — because half the twin cities’ solar anxiety in 2026 traces back to one week of circulars."
+        />
+        <div data-reveal-group>
+          <p class="text-ink-2" data-reveal-child>{city.disco.netMeteringReality}</p>
+          <p class="text-ink-2 mt-4" data-reveal-child>
+            The longer story: when the {NET_BILLING.regsName} took effect on
+            {NET_BILLING.effectiveDate}, circulars went out mid-transition and applicants were told
+            different things in the same week. The amendment that followed drew the line clearly —
+            existing net-metering consumers keep their original terms until their agreement
+            expires; new connections sign under net billing. Confusing week, settled outcome.
+          </p>
+          <p class="text-ink-2 mt-4" data-reveal-child>
+            Which side of that line you’re on depends on dates and paperwork status, so we check
+            your specific case before quoting anything. If you’re grandfathered, we’ll tell you
+            plainly whether expanding your system is worth losing that protection. Usually it
+            isn’t. Occasionally it is. Either way you hear it before you spend.
+          </p>
+          <p class="text-ink-2 mt-4" data-reveal-child>{city.disco.sheddingReality}</p>
+          <a
+            href="/net-metering"
+            class="link-gold inline-flex items-center gap-1.5 mt-5 font-medium"
+            data-reveal-child
+            data-evt="netmetering_more"
+            data-evt-src="islamabad_disco"
+          >
+            The 2026 rules, explained properly <Icon name="arrow-up-right" size={15} />
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Twin-city coverage -->
+  <section class="section pt-0">
+    <div class="wrap">
+      <div class="card p-7 sm:p-10" data-reveal>
+        <p class="eyebrow mb-4" lang="ur-Latn">{city.greeting}</p>
+        <h2 class="font-display text-h2 text-balance max-w-[20ch]">One crew, both sides of Faizabad.</h2>
+        <p class="text-ink-2 mt-5 max-w-2xl">
+          Islamabad’s sectors and Pindi’s colonies get the same hardware, the same engineering and
+          the same written timeline. Recent surveys across {areasLine} — and IESCO’s wider
+          districts by arrangement.
+        </p>
+        <div class="mt-7 flex flex-wrap gap-3.5">
+          <a href="/quote?src=islamabad" class="btn btn-gold" data-evt="quote_open" data-evt-src="islamabad_coverage">
+            <Icon name="pin" size={18} /> Get surveyed this week
+          </a>
+          <a href="/calculator?city=islamabad" class="btn btn-ghost" data-evt="city_calc" data-evt-src="islamabad_coverage">
+            <Icon name="calculator" size={18} /> Estimate first
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section pt-0">
+    <div class="wrap max-w-3xl">
+      <SectionHead eyebrow="Asked in the twin cities" title="Islamabad & Rawalpindi, answered" />
+      <div class="mt-10">
+        <FAQ items={faqs} schema />
+      </div>
+    </div>
+  </section>
+
+  <section class="section pt-0">
+    <div class="wrap">
+      <CTABand
+        heading="Clear air, good grid, great math."
+        sub="Free survey on either side of the twin cities — honest IESCO timeline included, in writing."
+        primaryHref="/calculator?city=islamabad"
+        primaryLabel="Run the twin-city numbers"
+        primaryIcon="calculator"
+        evtSrc="islamabad_final"
+      />
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .ico-dot {
+    flex: none;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 999px;
+    display: grid;
+    place-items: center;
+    background: color-mix(in srgb, var(--gold) 15%, transparent);
+    color: var(--gold);
+  }
+  .yield-row {
+    display: grid;
+    grid-template-columns: minmax(6.5rem, 10rem) 1fr 3.5rem;
+    align-items: center;
+    gap: 0.9rem;
+  }
+  .yield-label {
+    font-size: 0.9rem;
+    color: var(--text-2);
+  }
+  .yield-track {
+    height: 0.6rem;
+    border-radius: 999px;
+    background: var(--line);
+    overflow: hidden;
+  }
+  .yield-bar {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: color-mix(in srgb, var(--gold) 32%, var(--line));
+  }
+  .yield-bar.is-hero {
+    background: linear-gradient(90deg, var(--sun-a), var(--gold));
+  }
+</style>

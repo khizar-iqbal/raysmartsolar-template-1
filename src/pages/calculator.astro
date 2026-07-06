@@ -1,0 +1,755 @@
+---
+import Layout from '~/layouts/Layout.astro';
+import Icon from '~/components/Icon.astro';
+import { cities } from '~/data/cities';
+import { PRICES_AS_OF } from '~/data/facts';
+import { site } from '~/config/site';
+
+const title = 'Solar Savings Calculator (Pakistan, 2026 rules) — RaySmartSolar';
+const description =
+  'Enter your monthly electricity bill and see what solar would honestly do to it — system size, real PKR price bands, new-bill estimate and payback, under NEPRA’s 2026 net-billing rules. DISCO-aware for LESCO, K-Electric, IESCO, FESCO and MEPCO.';
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name: 'RaySmartSolar Savings Calculator',
+    url: `${site.url}/calculator`,
+    applicationCategory: 'UtilitiesApplication',
+    operatingSystem: 'Web',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'PKR' },
+  },
+];
+---
+
+<Layout {title} {description} {jsonLd}>
+  <section class="pt-28 lg:pt-36 pb-10">
+    <div class="wrap max-w-3xl">
+      <p class="eyebrow mb-4" data-reveal>The honest calculator</p>
+      <h1 class="font-display text-h2 text-balance" data-reveal>
+        What would <em class="fx-it">your</em> bill become?
+      </h1>
+      <p class="text-lede text-ink-2 mt-4 max-w-xl" data-reveal>
+        Thirty seconds, no phone number needed. Built on NEPRA’s <strong class="text-ink">2026
+        net-billing rules</strong> — not the old net-metering math other sites still quote.
+      </p>
+    </div>
+  </section>
+
+  <section class="pb-24">
+    <div class="wrap max-w-3xl">
+      <!-- ── INPUTS ── -->
+      <div class="card p-6 sm:p-8" data-reveal>
+        <div class="grid gap-7">
+          <!-- property type -->
+          <fieldset>
+            <legend class="calc-label">This is for my…</legend>
+            <div class="seg" role="radiogroup">
+              <label class="seg-opt">
+                <input type="radio" name="ptype" value="home" checked />
+                <Icon name="home" size={17} /> <span>Home</span>
+              </label>
+              <label class="seg-opt">
+                <input type="radio" name="ptype" value="business" />
+                <Icon name="building" size={17} /> <span>Business</span>
+              </label>
+            </div>
+          </fieldset>
+
+          <!-- city -->
+          <fieldset>
+            <legend class="calc-label">City</legend>
+            <div class="chips" role="radiogroup">
+              {
+                cities.map((c, i) => (
+                  <label class="chip-opt">
+                    <input type="radio" name="city" value={c.slug} checked={i === 0} />
+                    <span>{c.name}</span>
+                    <span class="chip-disco mono-num">{c.disco.code}</span>
+                  </label>
+                ))
+              }
+            </div>
+          </fieldset>
+
+          <!-- bill -->
+          <div>
+            <div class="flex items-baseline justify-between gap-3">
+              <label for="bill" class="calc-label">Monthly electricity bill</label>
+              <button type="button" class="text-xs text-ink-3 underline decoration-dotted underline-offset-4 hover:text-accent transition-colors" data-units-toggle>
+                I know my units instead
+              </button>
+            </div>
+            <div class="amount-wrap" data-amount-bill>
+              <span class="amount-prefix mono-num">Rs</span>
+              <input
+                id="bill"
+                class="amount-input mono-num"
+                type="text"
+                inputmode="numeric"
+                pattern="[0-9,]*"
+                autocomplete="off"
+                enterkeyhint="done"
+                placeholder="25,000"
+                aria-describedby="bill-hint"
+              />
+            </div>
+            <div class="amount-wrap" data-amount-units hidden>
+              <input
+                id="units"
+                class="amount-input mono-num"
+                type="text"
+                inputmode="numeric"
+                pattern="[0-9,]*"
+                autocomplete="off"
+                enterkeyhint="done"
+                placeholder="550"
+                aria-label="Monthly units (kWh)"
+              />
+              <span class="amount-suffix mono-num">units</span>
+            </div>
+            <p id="bill-hint" class="sr-only">Enter your average monthly bill in rupees</p>
+            <div class="quick-row" data-quick>
+              <button type="button" class="quick" data-amt="15000">15k</button>
+              <button type="button" class="quick" data-amt="25000">25k</button>
+              <button type="button" class="quick" data-amt="40000">40k</button>
+              <button type="button" class="quick" data-amt="60000">60k</button>
+              <button type="button" class="quick" data-amt="100000">1 lakh</button>
+            </div>
+          </div>
+
+          <!-- battery -->
+          <label class="switch-row" for="battery">
+            <span>
+              <span class="block font-medium">Add evening backup (battery)</span>
+              <span class="block text-sm text-ink-3 mt-0.5">
+                Lights, fans &amp; Wi-Fi through outages — and it pushes savings past ~85%.
+              </span>
+            </span>
+            <span class="switch">
+              <input type="checkbox" id="battery" role="switch" />
+              <span class="switch-track" aria-hidden="true"><span class="switch-thumb"></span></span>
+            </span>
+          </label>
+        </div>
+      </div>
+
+      <!-- ── RESULTS ── -->
+      <div id="results" class="results" hidden>
+        <div class="results-head">
+          <p class="eyebrow">Your estimate</p>
+          <p class="text-sm text-ink-3">
+            Honest ranges, not promises — assumptions below. Prices as of {PRICES_AS_OF}.
+          </p>
+        </div>
+
+        <!-- the money shot -->
+        <div class="card bill-card p-6 sm:p-8">
+          <div class="grid sm:grid-cols-2 gap-6 items-end">
+            <div>
+              <p class="calc-label mb-2">Today’s bill</p>
+              <p class="mono-num text-3xl text-ink-3 line-through decoration-danger/60 decoration-2" data-out="oldBill">—</p>
+            </div>
+            <div>
+              <p class="calc-label mb-2">Estimated new bill</p>
+              <p class="mono-num text-[2.6rem] leading-none text-money font-medium" data-out="newBill">—</p>
+            </div>
+          </div>
+          <div class="bars mt-7" aria-hidden="true">
+            <div class="bar-row">
+              <span class="bar-label">now</span>
+              <span class="bar bar-old"><span data-bar="old"></span></span>
+            </div>
+            <div class="bar-row">
+              <span class="bar-label">solar</span>
+              <span class="bar bar-new"><span data-bar="new"></span></span>
+            </div>
+          </div>
+          <p class="mt-5 text-ink-2">
+            <span class="text-money font-semibold" data-out="savingsPct">—</span> of your bill gone —
+            about <span class="font-semibold text-ink" data-out="savingsMo">—</span> back in your pocket
+            every month.
+          </p>
+        </div>
+
+        <div class="grid sm:grid-cols-2 gap-4 mt-4">
+          <div class="card p-6">
+            <p class="calc-label">Suggested system</p>
+            <p class="mono-num text-4xl mt-2 text-accent"><span data-out="sizeKw">—</span> kW</p>
+            <p class="text-sm text-ink-3 mt-2" data-out="sizeDetail">—</p>
+          </div>
+          <div class="card p-6">
+            <p class="calc-label">Turnkey price band</p>
+            <p class="mono-num text-[1.65rem] leading-tight mt-2" data-out="cost">—</p>
+            <p class="text-sm text-ink-3 mt-2" data-out="costDetail">Tier-1 panels · branded inverter · installed</p>
+          </div>
+          <div class="card p-6">
+            <p class="calc-label">Pays for itself in</p>
+            <p class="mono-num text-4xl mt-2"><span data-out="payback">—</span></p>
+            <p class="text-sm text-ink-3 mt-2">then ~20 more years of cheap power</p>
+          </div>
+          <div class="card p-6">
+            <p class="calc-label">25-year savings</p>
+            <p class="mono-num text-[1.65rem] leading-tight mt-2 text-money" data-out="lifetime">—</p>
+            <p class="text-sm text-ink-3 mt-2">at today’s tariffs — they only go up</p>
+          </div>
+        </div>
+
+        <!-- honesty box for poor fits -->
+        <div class="card p-6 mt-4 border-danger/40 hidden" data-poorfit>
+          <p class="font-medium flex items-center gap-2">
+            <Icon name="alert" size={18} class="text-danger" /> Straight talk: solar may not pay back
+            quickly at this bill size.
+          </p>
+          <p class="text-sm text-ink-2 mt-2">
+            Below roughly Rs 8,000/month, payback stretches long. If you’re expecting usage to grow
+            (new AC, new floor), it can still make sense — send us your bill and we’ll tell you
+            honestly.
+          </p>
+        </div>
+
+        <!-- assumptions -->
+        <details class="assump card mt-4">
+          <summary>
+            <Icon name="filecheck" size={17} class="text-gold" />
+            <span>Every assumption behind this estimate</span>
+            <Icon name="chevron-down" size={16} class="assump-chev" />
+          </summary>
+          <ul class="assump-list" data-out="assumptions"></ul>
+        </details>
+
+        <!-- handoff -->
+        <div class="mt-7 grid gap-3 sm:flex sm:flex-wrap">
+          <a href="#" class="btn btn-gold btn-lg" data-cta="wa" data-evt="calc_handoff" data-evt-kind="whatsapp">
+            <Icon name="whatsapp" size={19} /> <span data-wa-label>WhatsApp these numbers to us</span>
+          </a>
+          <a href="/quote?src=calc" class="btn btn-ghost btn-lg" data-cta="quote" data-evt="calc_handoff" data-evt-kind="quote">
+            Get an exact quote <Icon name="arrow-right" size={17} />
+          </a>
+        </div>
+        <p class="mt-4 text-sm text-ink-3">
+          Free survey, written quote, zero pressure. <span lang="ur-Latn">Koi zabardasti nahi.</span>
+        </p>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .calc-label {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-3);
+  }
+
+  /* segmented control */
+  .seg {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    margin-top: 0.6rem;
+    padding: 5px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--bg) 55%, transparent);
+  }
+  .seg-opt {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 2.9rem;
+    border-radius: 999px;
+    cursor: pointer;
+    color: var(--text-2);
+    font-weight: 540;
+    transition: color 150ms, background-color 200ms var(--ease-out);
+  }
+  .seg-opt input {
+    position: absolute;
+    opacity: 0;
+    inset: 0;
+    cursor: pointer;
+  }
+  .seg-opt:has(input:checked) {
+    background: linear-gradient(135deg, var(--sun-a), var(--gold) 60%, #ef8f1f);
+    color: #201405;
+  }
+  .seg-opt:has(input:focus-visible) {
+    outline: 2px solid var(--gold);
+    outline-offset: 2px;
+  }
+
+  /* city chips */
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 0.6rem;
+  }
+  .chip-opt {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 2.75rem;
+    padding: 0.45rem 0.95rem;
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    cursor: pointer;
+    color: var(--text-2);
+    font-size: 0.92rem;
+    transition: border-color 150ms, color 150ms, background-color 200ms;
+  }
+  .chip-opt input {
+    position: absolute;
+    opacity: 0;
+    inset: 0;
+    cursor: pointer;
+  }
+  .chip-disco {
+    font-size: 0.62rem;
+    letter-spacing: 0.08em;
+    padding: 0.15rem 0.45rem;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    color: var(--text-3);
+  }
+  .chip-opt:has(input:checked) {
+    border-color: var(--gold);
+    color: var(--text);
+    background: color-mix(in srgb, var(--gold) 12%, transparent);
+  }
+  .chip-opt:has(input:checked) .chip-disco {
+    border-color: color-mix(in srgb, var(--gold) 50%, transparent);
+    color: var(--accent-text);
+  }
+  .chip-opt:has(input:focus-visible) {
+    outline: 2px solid var(--gold);
+    outline-offset: 2px;
+  }
+
+  /* amount input */
+  .amount-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    margin-top: 0.7rem;
+    border: 1px solid var(--line-strong);
+    border-radius: 1rem;
+    padding: 0.35rem 1.1rem;
+    background: color-mix(in srgb, var(--bg) 55%, transparent);
+    transition: border-color 150ms;
+  }
+  .amount-wrap:focus-within {
+    border-color: var(--gold);
+  }
+  .amount-prefix,
+  .amount-suffix {
+    color: var(--text-3);
+    font-size: 1.3rem;
+  }
+  .amount-input {
+    width: 100%;
+    background: none;
+    border: 0;
+    outline: 0;
+    font-size: clamp(1.9rem, 6vw, 2.4rem);
+    padding-block: 0.35rem;
+    color: var(--text);
+    caret-color: var(--gold);
+  }
+  .amount-input::placeholder {
+    color: var(--text-3);
+    opacity: 0.55;
+  }
+
+  .quick-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 0.7rem;
+  }
+  .quick {
+    min-height: 2.4rem;
+    padding: 0.3rem 0.9rem;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    color: var(--text-2);
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: border-color 150ms, color 150ms, transform 150ms var(--ease-out);
+  }
+  .quick:hover {
+    border-color: var(--gold);
+    color: var(--accent-text);
+    transform: translateY(-1px);
+  }
+
+  /* switch */
+  .switch-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    cursor: pointer;
+  }
+  .switch {
+    position: relative;
+    flex: none;
+  }
+  .switch input {
+    position: absolute;
+    opacity: 0;
+    inset: 0;
+    cursor: pointer;
+  }
+  .switch-track {
+    display: block;
+    width: 3.4rem;
+    height: 2rem;
+    border-radius: 999px;
+    border: 1px solid var(--line-strong);
+    background: color-mix(in srgb, var(--bg) 60%, transparent);
+    transition: background-color 250ms var(--ease-out), border-color 250ms;
+  }
+  .switch-thumb {
+    position: absolute;
+    top: 3px;
+    left: 4px;
+    width: calc(2rem - 7px);
+    height: calc(2rem - 7px);
+    border-radius: 999px;
+    background: var(--text-3);
+    transition: transform 300ms var(--ease-out), background-color 250ms;
+  }
+  .switch input:checked + .switch-track {
+    background: color-mix(in srgb, var(--gold) 30%, transparent);
+    border-color: var(--gold);
+  }
+  .switch input:checked + .switch-track .switch-thumb {
+    transform: translateX(1.35rem);
+    background: var(--gold);
+  }
+  .switch input:focus-visible + .switch-track {
+    outline: 2px solid var(--gold);
+    outline-offset: 3px;
+  }
+
+  /* results */
+  .results {
+    margin-top: 1.25rem;
+  }
+  .results-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin: 2rem 0 1rem;
+  }
+  .bill-card {
+    background:
+      radial-gradient(80% 120% at 90% -20%, rgb(76 215 135 / 0.08), transparent 60%),
+      var(--surface);
+  }
+  .bars {
+    display: grid;
+    gap: 0.55rem;
+  }
+  .bar-row {
+    display: grid;
+    grid-template-columns: 3rem 1fr;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .bar-label {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--text-3);
+  }
+  .bar {
+    display: block;
+    height: 0.9rem;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--line) 60%, transparent);
+    overflow: hidden;
+  }
+  .bar span {
+    display: block;
+    height: 100%;
+    width: 0%;
+    border-radius: inherit;
+    transition: width 900ms var(--ease-out);
+  }
+  .bar-old span {
+    background: linear-gradient(90deg, color-mix(in srgb, var(--danger) 75%, transparent), var(--danger));
+  }
+  .bar-new span {
+    background: linear-gradient(90deg, var(--green), color-mix(in srgb, var(--green) 60%, var(--gold)));
+  }
+
+  /* assumptions accordion */
+  .assump summary {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 1.1rem 1.4rem;
+    cursor: pointer;
+    font-weight: 540;
+    list-style: none;
+  }
+  .assump summary::-webkit-details-marker {
+    display: none;
+  }
+  .assump-chev {
+    margin-left: auto;
+    transition: transform 300ms var(--ease-out);
+  }
+  .assump[open] .assump-chev {
+    transform: rotate(180deg);
+  }
+  .assump-list {
+    padding: 0 1.4rem 1.2rem;
+    display: grid;
+    gap: 0.6rem;
+    color: var(--text-2);
+    font-size: 0.92rem;
+  }
+  .assump-list :global(li) {
+    padding-left: 1.1rem;
+    position: relative;
+  }
+  .assump-list :global(li)::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.55em;
+    width: 5px;
+    height: 5px;
+    border-radius: 999px;
+    background: var(--gold);
+  }
+</style>
+
+<script>
+  import { calculate, fmtRs, fmtRsCompact, waMessageFromResult, type CalcResult } from '~/lib/calc';
+  import { track, scrollToEl } from '~/scripts/app';
+
+  function initCalc() {
+    const rootMaybe = document.getElementById('results');
+    const billMaybe = document.getElementById('bill');
+    if (!rootMaybe || !billMaybe || rootMaybe.dataset.bound) return;
+    rootMaybe.dataset.bound = '1';
+    const root: HTMLElement = rootMaybe;
+    const billInput = billMaybe as HTMLInputElement;
+
+    const unitsInput = document.getElementById('units') as HTMLInputElement;
+    const battery = document.getElementById('battery') as HTMLInputElement;
+    const out = (k: string) => document.querySelector<HTMLElement>(`[data-out="${k}"]`)!;
+    const poorfit = document.querySelector<HTMLElement>('[data-poorfit]')!;
+    const waBtn = document.querySelector<HTMLAnchorElement>('[data-cta="wa"]')!;
+    const waLabel = document.querySelector<HTMLElement>('[data-wa-label]')!;
+    const quoteBtn = document.querySelector<HTMLAnchorElement>('[data-cta="quote"]')!;
+
+    let mode: 'bill' | 'units' = 'bill';
+    let last: CalcResult | null = null;
+    let started = false;
+    let debounce = 0;
+
+    /* ── helpers ── */
+    const digits = (s: string) => parseInt(s.replace(/[^\d]/g, ''), 10) || 0;
+    const groupInput = (el: HTMLInputElement) => {
+      const n = digits(el.value);
+      el.value = n ? n.toLocaleString('en-PK') : '';
+    };
+
+    const tweens = new Map<HTMLElement, number>();
+    function setNum(el: HTMLElement, text: string) {
+      // gentle roll on change
+      if (el.textContent === text) return;
+      el.textContent = text;
+      el.animate?.(
+        [{ opacity: 0.25, transform: 'translateY(6px)' }, { opacity: 1, transform: 'none' }],
+        { duration: 320, easing: 'cubic-bezier(0.16,1,0.3,1)' }
+      );
+      tweens.delete(el);
+    }
+
+    function readInput() {
+      const type = (document.querySelector('input[name="ptype"]:checked') as HTMLInputElement)
+        .value as 'home' | 'business';
+      const citySlug = (document.querySelector('input[name="city"]:checked') as HTMLInputElement)
+        .value;
+      const bill = mode === 'bill' ? digits(billInput.value) : 0;
+      const units = mode === 'units' ? digits(unitsInput.value) : 0;
+      return { type, citySlug, bill: bill || undefined, units: units || undefined, battery: battery.checked };
+    }
+
+    function render() {
+      const input = readInput();
+      const minOk = (input.bill && input.bill >= 3000) || (input.units && input.units >= 60);
+      if (!minOk) {
+        root.hidden = true;
+        return;
+      }
+      const r = calculate(input);
+      if (!r) {
+        root.hidden = true;
+        return;
+      }
+      last = r;
+      const firstShow = root.hidden;
+      root.hidden = false;
+
+      const range = (a: number, b: number) =>
+        `Rs ${Math.round(a).toLocaleString('en-PK')} – ${Math.round(b).toLocaleString('en-PK')}`;
+      setNum(out('oldBill'), fmtRs(r.input.bill));
+      setNum(out('newBill'), range(r.newBillLow, r.newBillHigh));
+      setNum(out('savingsPct'), `${r.savingsPctLow}–${r.savingsPctHigh}%`);
+      setNum(out('savingsMo'), range(r.savingsLow, r.savingsHigh));
+      setNum(out('sizeKw'), String(r.sizeKw));
+      out('sizeDetail').textContent =
+        `≈ ${r.panels} panels · ~${r.roofSqft.toLocaleString('en-PK')} sq ft (${r.roofMarla} marla)` +
+        (r.batteryKwh ? ` · ${r.batteryKwh} kWh battery` : '');
+      setNum(out('cost'), `${fmtRsCompact(r.costLow)} – ${fmtRsCompact(r.costHigh)}`);
+      const pb =
+        r.paybackHigh > 25 ? `${Math.max(r.paybackLow, 8).toFixed(0)}+ yrs` : `${r.paybackLow}–${r.paybackHigh} yrs`;
+      setNum(out('payback'), pb);
+      setNum(out('lifetime'), `≈ ${fmtRsCompact(r.year25Savings)}`);
+
+      // bars: old = 100%, new = share of old
+      const newPct = Math.max(
+        4,
+        Math.round(((r.newBillLow + r.newBillHigh) / 2 / Math.max(r.input.bill, 1)) * 100)
+      );
+      requestAnimationFrame(() => {
+        document.querySelector<HTMLElement>('[data-bar="old"]')!.style.width = '100%';
+        document.querySelector<HTMLElement>('[data-bar="new"]')!.style.width = `${Math.min(newPct, 100)}%`;
+      });
+
+      // assumptions
+      out('assumptions').innerHTML = r.assumptions.map((a) => `<li>${a}</li>`).join('');
+
+      // poor fit honesty
+      poorfit.classList.toggle('hidden', !(r.paybackHigh > 15 || r.input.bill < 8000));
+
+      // handoff links
+      const wa = (window as any).__RSS as { waE164: string; waLive: boolean };
+      const msg = waMessageFromResult(r);
+      if (wa?.waLive) {
+        waBtn.href = `https://wa.me/${wa.waE164}?text=${encodeURIComponent(msg)}`;
+        waBtn.target = '_blank';
+        waBtn.rel = 'noopener';
+        waLabel.textContent = 'WhatsApp these numbers to us';
+      } else {
+        waBtn.href = '/quote?src=calc';
+        waLabel.textContent = 'Get these numbers checked — free survey';
+      }
+      quoteBtn.href = '/quote?src=calc';
+
+      try {
+        localStorage.setItem(
+          'rss-calc',
+          JSON.stringify({ input: r.input, sizeKw: r.sizeKw, costLow: r.costLow, costHigh: r.costHigh, newBillLow: r.newBillLow, newBillHigh: r.newBillHigh, wa: msg, at: Date.now() })
+        );
+      } catch {}
+
+      if (firstShow) {
+        track('calc_result', { bill: r.input.bill, city: r.input.citySlug, type: r.input.type });
+        requestAnimationFrame(() => scrollToEl(root, -70));
+      }
+    }
+
+    const queue = () => {
+      if (!started) {
+        started = true;
+        track('calc_start', {});
+      }
+      clearTimeout(debounce);
+      debounce = window.setTimeout(render, 260);
+    };
+
+    /* ── wire ── */
+    billInput.addEventListener('input', () => {
+      groupInput(billInput);
+      queue();
+    });
+    unitsInput.addEventListener('input', () => {
+      groupInput(unitsInput);
+      queue();
+    });
+    document.querySelectorAll('input[name="ptype"], input[name="city"]').forEach((el) =>
+      el.addEventListener('change', queue)
+    );
+    battery.addEventListener('change', queue);
+
+    document.querySelectorAll<HTMLButtonElement>('[data-amt]').forEach((b) =>
+      b.addEventListener('click', () => {
+        mode = 'bill';
+        syncMode();
+        billInput.value = Number(b.dataset.amt).toLocaleString('en-PK');
+        queue();
+      })
+    );
+
+    const toggleBtn = document.querySelector<HTMLButtonElement>('[data-units-toggle]')!;
+    const billWrap = document.querySelector<HTMLElement>('[data-amount-bill]')!;
+    const unitsWrap = document.querySelector<HTMLElement>('[data-amount-units]')!;
+    const quickRow = document.querySelector<HTMLElement>('[data-quick]')!;
+    function syncMode() {
+      billWrap.hidden = mode !== 'bill';
+      quickRow.hidden = mode !== 'bill';
+      unitsWrap.hidden = mode !== 'units';
+      toggleBtn.textContent = mode === 'bill' ? 'I know my units instead' : 'Enter bill amount instead';
+    }
+    toggleBtn.addEventListener('click', () => {
+      mode = mode === 'bill' ? 'units' : 'bill';
+      syncMode();
+      (mode === 'bill' ? billInput : unitsInput).focus();
+      queue();
+    });
+
+    /* ── prefill: URL params → localStorage ── */
+    const params = new URLSearchParams(location.search);
+    const pCity = params.get('city');
+    const pType = params.get('type');
+    const pBill = params.get('bill');
+    if (pCity) {
+      const el = document.querySelector<HTMLInputElement>(`input[name="city"][value="${pCity}"]`);
+      if (el) el.checked = true;
+    }
+    if (pType === 'business' || pType === 'home') {
+      document.querySelector<HTMLInputElement>(`input[name="ptype"][value="${pType}"]`)!.checked = true;
+    }
+    if (pBill && digits(pBill)) {
+      billInput.value = digits(pBill).toLocaleString('en-PK');
+      queue();
+    } else {
+      try {
+        const saved = JSON.parse(localStorage.getItem('rss-calc') || 'null');
+        if (saved?.input?.bill) {
+          billInput.value = Number(saved.input.bill).toLocaleString('en-PK');
+          if (saved.input.citySlug) {
+            const el = document.querySelector<HTMLInputElement>(
+              `input[name="city"][value="${saved.input.citySlug}"]`
+            );
+            if (el) el.checked = true;
+          }
+          if (saved.input.battery) battery.checked = true;
+          if (saved.input.type === 'business')
+            document.querySelector<HTMLInputElement>('input[name="ptype"][value="business"]')!.checked = true;
+          queue();
+        }
+      } catch {}
+    }
+  }
+
+  document.addEventListener('astro:page-load', initCalc);
+</script>

@@ -1,0 +1,456 @@
+---
+import Layout from '~/layouts/Layout.astro';
+import PageHero from '~/components/PageHero.astro';
+import SectionHead from '~/components/SectionHead.astro';
+import FAQ from '~/components/FAQ.astro';
+import Icon from '~/components/Icon.astro';
+import { site, waLink, WA_DEFAULT_MESSAGE, telLink } from '~/config/site';
+
+const title = 'Contact RaySmartSolar — Lahore office, WhatsApp & email';
+const description =
+  'WhatsApp, phone, email or walk into our Allama Iqbal Town office — real humans, replies within one business day, and a form that never loses your message.';
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'ContactPage',
+    name: `Contact ${site.name}`,
+    description,
+    about: { '@id': `${site.url}/#business` },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'LocalBusiness',
+    '@id': `${site.url}/#business`,
+    contactPoint: [
+      {
+        '@type': 'ContactPoint',
+        contactType: 'customer service',
+        email: site.email,
+        url: `${site.url}/contact`,
+        areaServed: 'PK',
+        availableLanguage: ['English', 'Urdu'],
+      },
+    ],
+  },
+];
+
+const waHref = site.phone.live ? waLink(WA_DEFAULT_MESSAGE) : '/quote?src=contact';
+
+const miniFaqs = [
+  {
+    q: 'How fast do you actually reply?',
+    a: `Within <strong>one business day</strong> — usually much faster. Office hours are ${site.hours.days}, ${site.hours.time}. ${site.hours.note}`,
+  },
+  {
+    q: 'Which cities do you cover?',
+    a: `Home turf is Lahore (${site.homeDisco} territory), plus <a href="/karachi">Karachi</a>, <a href="/islamabad">Islamabad &amp; Rawalpindi</a>, <a href="/faisalabad">Faisalabad</a> and <a href="/multan">Multan</a> — and most of Punjab besides. Somewhere else? Ask; worst case we say no honestly.`,
+  },
+  {
+    q: 'Do I need an appointment to visit?',
+    a: 'No — walk in during office hours. If you want the right person waiting (commercial sizing, net-metering specifics), send a message first and we’ll have them there.',
+  },
+];
+---
+
+<Layout {title} {description} {jsonLd}>
+  <PageHero
+    eyebrow="Contact"
+    title="Fast answers, human beings."
+    lede="Questions cost nothing here. WhatsApp, call, email, walk in — or leave a message below and a human gets back to you within one business day."
+  />
+
+  <!-- Channels -->
+  <section class="section">
+    <div class="wrap">
+      <h2 class="sr-only">Every way to reach us</h2>
+      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4" data-reveal-group>
+        <a
+          href={waHref}
+          target={site.phone.live ? '_blank' : undefined}
+          rel={site.phone.live ? 'noopener' : undefined}
+          class="ch-card card p-6"
+          data-reveal-child
+          data-evt={site.phone.live ? 'wa_click' : 'quote_open'}
+          data-evt-src="contact_channels"
+        >
+          <span class="ch-icon ch-icon-wa"><Icon name="whatsapp" size={19} /></span>
+          <h3 class="font-medium mt-4">WhatsApp</h3>
+          {
+            site.phone.live ? (
+              <>
+                <p class="mono-num text-lg mt-1">{site.phone.display}</p>
+                <p class="text-sm text-ink-3 mt-2">Fastest channel — photos of bills and roofs welcome.</p>
+              </>
+            ) : (
+              <>
+                <p class="text-sm text-ink-2 mt-1">Number being provisioned.</p>
+                <p class="text-sm text-ink-3 mt-2">This routes to our two-minute form meanwhile — nothing bounces.</p>
+              </>
+            )
+          }
+          <span class="ch-go">Open <Icon name="arrow-up-right" size={13} /></span>
+        </a>
+
+        {
+          site.phone.live ? (
+            <a href={telLink()} class="ch-card card p-6" data-reveal-child data-evt="tel_click" data-evt-src="contact_channels">
+              <span class="ch-icon"><Icon name="phone" size={18} /></span>
+              <h3 class="font-medium mt-4">Call us</h3>
+              <p class="mono-num text-lg mt-1">{site.phone.display}</p>
+              <p class="text-sm text-ink-3 mt-2">{site.hours.days}, {site.hours.time}.</p>
+              <span class="ch-go">Dial <Icon name="arrow-up-right" size={13} /></span>
+            </a>
+          ) : (
+            <div class="ch-card card p-6" data-reveal-child>
+              <span class="ch-icon"><Icon name="phone" size={18} /></span>
+              <h3 class="font-medium mt-4">Phone</h3>
+              <p class="mono-num text-lg mt-1">{site.phone.display}</p>
+              <p class="text-sm text-ink-3 mt-2">
+                ({site.phone.placeholderNote}) — until it rings, the form below reaches us instantly.
+              </p>
+            </div>
+          )
+        }
+
+        <a href={`mailto:${site.email}`} class="ch-card card p-6" data-reveal-child data-evt="email_click" data-evt-src="contact_channels">
+          <span class="ch-icon"><Icon name="mail" size={18} /></span>
+          <h3 class="font-medium mt-4">Email</h3>
+          <p class="text-sm text-ink mt-1 break-all">{site.email}</p>
+          <p class="text-sm text-ink-3 mt-2">Best for documents, bills and long questions.</p>
+          <span class="ch-go">Write <Icon name="arrow-up-right" size={13} /></span>
+        </a>
+
+        <a
+          href={site.address.mapsUrl}
+          target="_blank"
+          rel="noopener"
+          class="ch-card card p-6"
+          data-reveal-child
+          data-evt="maps_click"
+          data-evt-src="contact_channels"
+        >
+          <span class="ch-icon"><Icon name="pin" size={18} /></span>
+          <h3 class="font-medium mt-4">Visit the office</h3>
+          <p class="text-sm text-ink mt-1">{site.address.full}</p>
+          <p class="text-sm text-ink-3 mt-2">{site.hours.days}, {site.hours.time}. Walk-ins welcome.</p>
+          <span class="ch-go">Google Maps <Icon name="arrow-up-right" size={13} /></span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Message form + mini FAQ -->
+  <section class="section pt-0" id="message">
+    <div class="wrap">
+      <div class="grid gap-12 lg:grid-cols-[1.15fr_1fr] items-start">
+        <div>
+          <SectionHead
+            eyebrow="Or write it here"
+            title="Leave a message, get a human back."
+            lede="Name, number, question — that’s it. It lands straight in the inbox we actually read."
+          />
+
+          <form class="card p-6 sm:p-8 mt-10" data-contact-form novalidate data-reveal>
+            <div class="grid gap-5 sm:grid-cols-2">
+              <div>
+                <label for="c-name" class="c-label">Your name</label>
+                <input
+                  id="c-name"
+                  name="name"
+                  type="text"
+                  autocomplete="name"
+                  class="c-input"
+                  placeholder="Your name"
+                  required
+                />
+              </div>
+              <div>
+                <label for="c-phone" class="c-label">Phone / WhatsApp</label>
+                <input
+                  id="c-phone"
+                  name="phone"
+                  type="tel"
+                  inputmode="tel"
+                  autocomplete="tel"
+                  class="c-input mono-num"
+                  placeholder="03XX XXXXXXX"
+                  required
+                />
+              </div>
+            </div>
+            <div class="mt-5">
+              <label for="c-message" class="c-label">Your message</label>
+              <textarea
+                id="c-message"
+                name="message"
+                rows="5"
+                class="c-input"
+                placeholder="Your question, your bill size, your roof’s plot twist…"
+                required></textarea>
+            </div>
+
+            <!-- honeypot -->
+            <div class="hp" aria-hidden="true">
+              <label>Website<input type="text" name="website" tabindex="-1" autocomplete="off" /></label>
+            </div>
+
+            <p class="c-err" data-c-err hidden></p>
+
+            <button type="submit" class="btn btn-gold btn-lg w-full sm:w-auto mt-6" data-c-submit>
+              <Icon name="mail" size={18} /> Send message
+            </button>
+            <p class="text-xs text-ink-3 mt-3">
+              By sending you agree to our <a href="/privacy" class="underline underline-offset-2">privacy policy</a>.
+              No lists, no spam — just your answer.
+            </p>
+          </form>
+
+          <!-- success (inline) -->
+          <div class="card p-8 mt-10 text-center" data-c-done hidden tabindex="-1">
+            <span class="done-icon" aria-hidden="true"><Icon name="sunrise" size={30} class="text-gold" /></span>
+            <h3 class="font-display text-h3 mt-4">
+              <span lang="ur-Latn">Shukriya</span> — it’s in.
+            </h3>
+            <p class="text-ink-2 mt-3 max-w-md mx-auto">
+              A human reads it and replies within <strong class="text-ink">one business day</strong>.
+              Meanwhile, the <a href="/calculator" class="link-gold" data-evt="calc_open" data-evt-src="contact_done">calculator</a>
+              answers the money question in sixty seconds.
+            </p>
+          </div>
+
+          <!-- failure (inline, preserves the form text above) -->
+          <div class="card p-6 mt-4 fail-card" data-c-fail hidden>
+            <p class="flex items-start gap-3 text-ink-2">
+              <Icon name="alert" size={18} class="text-danger mt-0.5 shrink-0" />
+              <span>
+                <strong class="text-ink">That didn’t send — but your message is still right here.</strong>
+                <span class="block text-sm text-ink-3 mt-1" data-c-reason></span>
+              </span>
+            </p>
+            <div class="flex flex-wrap gap-3 mt-4">
+              <button type="button" class="btn btn-ghost btn-sm" data-c-retry>Try again</button>
+              <a href="#" class="btn btn-wa btn-sm" data-c-wa data-evt="wa_click" data-evt-src="contact_fail" hidden>
+                <Icon name="whatsapp" size={16} /> Send it on WhatsApp
+              </a>
+              <a href="#" class="btn btn-ghost btn-sm" data-c-mail data-mail-base={`mailto:${site.email}`}>
+                <Icon name="mail" size={16} /> Email it instead
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <aside>
+          <SectionHead eyebrow="Before you ask" title="The three we hear most" />
+          <div class="mt-8">
+            <FAQ items={miniFaqs} />
+          </div>
+          <p class="text-sm text-ink-3 mt-6" data-reveal>
+            Ready for numbers instead? <a href="/calculator" class="link-gold" data-evt="calc_open" data-evt-src="contact_aside">Run the honest calculator</a>
+            or <a href="/quote?src=contact" class="link-gold" data-evt="quote_open" data-evt-src="contact_aside">start a free survey</a>.
+          </p>
+        </aside>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .ch-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    transition: transform 300ms var(--ease-out), border-color 200ms;
+  }
+  a.ch-card:hover {
+    transform: translateY(-3px);
+    border-color: color-mix(in srgb, var(--gold) 45%, transparent);
+  }
+  .ch-icon {
+    width: 2.4rem;
+    height: 2.4rem;
+    border-radius: 999px;
+    display: grid;
+    place-items: center;
+    background: color-mix(in srgb, var(--gold) 15%, transparent);
+    color: var(--gold);
+  }
+  .ch-icon-wa {
+    background: color-mix(in srgb, var(--wa) 14%, transparent);
+    color: var(--wa);
+  }
+  .ch-go {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin-top: auto;
+    padding-top: 1.1rem;
+    font-size: 0.85rem;
+    font-weight: 550;
+    color: var(--accent-text);
+  }
+  .c-label {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--text-3);
+    margin-bottom: 0.5rem;
+  }
+  .c-input {
+    width: 100%;
+    border: 1px solid var(--line-strong);
+    border-radius: 0.9rem;
+    background: color-mix(in srgb, var(--bg) 55%, transparent);
+    padding: 0.8rem 1rem;
+    color: var(--text);
+    caret-color: var(--gold);
+    transition: border-color 150ms;
+  }
+  .c-input:focus {
+    outline: none;
+    border-color: var(--gold);
+  }
+  .c-input::placeholder {
+    color: var(--text-3);
+    opacity: 0.55;
+  }
+  textarea.c-input {
+    resize: vertical;
+    min-height: 8rem;
+  }
+  .c-err {
+    margin-top: 0.9rem;
+    color: var(--danger);
+    font-size: 0.9rem;
+  }
+  .fail-card {
+    border-color: color-mix(in srgb, var(--danger) 40%, transparent);
+  }
+  .done-icon {
+    width: 4rem;
+    height: 4rem;
+    border-radius: 999px;
+    display: inline-grid;
+    place-items: center;
+    background: color-mix(in srgb, var(--gold) 14%, transparent);
+    border: 1px solid color-mix(in srgb, var(--gold) 45%, transparent);
+  }
+  .hp {
+    position: absolute;
+    left: -9999px;
+    top: auto;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+</style>
+
+<script>
+  import { track } from '~/scripts/app';
+
+  function initContactForm() {
+    const form = document.querySelector<HTMLFormElement>('[data-contact-form]');
+    if (!form || form.dataset.bound) return;
+    form.dataset.bound = '1';
+
+    const mountedAt = Date.now();
+    const name = form.querySelector<HTMLInputElement>('#c-name')!;
+    const phone = form.querySelector<HTMLInputElement>('#c-phone')!;
+    const message = form.querySelector<HTMLTextAreaElement>('#c-message')!;
+    const hp = form.querySelector<HTMLInputElement>('input[name="website"]')!;
+    const err = form.querySelector<HTMLElement>('[data-c-err]')!;
+    const submitBtn = form.querySelector<HTMLButtonElement>('[data-c-submit]')!;
+    const done = document.querySelector<HTMLElement>('[data-c-done]')!;
+    const fail = document.querySelector<HTMLElement>('[data-c-fail]')!;
+    let sending = false;
+
+    const pkPhoneOk = (raw: string) => /^(?:\+?92|0)?3\d{9}$/.test(raw.replace(/[^\d+]/g, ''));
+
+    const waText = () =>
+      `Assalam-o-alaikum RaySmartSolar!\n${message.value.trim()}\n— ${name.value.trim()} (${phone.value.trim()})`;
+
+    function showError(msg: string | null) {
+      err.hidden = !msg;
+      if (msg) err.textContent = msg;
+    }
+
+    function setFallbacks() {
+      const rss = (window as any).__RSS;
+      const waBtn = fail.querySelector<HTMLAnchorElement>('[data-c-wa]')!;
+      if (rss?.waLive) {
+        waBtn.hidden = false;
+        waBtn.href = `https://wa.me/${rss.waE164}?text=${encodeURIComponent(waText())}`;
+        waBtn.target = '_blank';
+        waBtn.rel = 'noopener';
+      } else {
+        waBtn.hidden = true;
+      }
+      const mailBtn = fail.querySelector<HTMLAnchorElement>('[data-c-mail]')!;
+      mailBtn.href = `${mailBtn.dataset.mailBase}?subject=${encodeURIComponent(
+        'Message for RaySmartSolar'
+      )}&body=${encodeURIComponent(waText())}`;
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (sending) return;
+      if (name.value.trim().length < 2) return showError('We just need a name to address you properly.');
+      if (!pkPhoneOk(phone.value))
+        return showError('That doesn’t look like a Pakistani mobile — 03XX XXXXXXX works best.');
+      if (message.value.trim().length < 5)
+        return showError('Give us at least a sentence to work with.');
+      showError(null);
+
+      sending = true;
+      const original = submitBtn.innerHTML;
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = 'Sending…';
+
+      try {
+        const res = await fetch('/api/lead', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            kind: 'contact',
+            name: name.value.trim(),
+            phone: phone.value.trim(),
+            message: message.value.trim(),
+            page: '/contact',
+            website: hp.value || '',
+            t: mountedAt,
+          }),
+        });
+        const data = await res.json().catch(() => ({ ok: false }));
+        if (!res.ok || !data.ok) throw new Error(data.error || 'send_failed');
+
+        form.hidden = true;
+        fail.hidden = true;
+        done.hidden = false;
+        done.focus({ preventScroll: false });
+        track('contact_send', {});
+      } catch (ex: any) {
+        setFallbacks();
+        const reason = fail.querySelector<HTMLElement>('[data-c-reason]')!;
+        reason.textContent =
+          (ex?.message !== 'send_failed' && ex?.message) ||
+          'A connection hiccup — nothing you typed was lost.';
+        fail.hidden = false;
+        track('contact_fail', {});
+      } finally {
+        sending = false;
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = original;
+      }
+    });
+
+    fail.querySelector<HTMLElement>('[data-c-retry]')?.addEventListener('click', () => {
+      fail.hidden = true;
+      form.requestSubmit();
+    });
+  }
+
+  document.addEventListener('astro:page-load', initContactForm);
+</script>

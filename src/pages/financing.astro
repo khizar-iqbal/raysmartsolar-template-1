@@ -1,0 +1,344 @@
+---
+import Layout from '~/layouts/Layout.astro';
+import PageHero from '~/components/PageHero.astro';
+import SectionHead from '~/components/SectionHead.astro';
+import CTABand from '~/components/CTABand.astro';
+import FAQ from '~/components/FAQ.astro';
+import Icon from '~/components/Icon.astro';
+import { site } from '~/config/site';
+import { FINANCING, PRICES_AS_OF, PACKAGES, PAYBACK_TYPICAL } from '~/data/facts';
+import skyGradient from '~/assets/photos/sky-gradient.jpg';
+
+const fiveKw = PACKAGES.find((p) => p.kw === 5)!;
+
+const title = 'Solar Financing in Pakistan — the 2026 reality | RaySmartSolar';
+const description =
+  'The subsidised SBP solar scheme ended in 2023 — today’s financing tracks KIBOR. Which banks actually lend, what it truly costs, and when cash beats credit.';
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: 'Solar financing facilitation and bank liaison',
+    description,
+    provider: { '@id': `${site.url}/#business` },
+    areaServed: ['Lahore', 'Karachi', 'Islamabad', 'Rawalpindi', 'Faisalabad', 'Multan'],
+    serviceType: 'Solar financing arrangement, bank documentation and payment structures',
+  },
+];
+
+const faqs = [
+  {
+    q: 'Do you offer installments yourselves?',
+    a: 'We arrange financing through banks and financing partners rather than running our own loan book — that keeps the hardware quote and the money side separately honest and separately negotiable. Installer-run short plans do exist in the market; if one fits your size better than a bank offer, we’ll say so and help you compare the all-in totals.',
+  },
+  {
+    q: 'Are there Islamic financing options?',
+    a: 'Yes — this is one of the better-served corners of the market. Meezan finances residential solar through Diminishing Musharakah, and lease/ijarah structures cover business-scale systems. The paperwork differs from a conventional loan; the arithmetic doesn’t escape the market — pricing tracks the same benchmarks, so compare total cost the same way you’d compare any offer.',
+  },
+  {
+    q: 'What would a 5 kW system cost per month on financing?',
+    a: `Illustration only: a mid-range 5 kW system (≈Rs 7 lakh, as of ${PRICES_AS_OF}) on a 4-year tenor at the current KIBOR-linked band works out around Rs 19–22,000 a month. But the same system can quote at Rs 5.5 or Rs 9 lakh, and tenors run 3–10 years — so treat that as the shape, not the price. Your survey quote comes with live bank figures, in writing.`,
+  },
+  {
+    q: 'Can I settle early?',
+    a: 'Usually, yes. Conventional loans typically allow early settlement with a small fee and recalculated markup; Islamic structures let you buy out the remaining share. The exact clause lives in the schedule you sign — we flag it, and its fee, before signing. It’s precisely the sort of line that gets skipped in a showroom.',
+  },
+  {
+    q: 'What happens if KIBOR changes mid-tenor?',
+    a: 'On variable-rate products your installment reprices at review intervals — down as well as up; that’s the deal you signed. Some plans fix the rate for the whole tenor at a premium. We put both versions in front of you and print which one you’re choosing, so a rate reset never arrives as a surprise.',
+  },
+  {
+    q: 'Does financing delay the installation?',
+    a: 'A little, honestly. Bank processing runs from about a week to five weeks depending on the bank and the quality of your file — one more reason we prepare it properly the first time. We sequence the survey, quote and bank file so installation follows approval immediately; the system is usually generating before your first installment lands.',
+  },
+];
+---
+
+<Layout {title} {description} {jsonLd} heroNav>
+  <PageHero
+    eyebrow="Financing · the 2026 reality"
+    title="Solar on installments — minus the fairy tales."
+    titleHtml="Solar on installments — <em>minus the fairy tales.</em>"
+    lede="The subsidised SBP scheme is dead, and today’s bank markups track KIBOR. Financing can still be exactly the right call — as long as you see the full cost before signing, not after. Here it is."
+    image={skyGradient}
+    imageAlt="Sunset sky fading from warm gold to dusk blue"
+    imagePosition="50% 60%"
+  >
+    <Fragment slot="actions">
+      <a href="/quote?src=financing" class="btn btn-gold" data-evt="quote_open" data-evt-src="financing_hero">
+        <Icon name="banknote" size={18} /> Get financing options
+      </a>
+      <a href="/calculator" class="btn btn-ghost" data-evt="calc_open" data-evt-src="financing_hero">
+        First, size the system <Icon name="arrow-right" size={17} />
+      </a>
+    </Fragment>
+  </PageHero>
+
+  <!-- The stale pitch vs the real market -->
+  <section class="section">
+    <div class="wrap">
+      <SectionHead
+        eyebrow="Before anything else"
+        title="The stale pitch vs. the real market"
+        titleHtml="The stale pitch vs. <em>the real market</em>"
+        lede="One test separates serious financing advice from a recycled brochure: ask about the SBP scheme, and watch the answer."
+      />
+      <div class="grid gap-4 md:grid-cols-3 mt-12" data-reveal-group>
+        <div class="card p-7" data-reveal-child>
+          <p class="font-mono text-[0.68rem] uppercase tracking-[0.18em] text-ink-3">The stale pitch</p>
+          <p class="font-display text-h3 mt-3">“Subsidised 6% solar loans”</p>
+          <p class="text-ink-2 mt-3">
+            That was the State Bank’s concessional renewable-energy scheme. It closed to new
+            financing in 2023 and never came back. Anyone advertising subsidised solar rates today
+            is reading a brochure from another era.
+          </p>
+        </div>
+        <div class="card p-7" data-reveal-child>
+          <p class="font-mono text-[0.68rem] uppercase tracking-[0.18em] text-ink-3">The 2026 reality</p>
+          <p class="font-display text-h3 mt-3">KIBOR-linked markup</p>
+          <p class="text-ink-2 mt-3">
+            Live bank products price off KIBOR: {FINANCING.markupContext}. Rates move when the
+            market moves — which is why we fetch live quotes instead of printing numbers that go
+            stale.
+          </p>
+        </div>
+        <div class="card p-7" data-reveal-child>
+          <p class="font-mono text-[0.68rem] uppercase tracking-[0.18em] text-ink-3">What it means</p>
+          <p class="font-display text-h3 mt-3">Convenience, priced</p>
+          <p class="text-ink-2 mt-3">
+            Financing isn’t a subsidy; it’s a service with a cost. Used well, it swaps a bill that
+            never ends for an installment that does. We show cash vs financed side by side — and the
+            choice stays yours.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Cash vs financed -->
+  <section class="section pt-0">
+    <div class="wrap">
+      <SectionHead
+        eyebrow="The comparison"
+        title="Cash vs financed, in plain rupees"
+        lede="Both beat doing nothing while tariffs climb. They just win differently."
+      />
+      <p class="text-ink-2 mt-8 max-w-2xl" data-reveal>
+        Nothing sells solar like <em lang="ur-Latn">“asaan qist”</em> — the easy installment. Easy
+        exists; free doesn’t. Here’s the difference, in rupees.
+      </p>
+      <div class="grid gap-4 md:grid-cols-2 mt-8" data-reveal-group>
+        <div class="card p-7" data-reveal-child>
+          <span class="fin-icon"><Icon name="banknote" size={18} /></span>
+          <p class="font-display text-[1.2rem] mt-4">Paying cash</p>
+          <p class="text-ink-2 mt-2">
+            The cleanest math in solar: full amount on day one, typical payback of
+            <strong class="text-ink">{PAYBACK_TYPICAL}</strong>, then years of cheap power. Every
+            saved rupee is yours from the first month. If you can, cash wins on arithmetic.
+          </p>
+        </div>
+        <div class="card p-7" data-reveal-child>
+          <span class="fin-icon"><Icon name="clock" size={18} /></span>
+          <p class="font-display text-[1.2rem] mt-4">Financing it</p>
+          <p class="text-ink-2 mt-2">
+            Bill relief starts the month the system switches on, while the cost spreads over 3–10
+            years. You pay meaningfully more in total and payback stretches — that’s the honest
+            trade: cash flow now, rupees later. The sweet spot is an installment at or below the
+            bill it replaces.
+          </p>
+        </div>
+      </div>
+
+      <div class="card p-7 mt-6 border-gold/30" data-reveal>
+        <p class="font-mono text-[0.68rem] uppercase tracking-[0.18em] text-ink-3">
+          A worked example — illustrative, not a quote
+        </p>
+        <p class="text-ink-2 mt-3 max-w-3xl">
+          A 5 kW home system runs
+          <strong class="text-ink">Rs {(fiveKw.low / 100000).toFixed(1)}–{(fiveKw.high / 100000).toFixed(1)} lakh</strong>
+          installed (as of {PRICES_AS_OF}). Take the middle — about Rs 7 lakh — on a 4-year tenor at
+          today’s KIBOR-linked band, and the markup alone adds roughly
+          <strong class="text-ink">Rs 2.5–3.5 lakh</strong> over the tenor, with monthly
+          installments around Rs 19–22,000. Your actual numbers depend on the bank, the tenor, live
+          KIBOR and your file — which is why real quotes come from banks, in writing, not from this
+          page.
+        </p>
+      </div>
+
+      <div class="mt-8 flex flex-wrap items-center gap-5" data-reveal>
+        <a href="/calculator" class="btn btn-gold" data-evt="calc_open" data-evt-src="financing_example">
+          <Icon name="calculator" size={18} /> See your own numbers first
+        </a>
+        <p class="text-sm text-ink-3 max-w-md">
+          Size the system before you price the money — a right-sized system on financing beats an
+          oversized one on cash.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Banks -->
+  <section class="section pt-0">
+    <div class="wrap">
+      <SectionHead
+        eyebrow={`Who is actually lending · ${PRICES_AS_OF}`}
+        title="Banks with live solar products"
+        lede="Three names come up for good reason. Terms move with KIBOR — treat this as the map, and let us fetch the live quote."
+      />
+      <div class="grid gap-4 md:grid-cols-3 mt-12" data-reveal-group>
+        {
+          FINANCING.banks.map((bank) => (
+            <div class="card p-7" data-reveal-child>
+              <p class="font-display text-[1.2rem]">{bank.name}</p>
+              <p class="font-mono text-[0.68rem] uppercase tracking-[0.16em] text-accent mt-2">
+                {bank.model}
+              </p>
+              <p class="text-sm text-ink-2 mt-3">{bank.note} — terms confirmed live before you sign.</p>
+            </div>
+          ))
+        }
+      </div>
+
+      <!-- TODO: confirm live financing-partner arrangements before naming them as partners — see CONTENT-TODO.md -->
+      <div class="card p-6 mt-6" data-reveal>
+        <p class="flex items-start gap-3 text-ink-2">
+          <Icon name="clock" size={18} class="text-gold mt-0.5 shrink-0" />
+          <span>
+            <strong class="text-ink">Installer installment plans exist too:</strong> short-tenor
+            plans — 6 to 24 months — circulate in the market from installers and fintechs, usually
+            for smaller systems, with the financing cost built into the price. Convenient, rarely
+            free: compare the all-in total against a bank offer before signing. Ask us what’s
+            currently workable for your size.
+            <span class="todo-chip">partner list — being finalised</span>
+          </span>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- For business -->
+  <section class="section theme-night">
+    <div class="wrap">
+      <SectionHead
+        eyebrow="For businesses"
+        title="Zero-upfront exists at C&I scale"
+        lede="Commercial roofs get structures households don’t — up to and including paying nothing upfront at all."
+      />
+      <div class="grid gap-x-10 gap-y-4 md:grid-cols-2 mt-10 max-w-4xl" data-reveal-group>
+        {
+          FINANCING.commercial.map((item) => (
+            <p class="flex items-start gap-3 text-ink-2" data-reveal-child>
+              <span class="check-dot">
+                <Icon name="check" size={13} />
+              </span>
+              {item}
+            </p>
+          ))
+        }
+      </div>
+      <p class="text-sm text-ink-3 mt-8 max-w-2xl" data-reveal>
+        Lease and ijarah structures suit the 50–500 kW band; above that, PPA/BOOT models mean a
+        developer builds and owns the plant on your roof while you simply buy cheaper units. Sizing,
+        payback and execution live on the <a href="/business" class="link-gold">business page</a>.
+      </p>
+    </div>
+  </section>
+
+  <!-- Our role -->
+  <section class="section">
+    <div class="wrap">
+      <SectionHead
+        eyebrow="Where we fit"
+        title="We arrange. We never mark up."
+        titleHtml="We arrange. <em>We never mark up.</em>"
+        lede="Our job is to make you financeable and put real offers on your table — not to sell you money."
+      />
+      <div class="grid gap-4 md:grid-cols-3 mt-12" data-reveal-group>
+        <div class="card p-7" data-reveal-child>
+          <span class="fin-icon"><Icon name="filecheck" size={18} /></span>
+          <p class="font-display text-[1.15rem] mt-4">The bank file, done right</p>
+          <p class="text-sm text-ink-2 mt-2">
+            Banks ask for technical documents most applicants have never seen — system design,
+            generation estimates, vendor quotes in the format their credit team expects. We prepare
+            the lot; it’s the same engineering we already did for your quote.
+          </p>
+        </div>
+        <div class="card p-7" data-reveal-child>
+          <span class="fin-icon"><Icon name="users" size={18} /></span>
+          <p class="font-display text-[1.15rem] mt-4">Introductions that answer</p>
+          <p class="text-sm text-ink-2 mt-2">
+            We connect you to the banks’ solar desks and sit in the meeting if you want us there.
+            Prefer your own bank? Fine — we’ll still prepare your file for them.
+          </p>
+        </div>
+        <div class="card p-7" data-reveal-child>
+          <span class="fin-icon"><Icon name="shield" size={18} /></span>
+          <p class="font-display text-[1.15rem] mt-4">Zero markup on money</p>
+          <p class="text-sm text-ink-2 mt-2">
+            The bank’s terms are the bank’s terms, and our quote is our quote — separately visible,
+            never blended. If financing doesn’t suit your case, we’ll say so and quote cash.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section pt-0">
+    <div class="wrap max-w-3xl">
+      <SectionHead eyebrow="Straight answers" title="The money questions everyone asks" />
+      <div class="mt-10">
+        <FAQ items={faqs} schema />
+      </div>
+    </div>
+  </section>
+
+  <section class="section pt-0">
+    <div class="wrap">
+      <CTABand
+        heading="Sunlight now. Paid your way."
+        sub="Cash, bank, ijarah or pay-per-unit — we put the real numbers side by side, and the decision stays yours."
+        primaryHref="/quote?src=financing"
+        primaryLabel="Get my options"
+        primaryIcon="arrow-right"
+        evtSrc="financing_final"
+      />
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .fin-icon {
+    display: grid;
+    place-items: center;
+    width: 2.4rem;
+    height: 2.4rem;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--gold) 15%, transparent);
+    color: var(--gold);
+  }
+  .check-dot {
+    flex: none;
+    width: 1.45rem;
+    height: 1.45rem;
+    margin-top: 0.15rem;
+    border-radius: 999px;
+    display: grid;
+    place-items: center;
+    background: color-mix(in srgb, var(--gold) 16%, transparent);
+    color: var(--gold);
+  }
+  .todo-chip {
+    display: inline-block;
+    margin-left: 0.4rem;
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    padding: 0.2rem 0.55rem;
+    border-radius: 999px;
+    border: 1px dashed var(--line-strong);
+    color: var(--text-3);
+  }
+</style>

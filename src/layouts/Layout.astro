@@ -1,0 +1,157 @@
+---
+import { ClientRouter } from 'astro:transitions';
+import '~/styles/global.css';
+import { site } from '~/config/site';
+import Nav from '~/components/Nav.astro';
+import Footer from '~/components/Footer.astro';
+import WhatsAppFab from '~/components/WhatsAppFab.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  /** Extra JSON-LD blocks for this page */
+  jsonLd?: Record<string, unknown>[];
+  ogImage?: string;
+  noIndex?: boolean;
+  /** Hide the floating WhatsApp pill (e.g. inside the quote funnel) */
+  hideFab?: boolean;
+  /** Transparent nav over a full-bleed hero */
+  heroNav?: boolean;
+}
+
+const {
+  title,
+  description,
+  jsonLd = [],
+  ogImage = '/og-default.jpg',
+  noIndex = false,
+  hideFab = false,
+  heroNav = false,
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname === '/' ? '' : Astro.url.pathname, site.url).href;
+
+/* ── Base LocalBusiness schema — identical NAP on every page ── */
+const baseLd: Record<string, unknown> = {
+  '@context': 'https://schema.org',
+  '@type': ['LocalBusiness', 'HomeAndConstructionBusiness'],
+  '@id': `${site.url}/#business`,
+  name: site.name,
+  slogan: site.tagline,
+  url: site.url,
+  email: site.email,
+  image: new URL(ogImage, site.url).href,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: site.address.street,
+    addressLocality: site.address.city,
+    addressRegion: site.address.region,
+    addressCountry: site.address.countryCode,
+  },
+  geo: { '@type': 'GeoCoordinates', latitude: 31.5069, longitude: 74.2973 },
+  openingHoursSpecification: {
+    '@type': 'OpeningHoursSpecification',
+    dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+    opens: '09:00',
+    closes: '19:00',
+  },
+  areaServed: ['Lahore', 'Karachi', 'Islamabad', 'Rawalpindi', 'Faisalabad', 'Multan'],
+  knowsAbout: [
+    'Solar panel installation',
+    'Net metering',
+    'Solar battery backup',
+    'Solar system maintenance',
+  ],
+  // telephone: added when the real number goes live — see CONTENT-TODO.md
+};
+if (site.phone.live) baseLd.telephone = site.phone.e164;
+const sameAs = Object.values(site.social).filter(Boolean);
+if (sameAs.length) baseLd.sameAs = sameAs;
+
+const allLd = [baseLd, ...jsonLd];
+
+const rss = {
+  waE164: site.phone.e164.replace(/[^0-9]/g, ''),
+  waLive: site.phone.live,
+  analytics: import.meta.env.PUBLIC_ANALYTICS === 'on',
+};
+---
+
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noIndex && <meta name="robots" content="noindex, nofollow" />}
+
+    <script is:inline data-astro-rerun>
+      // Theme + JS flag — runs before first paint, and again after
+      // view-transition swaps (data-astro-rerun).
+      (() => {
+        const root = document.documentElement;
+        root.classList.add('js');
+        let t = 'dusk';
+        try {
+          t =
+            localStorage.getItem('rss-theme') ||
+            (matchMedia('(prefers-color-scheme: light)').matches ? 'day' : 'dusk');
+        } catch {}
+        root.dataset.theme = t;
+        const meta = document.querySelector('meta[name="theme-color"]');
+        if (meta) meta.setAttribute('content', t === 'day' ? '#faf6ec' : '#0a0f1e');
+      })();
+    </script>
+
+    <meta name="theme-color" content="#0a0f1e" />
+    <meta name="generator" content={Astro.generator} />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+
+    <link
+      rel="preload"
+      href="/fonts/fraunces-var.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link rel="preload" href="/fonts/satoshi-var.woff2" as="font" type="font/woff2" crossorigin />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={new URL(ogImage, site.url).href} />
+    <meta property="og:locale" content="en_PK" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={new URL(ogImage, site.url).href} />
+
+    {allLd.map((ld) => <script type="application/ld+json" set:html={JSON.stringify(ld)} />)}
+
+    <script is:inline data-astro-rerun define:vars={{ rss }}>
+      window.__RSS = rss;
+    </script>
+
+    <ClientRouter />
+  </head>
+
+  <body class="grain">
+    <a href="#main" class="skip-link">Skip to content</a>
+    <Nav heroNav={heroNav} />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+    {!hideFab && <WhatsAppFab />}
+    <script>
+      import '~/scripts/app';
+    </script>
+  </body>
+</html>

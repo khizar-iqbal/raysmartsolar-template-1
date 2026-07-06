@@ -1,0 +1,366 @@
+---
+import { Image } from 'astro:assets';
+import Layout from '~/layouts/Layout.astro';
+import PageHero from '~/components/PageHero.astro';
+import SectionHead from '~/components/SectionHead.astro';
+import CTABand from '~/components/CTABand.astro';
+import FAQ from '~/components/FAQ.astro';
+import Icon from '~/components/Icon.astro';
+import { site } from '~/config/site';
+import {
+  PACKAGES,
+  PRICES_AS_OF,
+  PAYBACK_TYPICAL,
+  BILL_CUT_TYPICAL,
+  HARDWARE,
+  PERFORMANCE_NOTE,
+} from '~/data/facts';
+import { cityBySlug } from '~/data/cities';
+import roofLahore from '~/assets/photos/roof-lahore.jpg';
+import roofAerial from '~/assets/photos/roof-aerial.jpg';
+
+const lahore = cityBySlug('lahore')!;
+const fiveKw = PACKAGES.find((p) => p.kw === 5)!;
+
+const title = 'Solar for Homes — cost, savings & honest sizing | RaySmartSolar';
+const description =
+  'What a home solar system really costs in Pakistan, what it saves at 2026 tariffs, and whether your roof qualifies — honest ranges, winter truth included.';
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: 'Residential rooftop solar installation',
+    description,
+    provider: { '@id': `${site.url}/#business` },
+    areaServed: ['Lahore', 'Karachi', 'Islamabad', 'Rawalpindi', 'Faisalabad', 'Multan'],
+    serviceType: 'Home solar system design, installation and paperwork',
+  },
+];
+
+const includes = [
+  {
+    icon: 'panel' as const,
+    title: 'Tier-1 panels, documented',
+    body: `${HARDWARE.panelBrands.join(', ')} — documented imports whose serials you verify in the maker’s own app before we leave the roof, with the ${HARDWARE.panelWarranty.performanceYears}-year performance warranty in writing.`,
+  },
+  {
+    icon: 'bolt' as const,
+    title: 'A named inverter',
+    body: `${HARDWARE.inverterBrands.slice(0, 3).join(', ')} class — the exact model named on your quote, DISCO-approvable for the prosumer file, with a ${HARDWARE.inverterWarrantyYears} year manufacturer warranty.`,
+  },
+  {
+    icon: 'layers' as const,
+    title: 'Engineered mounting',
+    body: 'Elevated hot-dip galvanised frames on flat roofs — correct tilt, cleaning access underneath, and the roof stays usable for everything a Lahore roof is for.',
+  },
+  {
+    icon: 'shield' as const,
+    title: 'Earthing & protection',
+    body: 'Real earthing, DC breakers, surge protection and cable that survives August afternoons — the parts fires come from when someone skips them.',
+  },
+  {
+    icon: 'gauge' as const,
+    title: 'Monitoring on your account',
+    body: 'The app is registered to you, not to us — you watch generation live, we watch alerts alongside. Installers keeping admin access is a known scam; we want no part of it.',
+  },
+  {
+    icon: 'filecheck' as const,
+    title: 'The paperwork',
+    body: 'Your DISCO prosumer application prepared, filed and chased weekly — under the real 2026 net-billing rules, not last year’s pitch. <a href="/net-metering">How that works</a>.',
+  },
+];
+
+const roofChecks = [
+  'Flat RCC roof? Close to ideal. An elevated structure gives panels the right tilt, clears parapet and tank shade, and leaves the roof usable underneath.',
+  'Space: plan roughly 55 sq ft per kW including walkways. A 5 kW array wants about 275 sq ft of clear roof — most 5-marla homes manage it once the water tank and mumty take their share, and 10-marla roofs host 8–12 kW without drama.',
+  'Shade is the silent killer — one shaded panel drags its whole string down. We map morning and afternoon shadows at the survey and design the strings around them.',
+  'Weight is rarely the issue: panels and frames spread about 15–20 kg per square metre. Sound RCC takes that easily; older brick-and-girder roofs get a structural opinion before we quote.',
+];
+
+const faqs = [
+  {
+    q: 'Is my roof strong enough for solar?',
+    a: 'Almost certainly, if it’s sound RCC — the array spreads roughly 15–20 kg per square metre across the frame feet, less than a filled water tank concentrates in one spot. We still check slab condition, the mumty and parapet walls at the survey, and older brick-and-girder roofs get a structural opinion before anything is quoted.',
+  },
+  {
+    q: 'I rent my house. Can I still get solar?',
+    a: 'Honestly: not alone. The system bolts to the property and the DISCO prosumer file runs in the meter owner’s name, so it’s a landlord conversation. We’re happy to join that call — the system raises the property’s value and rentability, and some owners split the cost against rent. If you own the house and rent floors out, see the next question.',
+  },
+  {
+    q: 'We have two or three floors on one meter — how does that work?',
+    a: 'Very common in Lahore, and it works fine. The system feeds the single connection, so savings land on whoever pays that bill — families usually split it informally or with private sub-meters, which we can wire in. One upside: combined usage sits in the highest tariff slabs, so the same panels save more per unit. One caution: system size is capped by the connection’s sanctioned load — we check it at the survey.',
+  },
+  {
+    q: 'How loud is it, and what upkeep does it need?',
+    a: 'Panels are silent. The inverter makes a soft fan hum around midday — about a laptop under load — so we mount it away from bedrooms and you’ll forget it exists. Upkeep is mostly keeping the glass clean: a monthly rinse you can do yourself (we teach you at handover) plus a professional check once or twice a year. The full honest breakdown is on the <a href="/maintenance">maintenance page</a>.',
+  },
+  {
+    q: 'Which brands will you quote?',
+    a: `Panels from documented Tier-1 makers — ${HARDWARE.panelBrands.join(', ')} — and inverters from ${HARDWARE.inverterBrands.join(', ')}. Named models in writing, serials verified with you at handover, ${HARDWARE.panelWarranty.performanceYears}-year panel performance and ${HARDWARE.inverterWarrantyYears} year inverter warranties backed by the manufacturer — not by a WhatsApp promise.`,
+  },
+  {
+    q: 'Do I need to be home during installation?',
+    a: 'Someone should be able to open the gate — that’s about it. A typical home install runs 1–2 days, and your power stays on except for a short, planned changeover window. We do want you (or someone you trust) there at the end: serial verification, the monitoring app set up on your account, and a walkthrough of where every shutoff lives.',
+  },
+];
+---
+
+<Layout {title} {description} {jsonLd} heroNav>
+  <PageHero
+    eyebrow="Solar for homes"
+    title="Your bill shrinks. Your fans don’t stop."
+    titleHtml="Your bill shrinks. <em>Your fans don’t stop.</em>"
+    lede="The bill lands like a second rent, and the outage always picks the hottest hour of the night. A right-sized rooftop system takes on both — and we’ll show you the honest math before you spend a rupee."
+    image={roofLahore}
+    imageAlt="Solar panels on a flat concrete rooftop in Lahore"
+    imagePosition="50% 55%"
+  >
+    <Fragment slot="actions">
+      <a href="/calculator?type=home" class="btn btn-gold" data-evt="calc_open" data-evt-src="homes_hero">
+        <Icon name="calculator" size={18} /> See my savings
+      </a>
+      <a href="/quote?src=homes" class="btn btn-ghost" data-evt="quote_open" data-evt-src="homes_hero">
+        Book the free survey <Icon name="arrow-right" size={17} />
+      </a>
+    </Fragment>
+  </PageHero>
+
+  <!-- The money answer -->
+  <section class="section">
+    <div class="wrap">
+      <SectionHead
+        eyebrow="Rupees first"
+        title="What it costs. What it saves."
+        titleHtml="What it costs. <em>What it saves.</em>"
+        lede="You shouldn’t need a sales visit to learn the shape of the deal. Here it is — ranges and all."
+      />
+      <div class="grid gap-4 md:grid-cols-3 mt-12" data-reveal-group>
+        <div class="card p-7" data-reveal-child>
+          <p class="mono-num text-4xl sm:text-5xl text-accent">{BILL_CUT_TYPICAL}</p>
+          <p class="text-ink-2 mt-3">
+            of a typical bill disappears with a right-sized system and evening storage. No battery?
+            Most homes still clear half.
+          </p>
+        </div>
+        <div class="card p-7" data-reveal-child>
+          <p class="mono-num text-4xl sm:text-5xl text-accent">{PAYBACK_TYPICAL}</p>
+          <p class="text-ink-2 mt-3">
+            typical payback at today’s tariffs — faster for big daytime bills, slower for small
+            ones. If yours won’t pay back, we’ll say so and save us both the visit.
+          </p>
+        </div>
+        <div class="card p-7" data-reveal-child>
+          <p class="mono-num text-4xl sm:text-5xl text-accent">
+            Rs {(fiveKw.low / 100000).toFixed(1)}–{(fiveKw.high / 100000).toFixed(1)}
+            <span class="text-2xl">lakh</span>
+          </p>
+          <p class="text-ink-2 mt-3">
+            installed, on-grid, Tier-1 hardware — for the most common home size (5 kW), as of
+            {PRICES_AS_OF}. Your exact price gets locked in writing after the free survey.
+            <a href="/pricing" class="link-gold">All sizes</a>.
+          </p>
+        </div>
+      </div>
+      <div class="mt-8 flex flex-wrap items-center gap-5" data-reveal>
+        <a href="/calculator?type=home" class="btn btn-gold" data-evt="calc_open" data-evt-src="homes_money">
+          <Icon name="calculator" size={18} /> Run my numbers
+        </a>
+        <p class="text-sm text-ink-3 max-w-md">
+          One photo of your latest <span lang="ur-Latn">bijli ka bill</span> is the only homework —
+          the calculator shows every assumption it makes.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- What a system includes -->
+  <section class="section pt-0">
+    <div class="wrap">
+      <SectionHead
+        eyebrow="The full kit"
+        title="What “a system” actually includes"
+        lede="Six things belong on every home solar quote. When someone’s price looks magically low, one of these is usually missing — now you’ll know which."
+      />
+      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 mt-12" data-reveal-group>
+        {
+          includes.map((item) => (
+            <div class="card p-6" data-reveal-child>
+              <span class="inc-icon">
+                <Icon name={item.icon} size={18} />
+              </span>
+              <p class="font-display text-[1.15rem] mt-4">{item.title}</p>
+              <p class="text-sm text-ink-2 mt-2 inc-body" set:html={item.body} />
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Roof reality check -->
+  <section class="section pt-0">
+    <div class="wrap">
+      <SectionHead
+        eyebrow="Roof reality check"
+        title="Will it work on my roof?"
+        lede="Probably — the flat RCC roofs of urban Punjab are close to ideal solar real estate. Here’s how to think about space, shade and structure before we even visit."
+      />
+      <div class="grid gap-10 md:grid-cols-2 mt-12 items-start">
+        <div class="grid gap-4" data-reveal-group>
+          {
+            roofChecks.map((item) => (
+              <p class="flex items-start gap-3 text-ink-2" data-reveal-child>
+                <span class="check-dot">
+                  <Icon name="check" size={13} />
+                </span>
+                {item}
+              </p>
+            ))
+          }
+          <p class="text-sm text-ink-3 mt-2" data-reveal-child>
+            Not sure where your roof lands? The survey is free and blunt —
+            <a href="/quote?src=homes_roof" class="link-gold" data-evt="quote_open" data-evt-src="homes_roof">book it</a>
+            and we’ll measure instead of guessing.
+          </p>
+        </div>
+        <figure class="ph rounded-2xl overflow-hidden" data-reveal>
+          <Image
+            src={roofAerial}
+            alt="Aerial view of rooftop solar arrays on flat roofs"
+            widths={[480, 800, 1200]}
+            sizes="(min-width: 768px) 50vw, 100vw"
+            format="avif"
+            quality={60}
+            loading="lazy"
+          />
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- Winter & smog honesty -->
+  <section class="section theme-night">
+    <div class="wrap">
+      <SectionHead
+        eyebrow="The winter question"
+        title="December is not June. We quote both."
+        lede="Anyone selling you June output for a December decision is selling weather, not engineering. Here’s what actually happens to a Lahore roof in winter."
+      />
+      <div class="grid gap-4 md:grid-cols-3 mt-12" data-reveal-group>
+        <div class="card p-7" data-reveal-child>
+          <p class="font-mono text-[0.68rem] uppercase tracking-[0.18em] text-ink-3">The honest curve</p>
+          <p class="text-ink-2 mt-3">
+            A Lahore kW averages about <strong class="text-ink">{lahore.monthlyUnitsPerKw} units a month</strong>
+            across the year — well above that in high summer, and roughly half of June’s output
+            through December and January, before smog takes its extra bite.
+          </p>
+        </div>
+        <div class="card p-7" data-reveal-child>
+          <p class="font-mono text-[0.68rem] uppercase tracking-[0.18em] text-ink-3">What we do about it</p>
+          <p class="text-ink-2 mt-3">{lahore.climateNote}</p>
+        </div>
+        <div class="card p-7" data-reveal-child>
+          <p class="font-mono text-[0.68rem] uppercase tracking-[0.18em] text-ink-3">What you do about it</p>
+          <p class="text-ink-2 mt-3">
+            Nothing heroic. Keep the glass clean November–February (we teach you the 15-minute
+            routine), glance at the app, and judge the system on its 12-month average — the number
+            your payback was quoted on. Cleaning help lives on the
+            <a href="/maintenance" class="link-gold">maintenance page</a>.
+          </p>
+        </div>
+      </div>
+      <p class="text-sm text-ink-3 mt-6 max-w-2xl" data-reveal>{PERFORMANCE_NOTE}</p>
+    </div>
+  </section>
+
+  <!-- Upgrade path -->
+  <section class="section">
+    <div class="wrap">
+      <SectionHead
+        eyebrow="Start sensible"
+        title="Start on-grid. Stay battery-ready."
+        lede="Most homes get the best rupee-for-rupee return from an on-grid system sized for daytime self-use. Backup can come on day one — or later, without regret."
+      />
+      <div class="grid gap-4 md:grid-cols-3 mt-12" data-reveal-group>
+        <div class="card p-7" data-reveal-child>
+          <span class="inc-icon"><Icon name="sun" size={18} /></span>
+          <p class="font-display text-[1.15rem] mt-4">Day one: on-grid</p>
+          <p class="text-sm text-ink-2 mt-2">
+            Panels and inverter cover your daytime load and shave the expensive slabs off the bill —
+            the cheapest way into serious savings under the 2026 net-billing rules.
+          </p>
+        </div>
+        <div class="card p-7" data-reveal-child>
+          <span class="inc-icon"><Icon name="battery" size={18} /></span>
+          <p class="font-display text-[1.15rem] mt-4">Battery-ready by design</p>
+          <p class="text-sm text-ink-2 mt-2">
+            Choose a hybrid inverter now (or have the wiring routes provisioned) and a lithium block
+            drops in later with zero rework — when the budget smiles, or the feeder doesn’t.
+            Details on the <a href="/battery-backup" class="link-gold">battery page</a>.
+          </p>
+        </div>
+        <div class="card p-7 border-gold/30" data-reveal-child>
+          <span class="inc-icon"><Icon name="alert" size={18} /></span>
+          <p class="font-display text-[1.15rem] mt-4">On the old net metering?</p>
+          <p class="text-sm text-ink-2 mt-2">
+            Adding panels to a grandfathered system can void its old unit-for-unit terms and shift
+            you to net billing. Sometimes expansion is still worth it, often it isn’t — ask before
+            you add. The full story is on the <a href="/net-metering" class="link-gold">net-metering page</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section pt-0">
+    <div class="wrap max-w-3xl">
+      <SectionHead eyebrow="Straight answers" title="What homeowners ask us" />
+      <div class="mt-10">
+        <FAQ items={faqs} schema />
+      </div>
+    </div>
+  </section>
+
+  <section class="section pt-0">
+    <div class="wrap">
+      <CTABand
+        heading="One survey. Zero guesswork."
+        sub="Free roof survey, honest numbers computed from your actual bill, and a written quote that stays fixed for 14 days."
+        primaryHref="/quote?src=homes"
+        primaryLabel="Book the free survey"
+        primaryIcon="filecheck"
+        evtSrc="homes_final"
+      />
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .inc-icon {
+    display: grid;
+    place-items: center;
+    width: 2.4rem;
+    height: 2.4rem;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--gold) 15%, transparent);
+    color: var(--gold);
+  }
+  .inc-body :global(a) {
+    color: var(--accent-text);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .check-dot {
+    flex: none;
+    width: 1.45rem;
+    height: 1.45rem;
+    margin-top: 0.15rem;
+    border-radius: 999px;
+    display: grid;
+    place-items: center;
+    background: color-mix(in srgb, var(--gold) 16%, transparent);
+    color: var(--gold);
+  }
+</style>

@@ -1,0 +1,314 @@
+---
+import { Image } from 'astro:assets';
+import Layout from '~/layouts/Layout.astro';
+import PageHero from '~/components/PageHero.astro';
+import SectionHead from '~/components/SectionHead.astro';
+import CTABand from '~/components/CTABand.astro';
+import FAQ from '~/components/FAQ.astro';
+import Icon from '~/components/Icon.astro';
+import { site } from '~/config/site';
+import { RESIDENTIAL_MARGINAL_RATE, PRICES_AS_OF } from '~/data/facts';
+import { cityBySlug } from '~/data/cities';
+import instClean from '~/assets/photos/inst-clean.jpg';
+import hwInverter from '~/assets/photos/hw-inverter.jpg';
+
+const lahore = cityBySlug('lahore')!;
+
+/** Illustrative soiling loss: a 10 kW Lahore roof losing 20% to dirt. */
+const soilUnits = Math.round(10 * lahore.monthlyUnitsPerKw * 0.2);
+const soilRupees = soilUnits * RESIDENTIAL_MARGINAL_RATE;
+
+const title = 'Solar Panel Cleaning & Maintenance in Lahore | RaySmartSolar';
+const description =
+  'Punjab dust and smog season can halve solar output. Cleaning, torque checks, thermal scans and monitoring on your account — for any system, any installer.';
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: 'Solar system maintenance, cleaning and monitoring',
+    description,
+    provider: { '@id': `${site.url}/#business` },
+    areaServed: ['Lahore', 'Karachi', 'Islamabad', 'Rawalpindi', 'Faisalabad', 'Multan'],
+    serviceType: 'Solar panel cleaning, preventive maintenance and remote monitoring',
+  },
+];
+
+const visitItems = [
+  'Panel cleaning — soft brush and plain water; no detergents, no pressure jets',
+  'Torque check on mounting bolts and panel clamps (thermal cycling loosens them)',
+  'Thermal scan of connectors, breakers and inverter terminals — hot joints show up before they burn',
+  'Inverter health: fans, dust filters, error-log review, firmware where due',
+  'Earthing continuity test and surge-protection check',
+  'Monitoring review against expected yield — with a written report and photos',
+];
+
+const orphanPoints = [
+  'The first visit is a full health check: wiring and earthing quality, panel serials verified against manufacturer apps, inverter configuration, mounting torque — findings in writing, with photos.',
+  'We tell you what the previous installer got right, too. If the system is fundamentally sound, you’ll hear exactly that — no invented emergencies.',
+  'Where hardware carries genuine manufacturer warranties, we document the serials and run claims through the brand’s local channel on your behalf.',
+  'No lecture, no lock-in. A one-off health check is a perfectly good way to meet us.',
+];
+
+const faqs = [
+  {
+    q: 'Can I clean the panels myself?',
+    a: 'Yes — please do. Early morning or evening, never midday (a cold hose on 60°C glass is how panels crack, and a noon roof in June is no place for a human). Plain water, a soft brush or mop, no pressure washer, no detergents, and never stand on the panels. Mind your footing on a wet roof — and if the array is high or awkward, that’s what our visits are for. We teach the full routine at handover, free.',
+  },
+  {
+    q: 'How often does a system need professional service?',
+    a: 'Twice a year suits most homes — once before summer, once after smog season. Quarterly earns its keep on dusty, industrial or main-road sites. Between visits, your own monthly rinse plus an occasional glance at the monitoring app covers the rest. Anyone selling weekly professional cleaning to a Lahore bungalow is selling visits, not value.',
+  },
+  {
+    q: 'What actually breaks on solar systems?',
+    a: 'In rough order: connections loosened by thermal cycling (this is what the thermal scan exists for), inverter cooling fans and clogged dust filters, cables chewed by rodents, and UV-brittled cable ties letting DC runs droop onto hot roofs. The panels themselves almost never fail — which is why we spend our time on everything around them.',
+  },
+  {
+    q: 'Do you handle warranty claims?',
+    a: 'Yes. We document panel and inverter serials at installation — or at the first health check on a system we adopt — and when something fails inside warranty, we file and chase the claim through the manufacturer’s local channel. Fair warning, honestly given: undocumented or relabeled panels carry no real warranty, and if that’s what’s on your roof, we’ll tell you straight rather than pretend otherwise.',
+  },
+  {
+    q: 'What does maintenance cost?',
+    a: 'Plans are quoted by system size and roof access, in writing — one-off visits, twice-yearly, or quarterly contracts. We won’t invent a number on a page that can’t see your roof; you’ll have the exact figure before any work starts, and it won’t change afterwards.',
+  },
+];
+---
+
+<Layout {title} {description} {jsonLd} heroNav>
+  <PageHero
+    eyebrow="Maintenance & monitoring"
+    title="Dirty panels pay nobody."
+    titleHtml="Dirty panels pay <em>nobody.</em>"
+    lede="Punjab’s dust is patient and smog season is worse — a neglected array quietly loses a slice of everything it should earn. We keep systems earning: ours, and the ones whose installers stopped answering."
+    image={instClean}
+    imageAlt="Workers cleaning rows of solar panels"
+    imagePosition="50% 40%"
+  >
+    <Fragment slot="actions">
+      <a href="/quote?src=maintenance" class="btn btn-gold" data-evt="quote_open" data-evt-src="maintenance_hero">
+        <Icon name="wrench" size={18} /> Book a service visit
+      </a>
+      <a href="#orphans" class="btn btn-ghost" data-evt="maintenance_orphans">
+        Not our install? Still welcome <Icon name="arrow-right" size={17} />
+      </a>
+    </Fragment>
+  </PageHero>
+
+  <!-- The problem, measured -->
+  <section class="section">
+    <div class="wrap">
+      <SectionHead
+        eyebrow="The problem, measured"
+        title="Why Punjab eats solar output"
+        titleHtml="Why Punjab <em>eats</em> solar output"
+        lede="Dust, smog, monsoon splash-back, bird traffic — every roof collects its own tax. The trick is knowing how big the tax is, then paying the cheap version of it."
+      />
+      <div class="grid gap-4 md:grid-cols-3 mt-12" data-reveal-group>
+        <div class="card p-7" data-reveal-child>
+          <span class="mnt-icon"><Icon name="alert" size={18} /></span>
+          <p class="font-display text-[1.15rem] mt-4">Smog season, Nov–Jan</p>
+          <p class="text-sm text-ink-2 mt-2">{lahore.climateNote}</p>
+        </div>
+        <div class="card p-7" data-reveal-child>
+          <span class="mnt-icon"><Icon name="panel" size={18} /></span>
+          <p class="font-display text-[1.15rem] mt-4">Dust, all year</p>
+          <p class="text-sm text-ink-2 mt-2">
+            <span lang="ur-Latn">Punjab ki dhool</span> is patient: construction, traffic and field
+            dust build a film that shaves output a little more every dry week. Monsoon rain rinses
+            some of it off — then splashes mud along the bottom rows as a parting gift.
+          </p>
+        </div>
+        <div class="card p-7 border-gold/30" data-reveal-child>
+          <span class="mnt-icon"><Icon name="trending" size={18} /></span>
+          <p class="font-display text-[1.15rem] mt-4">What neglect costs</p>
+          <p class="text-sm text-ink-2 mt-2">
+            On a 10 kW Lahore roof, a 20% soiling loss is roughly
+            <strong class="text-ink">{soilUnits} units a month</strong> — up to
+            <strong class="text-ink">Rs {soilRupees.toLocaleString('en-PK')}</strong> at the top
+            residential rate (estimates, at {PRICES_AS_OF} tariffs) — but the direction isn’t in
+            doubt: cleaning is the cheapest electricity you’ll ever buy.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- What a visit includes -->
+  <section class="section pt-0">
+    <div class="wrap">
+      <SectionHead
+        eyebrow="The service visit"
+        title="What a proper visit includes"
+        lede="Cleaning is the visible part. The other five items are why you book a professional at all."
+      />
+      <div class="grid gap-x-10 gap-y-4 md:grid-cols-2 mt-10 max-w-4xl" data-reveal-group>
+        {
+          visitItems.map((item) => (
+            <p class="flex items-start gap-3 text-ink-2" data-reveal-child>
+              <span class="check-dot">
+                <Icon name="check" size={13} />
+              </span>
+              {item}
+            </p>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Monitoring -->
+  <section class="section pt-0">
+    <div class="wrap">
+      <SectionHead
+        eyebrow="Between visits"
+        title="The app is yours. The alerts reach us too."
+        lede="Most faults announce themselves in the data weeks before they show up on a bill — if someone is actually looking."
+      />
+      <div class="grid gap-10 md:grid-cols-2 mt-12 items-start">
+        <figure class="ph rounded-2xl overflow-hidden" data-reveal>
+          <Image
+            src={hwInverter}
+            alt="A technician wiring a solar inverter on a wall"
+            widths={[480, 800, 1200]}
+            sizes="(min-width: 768px) 50vw, 100vw"
+            format="avif"
+            quality={60}
+            loading="lazy"
+          />
+        </figure>
+        <div class="grid gap-4" data-reveal-group>
+          <p class="flex items-start gap-3 text-ink-2" data-reveal-child>
+            <span class="check-dot"><Icon name="check" size={13} /></span>
+            Monitoring is registered on your account — you own the login. An installer keeping
+            admin access to your system is one of this market’s quiet scams, and we want no part
+            of it.
+          </p>
+          <p class="flex items-start gap-3 text-ink-2" data-reveal-child>
+            <span class="check-dot"><Icon name="check" size={13} /></span>
+            We keep read access for alerts: if a string sags or the inverter throws an error, you
+            get a call about it — not a surprise on next month’s bill.
+          </p>
+          <p class="flex items-start gap-3 text-ink-2" data-reveal-child>
+            <span class="check-dot"><Icon name="check" size={13} /></span>
+            Once a month, glance at one number: units generated versus the month’s expectation.
+            We’ll show you where it lives in the app — that one habit catches most problems early.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Honest cadence -->
+  <section class="section theme-night">
+    <div class="wrap">
+      <SectionHead
+        eyebrow="Honest cadence"
+        title="How often is actually enough?"
+        lede="Less than the maintenance industry says. More than never. Here’s the honest schedule."
+      />
+      <div class="grid gap-4 md:grid-cols-3 mt-12" data-reveal-group>
+        <div class="card p-7" data-reveal-child>
+          <span class="mnt-icon"><Icon name="sunrise" size={18} /></span>
+          <p class="font-display text-[1.15rem] mt-4">You — monthly</p>
+          <p class="text-sm text-ink-2 mt-2">
+            A morning or evening rinse with plain water and a soft brush. Fifteen minutes for a
+            home array, and we teach you the routine at handover, free. Step it up during smog
+            season or when there’s construction next door.
+          </p>
+        </div>
+        <div class="card p-7" data-reveal-child>
+          <span class="mnt-icon"><Icon name="users" size={18} /></span>
+          <p class="font-display text-[1.15rem] mt-4">Us — twice a year, or quarterly</p>
+          <p class="text-sm text-ink-2 mt-2">
+            Professional service twice a year suits most homes: cleaning plus the full checklist —
+            torque, thermal scan, earthing, inverter, report. Dusty, industrial and main-road sites
+            justify quarterly.
+          </p>
+        </div>
+        <div class="card p-7" data-reveal-child>
+          <span class="mnt-icon"><Icon name="x" size={18} /></span>
+          <p class="font-display text-[1.15rem] mt-4">Nobody — weekly</p>
+          <p class="text-sm text-ink-2 mt-2">
+            Weekly professional cleaning for a house is a subscription to visits, not to value.
+            If someone’s selling you that, they’ve sized the plan to their van, not your roof.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Orphaned systems -->
+  <section class="section" id="orphans">
+    <div class="wrap">
+      <SectionHead
+        eyebrow="Orphaned systems"
+        title="We service systems we didn’t install."
+        titleHtml="We service systems <em>we didn’t install.</em>"
+        lede="Installers vanish. Roofs stay. If your solar company has stopped answering the phone, you’re exactly who this section is for."
+      />
+      <div class="grid gap-4 mt-10 max-w-3xl" data-reveal-group>
+        {
+          orphanPoints.map((item) => (
+            <p class="flex items-start gap-3 text-ink-2" data-reveal-child>
+              <span class="check-dot">
+                <Icon name="check" size={13} />
+              </span>
+              {item}
+            </p>
+          ))
+        }
+      </div>
+      <div class="mt-10" data-reveal>
+        <a href="/quote?src=maintenance_orphans" class="btn btn-gold" data-evt="quote_open" data-evt-src="maintenance_orphans">
+          <Icon name="wrench" size={18} /> Book a health check
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section pt-0">
+    <div class="wrap max-w-3xl">
+      <SectionHead eyebrow="Straight answers" title="Maintenance questions, answered plainly" />
+      <div class="mt-10">
+        <FAQ items={faqs} schema />
+      </div>
+    </div>
+  </section>
+
+  <section class="section pt-0">
+    <div class="wrap">
+      <CTABand
+        heading="Your roof earns. Keep it earning."
+        sub="One-off visit or a yearly plan, for any installer’s system — quoted in writing before we climb anything."
+        primaryHref="/quote?src=maintenance"
+        primaryLabel="Book a visit"
+        primaryIcon="filecheck"
+        evtSrc="maintenance_final"
+      />
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .mnt-icon {
+    display: grid;
+    place-items: center;
+    width: 2.4rem;
+    height: 2.4rem;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--gold) 15%, transparent);
+    color: var(--gold);
+  }
+  .check-dot {
+    flex: none;
+    width: 1.45rem;
+    height: 1.45rem;
+    margin-top: 0.15rem;
+    border-radius: 999px;
+    display: grid;
+    place-items: center;
+    background: color-mix(in srgb, var(--gold) 16%, transparent);
+    color: var(--gold);
+  }
+</style>

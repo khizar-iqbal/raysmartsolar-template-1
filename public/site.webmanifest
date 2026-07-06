@@ -1,0 +1,12 @@
+{
+  "name": "RaySmartSolar",
+  "short_name": "RaySmartSolar",
+  "description": "Solar installation, net metering and battery backup across Pakistan — from Lahore.",
+  "start_url": "/",
+  "display": "browser",
+  "background_color": "#0a0f1e",
+  "theme_color": "#0a0f1e",
+  "icons": [
+    { "src": "/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" }
+  ]
+}

@@ -1,0 +1,829 @@
+---
+import Layout from '~/layouts/Layout.astro';
+import Icon from '~/components/Icon.astro';
+import { cities } from '~/data/cities';
+import { site } from '~/config/site';
+
+const title = 'Get your solar quote — RaySmartSolar';
+const description =
+  'A two-minute set of questions — home or business, city, bill size — and we prepare an exact, written solar quote after a free survey. Finish on WhatsApp if you prefer.';
+---
+
+<Layout {title} {description} hideFab noIndex={false}>
+  <section class="funnel-page">
+    <div class="wrap max-w-xl">
+      <!-- progress -->
+      <div class="funnel-top">
+        <a href="/" class="text-ink-3 hover:text-ink transition-colors text-sm inline-flex items-center gap-1.5">
+          <Icon name="x" size={15} /> Exit
+        </a>
+        <div class="progress" role="progressbar" aria-label="Quote progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" data-progress>
+          <div class="progress-track">
+            <div class="progress-fill" data-progress-fill></div>
+            <div class="progress-sun" data-progress-sun aria-hidden="true">
+              <Icon name="sun" size={13} />
+            </div>
+          </div>
+        </div>
+        <span class="mono-num text-xs text-ink-3" data-step-count>1 / 8</span>
+      </div>
+
+      <!-- steps host -->
+      <div class="steps" data-steps aria-live="polite">
+        <!-- 1: type -->
+        <section class="step" data-step="type">
+          <h1 class="step-title font-display" tabindex="-1">Where is this solar going?</h1>
+          <div class="opts" data-autoadvance>
+            <button type="button" class="opt" data-value="home">
+              <Icon name="home" size={22} class="text-gold" />
+              <span class="opt-label">My home</span>
+              <span class="opt-sub">house, upper portion, farmhouse</span>
+            </button>
+            <button type="button" class="opt" data-value="business">
+              <Icon name="building" size={22} class="text-gold" />
+              <span class="opt-label">My business</span>
+              <span class="opt-sub">shop, office, factory, school…</span>
+            </button>
+          </div>
+        </section>
+
+        <!-- 2: city -->
+        <section class="step" data-step="city" hidden>
+          <h2 class="step-title font-display" tabindex="-1">Which city?</h2>
+          <div class="opts opts-grid" data-autoadvance>
+            {
+              cities.map((c) => (
+                <button type="button" class="opt opt-compact" data-value={c.slug}>
+                  <span class="opt-label">{c.name}</span>
+                  <span class="opt-sub mono-num">{c.disco.code}</span>
+                </button>
+              ))
+            }
+            <button type="button" class="opt opt-compact" data-value="other">
+              <span class="opt-label">Somewhere else</span>
+              <span class="opt-sub">we cover most of Punjab &amp; beyond</span>
+            </button>
+          </div>
+        </section>
+
+        <!-- 3: bill -->
+        <section class="step" data-step="bill" hidden>
+          <h2 class="step-title font-display" tabindex="-1">Your average monthly bill?</h2>
+          <p class="step-hint">A rough figure is fine — summer months count double in memory, we know.</p>
+          <div class="amount-wrap">
+            <span class="amount-prefix mono-num">Rs</span>
+            <input
+              class="amount-input mono-num"
+              type="text"
+              inputmode="numeric"
+              pattern="[0-9,]*"
+              placeholder="45,000"
+              autocomplete="off"
+              enterkeyhint="next"
+              data-input="bill"
+              aria-label="Average monthly bill in rupees"
+            />
+          </div>
+          <div class="quick-row">
+            <button type="button" class="quick" data-amt="15000">15k</button>
+            <button type="button" class="quick" data-amt="25000">25k</button>
+            <button type="button" class="quick" data-amt="45000">45k</button>
+            <button type="button" class="quick" data-amt="80000">80k</button>
+            <button type="button" class="quick" data-amt="150000">1.5 lakh</button>
+          </div>
+          <p class="err" data-err="bill" hidden></p>
+          <button type="button" class="btn btn-gold btn-lg w-full mt-6" data-next>
+            Continue <Icon name="arrow-right" size={17} />
+          </button>
+        </section>
+
+        <!-- 4: roof -->
+        <section class="step" data-step="roof" hidden>
+          <h2 class="step-title font-display" tabindex="-1">And the roof?</h2>
+          <div class="opts" data-autoadvance>
+            <button type="button" class="opt" data-value="own">
+              <Icon name="check" size={20} class="text-gold" />
+              <span class="opt-label">It’s our own roof</span>
+              <span class="opt-sub">house or building we own</span>
+            </button>
+            <button type="button" class="opt" data-value="rented">
+              <Icon name="clock" size={20} class="text-gold" />
+              <span class="opt-label">Rented property</span>
+              <span class="opt-sub">possible with the owner’s consent — we’ll guide you</span>
+            </button>
+            <button type="button" class="opt" data-value="construction">
+              <Icon name="layers" size={20} class="text-gold" />
+              <span class="opt-label">Under construction / plot</span>
+              <span class="opt-sub">smart time to plan wiring — seriously</span>
+            </button>
+          </div>
+        </section>
+
+        <!-- 5: timeline -->
+        <section class="step" data-step="timeline" hidden>
+          <h2 class="step-title font-display" tabindex="-1">When are you thinking?</h2>
+          <div class="opts" data-autoadvance>
+            <button type="button" class="opt" data-value="asap">
+              <Icon name="bolt" size={20} class="text-gold" />
+              <span class="opt-label">As soon as possible</span>
+              <span class="opt-sub">the bills have made the decision</span>
+            </button>
+            <button type="button" class="opt" data-value="1-3mo">
+              <Icon name="clock" size={20} class="text-gold" />
+              <span class="opt-label">In the next 1–3 months</span>
+              <span class="opt-sub">planning ahead properly</span>
+            </button>
+            <button type="button" class="opt" data-value="research">
+              <Icon name="sparkle" size={20} class="text-gold" />
+              <span class="opt-label">Just researching</span>
+              <span class="opt-sub">totally fine — no follow-up spam, promise</span>
+            </button>
+          </div>
+        </section>
+
+        <!-- 6: backup -->
+        <section class="step" data-step="backup" hidden>
+          <h2 class="step-title font-display" tabindex="-1">Backup for outages too?</h2>
+          <p class="step-hint">Battery keeps lights, fans and Wi-Fi running when the grid goes.</p>
+          <div class="opts" data-autoadvance>
+            <button type="button" class="opt" data-value="yes">
+              <Icon name="battery" size={20} class="text-gold" />
+              <span class="opt-label">Yes — outages hurt</span>
+            </button>
+            <button type="button" class="opt" data-value="no">
+              <Icon name="panel" size={20} class="text-gold" />
+              <span class="opt-label">No — just cut the bill</span>
+            </button>
+            <button type="button" class="opt" data-value="unsure">
+              <Icon name="sparkle" size={20} class="text-gold" />
+              <span class="opt-label">Not sure — advise me</span>
+            </button>
+          </div>
+        </section>
+
+        <!-- 7: name -->
+        <section class="step" data-step="name" hidden>
+          <h2 class="step-title font-display" tabindex="-1">Almost done — your name?</h2>
+          <div class="amount-wrap">
+            <input
+              class="amount-input"
+              style="font-size: 1.5rem"
+              type="text"
+              autocomplete="name"
+              placeholder="Your name"
+              enterkeyhint="next"
+              data-input="name"
+              aria-label="Your name"
+            />
+          </div>
+          <p class="err" data-err="name" hidden></p>
+          <button type="button" class="btn btn-gold btn-lg w-full mt-6" data-next>
+            Continue <Icon name="arrow-right" size={17} />
+          </button>
+        </section>
+
+        <!-- 8: phone -->
+        <section class="step" data-step="phone" hidden>
+          <h2 class="step-title font-display" tabindex="-1">Best number to reach you, <span data-echo="name">friend</span>?</h2>
+          <p class="step-hint">One call or WhatsApp to arrange your free survey. Never shared, never spammed.</p>
+          <div class="amount-wrap">
+            <input
+              class="amount-input mono-num"
+              style="font-size: 1.6rem"
+              type="tel"
+              inputmode="tel"
+              autocomplete="tel"
+              placeholder="03XX XXXXXXX"
+              enterkeyhint="send"
+              data-input="phone"
+              aria-label="Phone number"
+            />
+          </div>
+          <p class="err" data-err="phone" hidden></p>
+          <!-- honeypot -->
+          <div class="hp" aria-hidden="true">
+            <label>Website<input type="text" name="website" tabindex="-1" autocomplete="off" data-input="website" /></label>
+          </div>
+          <button type="button" class="btn btn-gold btn-lg w-full mt-6" data-submit>
+            <Icon name="filecheck" size={18} /> Get my free survey &amp; quote
+          </button>
+          <p class="text-xs text-ink-3 mt-3 text-center">
+            By continuing you agree to our <a href="/privacy" class="underline underline-offset-2">privacy policy</a>.
+          </p>
+        </section>
+
+        <!-- error card (submit failure) -->
+        <section class="step" data-step="fail" hidden>
+          <h2 class="step-title font-display" tabindex="-1">That didn’t send — but nothing is lost.</h2>
+          <p class="step-hint" data-fail-reason>Connection hiccup. Your answers are saved on this device.</p>
+          <div class="grid gap-3 mt-6">
+            <button type="button" class="btn btn-gold btn-lg w-full" data-retry>
+              Try again
+            </button>
+            <a href="#" class="btn btn-wa btn-lg w-full" data-fail-wa data-evt="wa_click" data-evt-src="quote_fail">
+              <Icon name="whatsapp" size={19} /> Send it on WhatsApp instead
+            </a>
+            <a href={`mailto:${site.email}`} class="btn btn-ghost w-full" data-fail-mail>
+              <Icon name="mail" size={17} /> Or email us
+            </a>
+          </div>
+        </section>
+
+        <!-- success -->
+        <section class="step" data-step="done" hidden>
+          <div class="done-sun" aria-hidden="true">
+            <Icon name="sunrise" size={40} class="text-gold" />
+          </div>
+          <h2 class="step-title font-display" tabindex="-1">
+            Shukriya, <span data-echo="name">dost</span>. It’s on its way.
+          </h2>
+          <p class="step-hint">
+            We’ll reach out within <strong class="text-ink">one business day</strong> to set up your
+            free survey. Meanwhile, here’s your summary:
+          </p>
+          <div class="card p-5 mt-5 text-sm leading-relaxed text-ink-2" data-summary></div>
+          <div class="grid gap-3 mt-6">
+            <a href="#" class="btn btn-wa btn-lg w-full" data-done-wa data-evt="wa_click" data-evt-src="quote_done" hidden>
+              <Icon name="whatsapp" size={19} /> Continue on WhatsApp now
+            </a>
+            <a href="/learn" class="btn btn-ghost w-full">
+              Read while you wait: honest solar guides <Icon name="arrow-right" size={16} />
+            </a>
+          </div>
+          <p class="text-sm text-ink-3 mt-6">
+            Prefer to visit? {site.address.full} · {site.hours.days}, {site.hours.time}
+          </p>
+        </section>
+      </div>
+
+      <button type="button" class="back" data-back hidden>
+        <Icon name="arrow-right" size={15} class="rotate-180" /> Back
+      </button>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .funnel-page {
+    min-height: 100svh;
+    padding-top: 6.5rem;
+    padding-bottom: 4rem;
+    display: flex;
+    align-items: flex-start;
+  }
+  .funnel-top {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: clamp(2rem, 6vh, 3.5rem);
+  }
+  .progress {
+    flex: 1;
+  }
+  .progress-track {
+    position: relative;
+    height: 4px;
+    border-radius: 999px;
+    background: var(--line);
+  }
+  .progress-fill {
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 0%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, var(--gold-deep), var(--gold));
+    transition: width 500ms var(--ease-out);
+  }
+  .progress-sun {
+    position: absolute;
+    top: 50%;
+    left: 0%;
+    transform: translate(-50%, -50%);
+    color: var(--gold);
+    background: var(--bg);
+    border: 1px solid var(--gold);
+    border-radius: 999px;
+    width: 1.55rem;
+    height: 1.55rem;
+    display: grid;
+    place-items: center;
+    transition: left 500ms var(--ease-out);
+  }
+
+  .steps {
+    position: relative;
+  }
+  .step-title {
+    font-size: clamp(1.6rem, 5.5vw, 2.2rem);
+    line-height: 1.15;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    outline: none;
+  }
+  .step-hint {
+    color: var(--text-2);
+    margin-top: 0.7rem;
+  }
+  .step {
+    animation: step-in 450ms var(--ease-out);
+  }
+  @keyframes step-in {
+    from {
+      opacity: 0;
+      transform: translateX(26px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  .step.back-anim {
+    animation-name: step-in-back;
+  }
+  @keyframes step-in-back {
+    from {
+      opacity: 0;
+      transform: translateX(-26px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .step {
+      animation: none !important;
+    }
+  }
+
+  .opts {
+    display: grid;
+    gap: 0.7rem;
+    margin-top: 1.6rem;
+  }
+  .opts-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  @media (max-width: 480px) {
+    .opts-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  .opt {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-areas: 'icon label' 'icon sub';
+    column-gap: 0.9rem;
+    row-gap: 0.15rem;
+    align-items: center;
+    text-align: left;
+    padding: 1rem 1.15rem;
+    border: 1px solid var(--line-strong);
+    border-radius: 1rem;
+    background: color-mix(in srgb, var(--surface) 65%, transparent);
+    cursor: pointer;
+    transition: border-color 150ms, background-color 200ms, transform 200ms var(--ease-out);
+  }
+  .opt:hover {
+    border-color: var(--gold);
+    transform: translateY(-1px);
+  }
+  .opt:active {
+    transform: scale(0.985);
+  }
+  .opt :global(svg) {
+    grid-area: icon;
+  }
+  .opt-label {
+    grid-area: label;
+    font-weight: 560;
+  }
+  .opt-sub {
+    grid-area: sub;
+    font-size: 0.83rem;
+    color: var(--text-3);
+  }
+  .opt-compact {
+    grid-template-columns: 1fr;
+    grid-template-areas: 'label' 'sub';
+  }
+  .opt.selected {
+    border-color: var(--gold);
+    background: color-mix(in srgb, var(--gold) 13%, transparent);
+  }
+
+  .amount-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    margin-top: 1.4rem;
+    border: 1px solid var(--line-strong);
+    border-radius: 1rem;
+    padding: 0.35rem 1.1rem;
+    background: color-mix(in srgb, var(--bg) 55%, transparent);
+    transition: border-color 150ms;
+  }
+  .amount-wrap:focus-within {
+    border-color: var(--gold);
+  }
+  .amount-prefix {
+    color: var(--text-3);
+    font-size: 1.3rem;
+  }
+  .amount-input {
+    width: 100%;
+    background: none;
+    border: 0;
+    outline: 0;
+    font-size: clamp(1.8rem, 6vw, 2.2rem);
+    padding-block: 0.4rem;
+    color: var(--text);
+    caret-color: var(--gold);
+  }
+  .amount-input::placeholder {
+    color: var(--text-3);
+    opacity: 0.5;
+  }
+  .quick-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 0.8rem;
+  }
+  .quick {
+    min-height: 2.4rem;
+    padding: 0.3rem 0.9rem;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    color: var(--text-2);
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: border-color 150ms, color 150ms;
+  }
+  .quick:hover {
+    border-color: var(--gold);
+    color: var(--accent-text);
+  }
+
+  .err {
+    margin-top: 0.7rem;
+    color: var(--danger);
+    font-size: 0.9rem;
+  }
+
+  .back {
+    margin-top: 2.25rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    color: var(--text-3);
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: color 150ms;
+  }
+  .back :global(svg) {
+    transform: rotate(180deg);
+  }
+  .back:hover {
+    color: var(--text);
+  }
+
+  .hp {
+    position: absolute;
+    left: -9999px;
+    top: auto;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
+  .done-sun {
+    width: 4.5rem;
+    height: 4.5rem;
+    border-radius: 999px;
+    display: grid;
+    place-items: center;
+    background: color-mix(in srgb, var(--gold) 14%, transparent);
+    border: 1px solid color-mix(in srgb, var(--gold) 45%, transparent);
+    margin-bottom: 1.4rem;
+  }
+</style>
+
+<script>
+  import { track, scrollToEl } from '~/scripts/app';
+
+  type StepId = 'type' | 'city' | 'bill' | 'roof' | 'timeline' | 'backup' | 'name' | 'phone';
+  const ORDER: StepId[] = ['type', 'city', 'bill', 'roof', 'timeline', 'backup', 'name', 'phone'];
+
+  const LABELS: Record<string, Record<string, string>> = {
+    type: { home: 'Home', business: 'Business' },
+    roof: { own: 'Own roof', rented: 'Rented (owner consent)', construction: 'Under construction / plot' },
+    timeline: { asap: 'As soon as possible', '1-3mo': 'Next 1–3 months', research: 'Researching' },
+    backup: { yes: 'Yes, battery backup', no: 'No battery', unsure: 'Wants advice' },
+    city: {
+      lahore: 'Lahore',
+      karachi: 'Karachi',
+      islamabad: 'Islamabad · Rawalpindi',
+      faisalabad: 'Faisalabad',
+      multan: 'Multan',
+      other: 'Other city',
+    },
+  };
+
+  function initFunnel() {
+    const host = document.querySelector<HTMLElement>('[data-steps]');
+    if (!host || host.dataset.bound) return;
+    host.dataset.bound = '1';
+
+    const mountedAt = Date.now();
+    const steps = new Map<string, HTMLElement>();
+    document.querySelectorAll<HTMLElement>('.step').forEach((el) => steps.set(el.dataset.step!, el));
+    const backBtn = document.querySelector<HTMLElement>('[data-back]')!;
+    const fill = document.querySelector<HTMLElement>('[data-progress-fill]')!;
+    const sun = document.querySelector<HTMLElement>('[data-progress-sun]')!;
+    const progressEl = document.querySelector<HTMLElement>('[data-progress]')!;
+    const counter = document.querySelector<HTMLElement>('[data-step-count]')!;
+
+    let state: Record<string, string | number> = {};
+    let idx = 0;
+    let submitting = false;
+
+    /* prefill from calculator handoff */
+    const src = new URLSearchParams(location.search).get('src') || '';
+    try {
+      const saved = JSON.parse(localStorage.getItem('rss-quote') || 'null');
+      if (saved?.state) ({ state } = saved);
+    } catch {}
+    if (src === 'calc') {
+      try {
+        const calc = JSON.parse(localStorage.getItem('rss-calc') || 'null');
+        if (calc?.input) {
+          state.type = calc.input.type === 'business' ? 'business' : 'home';
+          state.city = calc.input.citySlug;
+          state.bill = calc.input.bill;
+          state.calc = calc.wa
+            ? `Suggested ${calc.sizeKw} kW · est. new bill Rs ${calc.newBillLow?.toLocaleString?.('en-PK') ?? calc.newBillLow}–${calc.newBillHigh?.toLocaleString?.('en-PK') ?? calc.newBillHigh}`
+            : '';
+        }
+      } catch {}
+    }
+
+    const firstIncomplete = () => {
+      for (let i = 0; i < ORDER.length; i++) {
+        const k = ORDER[i];
+        if (k === 'name' || k === 'phone') return i;
+        if (state[k] === undefined || state[k] === '') return i;
+      }
+      return ORDER.length - 1;
+    };
+    idx = firstIncomplete();
+
+    const digitsOf = (s: string) => parseInt(String(s).replace(/[^\d]/g, ''), 10) || 0;
+    const pkPhoneOk = (raw: string) => /^(?:\+?92|0)?3\d{9}$/.test(raw.replace(/[^\d+]/g, ''));
+
+    function persist() {
+      try {
+        localStorage.setItem('rss-quote', JSON.stringify({ state, at: Date.now() }));
+      } catch {}
+    }
+
+    function show(id: string, dir: 'fwd' | 'back' = 'fwd') {
+      steps.forEach((el) => (el.hidden = true));
+      const el = steps.get(id)!;
+      el.hidden = false;
+      el.classList.toggle('back-anim', dir === 'back');
+      // restore selection highlight
+      el.querySelectorAll<HTMLElement>('.opt').forEach((o) =>
+        o.classList.toggle('selected', o.dataset.value === state[id as StepId])
+      );
+      // restore input values
+      const input = el.querySelector<HTMLInputElement>('[data-input]');
+      if (input) {
+        const key = input.dataset.input!;
+        if (state[key] !== undefined && key === 'bill') input.value = Number(state[key]).toLocaleString('en-PK');
+        else if (state[key] !== undefined && key !== 'website') input.value = String(state[key]);
+        setTimeout(() => input.focus({ preventScroll: true }), 60);
+      } else {
+        (el.querySelector('.step-title') as HTMLElement)?.focus({ preventScroll: true });
+      }
+      const stepPos = ORDER.indexOf(id as StepId);
+      const inFlow = stepPos >= 0;
+      backBtn.hidden = !inFlow || stepPos === 0;
+      const pct = inFlow ? Math.round((stepPos / ORDER.length) * 100) : 100;
+      fill.style.width = `${pct}%`;
+      sun.style.left = `${pct}%`;
+      progressEl.setAttribute('aria-valuenow', String(pct));
+      counter.textContent = inFlow ? `${stepPos + 1} / ${ORDER.length}` : '✓';
+      document.querySelectorAll<HTMLElement>('[data-echo="name"]').forEach((n) => {
+        if (state.name) n.textContent = String(state.name).split(' ')[0];
+      });
+      scrollToEl(0, 0);
+      if (inFlow) track('quote_step', { step: id, pos: stepPos + 1 });
+    }
+
+    function go(dir: 1 | -1) {
+      idx = Math.min(Math.max(idx + dir, 0), ORDER.length - 1);
+      show(ORDER[idx], dir === 1 ? 'fwd' : 'back');
+    }
+
+    /* option clicks (auto-advance) */
+    steps.forEach((el, id) => {
+      el.querySelectorAll<HTMLElement>('[data-autoadvance] .opt').forEach((opt) => {
+        opt.addEventListener('click', () => {
+          state[id] = opt.dataset.value!;
+          persist();
+          el.querySelectorAll('.opt').forEach((o) => o.classList.remove('selected'));
+          opt.classList.add('selected');
+          setTimeout(() => go(1), 240);
+        });
+      });
+    });
+
+    /* text inputs */
+    const billInput = document.querySelector<HTMLInputElement>('[data-input="bill"]')!;
+    billInput.addEventListener('input', () => {
+      const n = digitsOf(billInput.value);
+      billInput.value = n ? n.toLocaleString('en-PK') : '';
+      state.bill = n;
+      persist();
+    });
+    document.querySelectorAll<HTMLButtonElement>('[data-amt]').forEach((b) =>
+      b.addEventListener('click', () => {
+        billInput.value = Number(b.dataset.amt).toLocaleString('en-PK');
+        state.bill = Number(b.dataset.amt);
+        persist();
+      })
+    );
+    const nameInput = document.querySelector<HTMLInputElement>('[data-input="name"]')!;
+    nameInput.addEventListener('input', () => {
+      state.name = nameInput.value;
+      persist();
+    });
+    const phoneInput = document.querySelector<HTMLInputElement>('[data-input="phone"]')!;
+    phoneInput.addEventListener('input', () => {
+      state.phone = phoneInput.value;
+      persist();
+    });
+
+    function showErr(key: string, msg: string | null) {
+      const el = document.querySelector<HTMLElement>(`[data-err="${key}"]`)!;
+      el.hidden = !msg;
+      if (msg) el.textContent = msg;
+    }
+
+    function validateCurrent(): boolean {
+      const id = ORDER[idx];
+      if (id === 'bill') {
+        const n = digitsOf(billInput.value);
+        if (n < 1000) {
+          showErr('bill', 'A monthly bill under Rs 1,000 usually means a typo — double-check?');
+          return false;
+        }
+        showErr('bill', null);
+        state.bill = n;
+      }
+      if (id === 'name') {
+        if (String(nameInput.value).trim().length < 2) {
+          showErr('name', 'We just need a name to address you properly.');
+          return false;
+        }
+        showErr('name', null);
+        state.name = nameInput.value.trim();
+      }
+      if (id === 'phone') {
+        if (!pkPhoneOk(phoneInput.value)) {
+          showErr('phone', 'That doesn’t look like a Pakistani mobile — 03XX XXXXXXX works best.');
+          return false;
+        }
+        showErr('phone', null);
+        state.phone = phoneInput.value.trim();
+      }
+      persist();
+      return true;
+    }
+
+    document.querySelectorAll<HTMLElement>('[data-next]').forEach((b) =>
+      b.addEventListener('click', () => {
+        if (validateCurrent()) go(1);
+      })
+    );
+    backBtn.addEventListener('click', () => go(-1));
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key !== 'Enter') return;
+      const active = document.activeElement as HTMLElement;
+      if (active?.dataset?.input === 'bill' || active?.dataset?.input === 'name') {
+        e.preventDefault();
+        if (validateCurrent()) go(1);
+      } else if (active?.dataset?.input === 'phone') {
+        e.preventDefault();
+        submit();
+      }
+    });
+
+    function summaryText() {
+      const bits = [
+        `${LABELS.type[state.type as string] ?? '—'} · ${LABELS.city[state.city as string] ?? state.city ?? '—'}`,
+        `Bill ~Rs ${Number(state.bill || 0).toLocaleString('en-PK')}/month`,
+        `Roof: ${LABELS.roof[state.roof as string] ?? '—'}`,
+        `Timeline: ${LABELS.timeline[state.timeline as string] ?? '—'}`,
+        `Backup: ${LABELS.backup[state.backup as string] ?? '—'}`,
+      ];
+      if (state.calc) bits.push(String(state.calc));
+      return bits;
+    }
+
+    function waText() {
+      return (
+        `Assalam-o-alaikum RaySmartSolar! Quote request:\n• ` +
+        summaryText().join('\n• ') +
+        `\n• Name: ${state.name}\n• Phone: ${state.phone}`
+      );
+    }
+
+    async function submit() {
+      if (!validateCurrent() || submitting) return;
+      submitting = true;
+      const btn = document.querySelector<HTMLButtonElement>('[data-submit]')!;
+      const original = btn.innerHTML;
+      btn.innerHTML = 'Sending…';
+      btn.disabled = true;
+
+      const payload = {
+        kind: 'quote',
+        name: state.name,
+        phone: state.phone,
+        city: LABELS.city[state.city as string] ?? state.city,
+        propertyType: state.type,
+        bill: state.bill,
+        roof: LABELS.roof[state.roof as string],
+        timeline: LABELS.timeline[state.timeline as string],
+        backup: LABELS.backup[state.backup as string],
+        calc: state.calc || undefined,
+        page: `/quote${src ? `?src=${src}` : ''}`,
+        website: (document.querySelector<HTMLInputElement>('[data-input="website"]') || {}).value || '',
+        t: mountedAt,
+      };
+
+      try {
+        const res = await fetch('/api/lead', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        const data = await res.json().catch(() => ({ ok: false }));
+        if (!res.ok || !data.ok) throw new Error(data.error || 'send_failed');
+
+        track('quote_complete', { city: payload.city, bill: payload.bill, timeline: payload.timeline });
+        const sum = document.querySelector<HTMLElement>('[data-summary]')!;
+        sum.innerHTML = summaryText()
+          .map((s) => `<div>• ${s}</div>`)
+          .join('');
+        const rss = (window as any).__RSS;
+        const doneWa = document.querySelector<HTMLAnchorElement>('[data-done-wa]')!;
+        if (rss?.waLive) {
+          doneWa.hidden = false;
+          doneWa.href = `https://wa.me/${rss.waE164}?text=${encodeURIComponent(waText())}`;
+          doneWa.target = '_blank';
+          doneWa.rel = 'noopener';
+        }
+        show('done');
+        try {
+          localStorage.removeItem('rss-quote');
+        } catch {}
+      } catch (err: any) {
+        const reason = document.querySelector<HTMLElement>('[data-fail-reason]')!;
+        reason.textContent =
+          (err?.message !== 'send_failed' && err?.message) ||
+          'A connection hiccup. Your answers are saved on this device — nothing is lost.';
+        const rss = (window as any).__RSS;
+        const failWa = document.querySelector<HTMLAnchorElement>('[data-fail-wa]')!;
+        if (rss?.waLive) {
+          failWa.href = `https://wa.me/${rss.waE164}?text=${encodeURIComponent(waText())}`;
+          failWa.target = '_blank';
+          failWa.rel = 'noopener';
+        } else {
+          failWa.hidden = true;
+        }
+        document.querySelector<HTMLAnchorElement>('[data-fail-mail]')!.href =
+          `mailto:info@raysmartsolar.com?subject=${encodeURIComponent('Solar quote request')}&body=${encodeURIComponent(waText())}`;
+        show('fail');
+        track('quote_fail', {});
+      } finally {
+        submitting = false;
+        btn.innerHTML = original;
+        btn.disabled = false;
+      }
+    }
+
+    document.querySelector<HTMLElement>('[data-submit]')!.addEventListener('click', submit);
+    document.querySelector<HTMLElement>('[data-retry]')!.addEventListener('click', () => show('phone', 'back'));
+
+    /* start */
+    track('quote_open', { src });
+    show(ORDER[idx]);
+  }
+
+  document.addEventListener('astro:page-load', initFunnel);
+</script>

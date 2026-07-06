@@ -1,0 +1,348 @@
+---
+import { Image } from 'astro:assets';
+import Layout from '~/layouts/Layout.astro';
+import PageHero from '~/components/PageHero.astro';
+import SectionHead from '~/components/SectionHead.astro';
+import CTABand from '~/components/CTABand.astro';
+import Icon from '~/components/Icon.astro';
+import { site } from '~/config/site';
+import instLift from '~/assets/photos/inst-lift.jpg';
+
+const title = 'About RaySmartSolar — built to be checked up on';
+const description =
+  'A solar company you can verify — walk-in Lahore office, staged payments, serial-checked Tier-1 hardware and honest DISCO timelines. No fake awards wall.';
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'AboutPage',
+    name: 'About RaySmartSolar',
+    description,
+    about: { '@id': `${site.url}/#business` },
+  },
+];
+
+const principles = [
+  {
+    n: '01',
+    title: 'Staged payments, not leaps of faith',
+    body: 'No lump sums up front. Payments are staged against delivered work — survey, hardware on your roof, commissioning — so your money never runs ahead of the job.',
+  },
+  {
+    n: '02',
+    title: 'Hardware you can serial-check',
+    body: 'Every panel’s serial number is verified in the manufacturer’s own app before we leave the roof — with you watching. Datasheets and warranty cards go in your file, not a drawer in ours.',
+  },
+  {
+    n: '03',
+    title: 'Written ranges, not promises',
+    body: 'Savings are quoted as ranges with every assumption printed on the proposal. If solar doesn’t make sense for your bill yet, we say that too — in writing, before you spend a rupee.',
+  },
+  {
+    n: '04',
+    title: 'The monitoring app is yours',
+    body: 'Monitoring goes on your account, not ours. You see what we see — output, faults, everything — forever. An installer who keeps admin access is keeping you blind.',
+  },
+  {
+    n: '05',
+    title: 'DISCO timelines, quoted honestly',
+    body: 'We tell you the current real approval timeline for your DISCO before you sign — not the regulation’s paper clock — then chase your file weekly until the meter is live.',
+  },
+];
+---
+
+<Layout {title} {description} {jsonLd}>
+  <PageHero
+    eyebrow="About us"
+    title="Built to be checked up on."
+    titleHtml="Built to be <em>checked up on.</em>"
+    lede="Pakistan’s solar market burned people — vanished advances, relabeled panels, oversold savings. So we built the opposite: a company you can verify piece by piece, before you hand over a rupee."
+  >
+    <Fragment slot="actions">
+      <a href="#verify" class="btn btn-gold">
+        <Icon name="shield" size={18} /> Start verifying us
+      </a>
+      <a href="/contact" class="btn btn-ghost" data-evt="cta_primary" data-evt-src="about_hero">
+        Meet us in person <Icon name="arrow-right" size={17} />
+      </a>
+    </Fragment>
+  </PageHero>
+
+  <!-- Founding premise -->
+  <section class="section">
+    <div class="wrap">
+      <div class="grid gap-10 lg:gap-14 md:grid-cols-[1.05fr_0.95fr] items-center">
+        <div>
+          <SectionHead
+            eyebrow="Why we exist"
+            title="This market taught people not to trust it."
+            titleHtml="This market taught people <em>not to trust it.</em>"
+          />
+          <div class="space-y-5 mt-8 text-ink-2 max-w-xl" data-reveal>
+            <p>
+              Pakistan’s rooftop boom minted a thousand installers overnight. Some were excellent.
+              Enough weren’t — advances vanished, B-grade panels wore Tier-1 stickers, savings were
+              promised that physics couldn’t deliver, and prosumer files sat in DISCO offices with
+              nobody chasing them. The burned customers tell everyone. They should.
+            </p>
+            <p>
+              RaySmartSolar starts from that reality: <strong class="text-ink">assume nobody
+              believes us.</strong> So instead of an awards wall, we give you things you can check —
+              a street address you can walk into, certificate numbers you can look up, payments that
+              stay level with delivered work, and paperwork that lives in your folder, not ours.
+            </p>
+            <p>
+              You’ll find no invented testimonials here, no “10,000 systems installed” claims, no
+              stock-photo team. Where a credential is still being formalised, we show the gap and
+              say so. Verifiable beats impressive — every time.
+            </p>
+          </div>
+        </div>
+        <figure data-reveal>
+          <div class="ph rounded-2xl">
+            <Image
+              src={instLift}
+              alt="Two workers carrying a solar panel across a rooftop"
+              widths={[480, 800, 1200]}
+              sizes="(min-width: 768px) 50vw, 100vw"
+              format="avif"
+              quality={60}
+              loading="lazy"
+            />
+          </div>
+          <figcaption class="text-[0.62rem] font-mono text-ink-3 mt-2">
+            Illustrative photo of rooftop panel work — not our crew (see <a href="/credits" class="underline underline-offset-2">/credits</a>).
+            Our own project photos join as they’re documented.
+          </figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- Verify us -->
+  <section class="section pt-0" id="verify">
+    <div class="wrap">
+      <SectionHead
+        eyebrow="Verify us"
+        title="Don’t take our word. Check these."
+        titleHtml="Don’t take our word. <em>Check these.</em>"
+        lede="Concrete, checkable things — the kind a here-today-gone-tomorrow outfit can’t fake. Anything still marked “being added” is a gap we’d rather show than invent."
+      />
+
+      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 mt-12" data-reveal-group data-todo="certifications">
+        <div class="card p-6" data-reveal-child>
+          <span class="v-icon"><Icon name="pin" size={17} /></span>
+          <h3 class="font-medium mt-4">Walk into the office</h3>
+          <p class="text-sm text-ink-2 mt-2">
+            {site.address.full}. {site.hours.days}, {site.hours.time}. No appointment needed.
+          </p>
+          <a
+            href={site.address.mapsUrl}
+            target="_blank"
+            rel="noopener"
+            class="link-gold text-sm inline-flex items-center gap-1 mt-3"
+            data-evt="maps_click"
+          >
+            Open in Google Maps <Icon name="arrow-up-right" size={13} />
+          </a>
+        </div>
+
+        <div class="card p-6" data-reveal-child>
+          <span class="v-icon"><Icon name="mail" size={17} /></span>
+          <h3 class="font-medium mt-4">Email that answers</h3>
+          <p class="text-sm text-ink-2 mt-2">
+            A written reply you can hold us to — within one business day.
+          </p>
+          <a href={`mailto:${site.email}`} class="link-gold text-sm inline-flex items-center gap-1 mt-3" data-evt="email_click">
+            {site.email} <Icon name="arrow-up-right" size={13} />
+          </a>
+        </div>
+
+        <!-- TODO: PPIB certificate number + category — owner to supply and verify before publishing. See CONTENT-TODO.md §3. Never fake credentials. -->
+        <div class="card p-6" data-reveal-child>
+          <span class="v-icon"><Icon name="shield" size={17} /></span>
+          <h3 class="font-medium mt-4">PPIB installer certification</h3>
+          <p class="text-sm text-ink-2 mt-2">
+            PPIB (formerly AEDB) certifies installers in categories C-1 to C-3. Ask any installer —
+            including us — for the certificate number, then check it at
+            <a href="https://www.ppib.gov.pk/" target="_blank" rel="noopener" class="link-gold">ppib.gov.pk</a>.
+          </p>
+          <span class="todo-chip inline-block mt-3">certificate № — being added</span>
+        </div>
+
+        <!-- TODO: DISCO vendor registration docs — owner to supply. See CONTENT-TODO.md §3. -->
+        <div class="card p-6" data-reveal-child>
+          <span class="v-icon"><Icon name="filecheck" size={17} /></span>
+          <h3 class="font-medium mt-4">{site.homeDisco} vendor registration</h3>
+          <p class="text-sm text-ink-2 mt-2">
+            Net-metering work needs a DISCO-registered vendor. Ask to see the registration when we
+            survey — you should ask everyone this.
+          </p>
+          <span class="todo-chip inline-block mt-3">docs on request</span>
+        </div>
+
+        <!-- TODO: company registration / NTN — owner to supply. See CONTENT-TODO.md §3. -->
+        <div class="card p-6" data-reveal-child>
+          <span class="v-icon"><Icon name="banknote" size={17} /></span>
+          <h3 class="font-medium mt-4">Company registration &amp; NTN</h3>
+          <p class="text-sm text-ink-2 mt-2">
+            A company that plans to be around puts its tax number where you can see it.
+          </p>
+          <span class="todo-chip inline-block mt-3">NTN — being added</span>
+        </div>
+
+        <div class="card p-6" data-reveal-child>
+          <span class="v-icon"><Icon name="users" size={17} /></span>
+          <h3 class="font-medium mt-4">Ask us the hard ones</h3>
+          <p class="text-sm text-ink-2 mt-2">
+            Serial numbers, timelines, what breaks, what’s extra — bring the questions other
+            installers dodge. We like those.
+          </p>
+          <a href="/contact" class="link-gold text-sm inline-flex items-center gap-1 mt-3" data-evt="cta_primary" data-evt-src="about_verify">
+            Every way to reach us <Icon name="arrow-right" size={13} />
+          </a>
+        </div>
+      </div>
+
+      <p class="text-sm text-ink-3 mt-6 max-w-2xl" data-reveal>
+        Every line above is checkable — that’s the point. If one ever isn’t, ask us why. In person,
+        if you like.
+      </p>
+    </div>
+  </section>
+
+  <!-- How we work -->
+  <section class="section theme-night">
+    <div class="wrap">
+      <SectionHead
+        eyebrow="How we work"
+        title="Five rules we don’t bend."
+        lede="Each one exists because this market broke it somewhere, for someone. They’re in your contract, not just on this page."
+      />
+      <div class="mt-12 grid gap-7 max-w-3xl" data-reveal-group>
+        {
+          principles.map((p) => (
+            <div class="flex items-start gap-5" data-reveal-child>
+              <span class="pr-num mono-num">{p.n}</span>
+              <div>
+                <h3 class="font-display text-h3">{p.title}</h3>
+                <p class="text-ink-2 mt-2 max-w-xl">{p.body}</p>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+      <div class="mt-12 flex flex-wrap items-center gap-4" data-reveal>
+        <a href="/quote?src=about" class="btn btn-gold" data-evt="quote_open" data-evt-src="about_principles">
+          <Icon name="filecheck" size={18} /> Put us to the test
+        </a>
+        <p class="text-sm text-ink-3">
+          Free survey — and if solar doesn’t make sense for you yet, we’ll say exactly that.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Team -->
+  <section class="section">
+    <div class="wrap">
+      <SectionHead
+        eyebrow="The humans"
+        title="Real faces, coming properly."
+        lede="We’d rather show you an honest empty frame than a stock-photo “team”. Photos and bios go up as each person agrees to be public — the same verify-it standard we apply to everything else."
+      />
+      <!-- TODO: real team photos & bios — owner to supply; replace placeholder cards. See CONTENT-TODO.md. -->
+      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 mt-12" data-reveal-group data-todo="team">
+        {
+          [1, 2, 3].map(() => (
+            <div class="team-card" data-reveal-child>
+              <span class="team-avatar" aria-hidden="true">
+                <Icon name="users" size={26} />
+              </span>
+              <span class="team-line w-28" aria-hidden="true" />
+              <span class="team-line w-16" aria-hidden="true" />
+              <span class="todo-chip mt-2">photo &amp; bio coming</span>
+            </div>
+          ))
+        }
+      </div>
+      <p class="text-sm text-ink-3 mt-6 max-w-2xl" data-reveal>
+        Team photos &amp; bios coming — we’d rather show real faces than stock ones. Until then,
+        you can meet everyone the old way: at the office, over chai.
+      </p>
+    </div>
+  </section>
+
+  <section class="section pt-0">
+    <div class="wrap">
+      <CTABand
+        heading="Come argue with us in person."
+        sub={`Bring your bill and your hardest questions — ${site.address.full}. Chai on us.`}
+        primaryHref="/contact"
+        primaryLabel="Contact & directions"
+        primaryIcon="arrow-right"
+        evtSrc="about_final"
+      />
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .v-icon {
+    width: 2.1rem;
+    height: 2.1rem;
+    border-radius: 999px;
+    display: grid;
+    place-items: center;
+    background: color-mix(in srgb, var(--gold) 15%, transparent);
+    color: var(--gold);
+  }
+  .pr-num {
+    flex: none;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 999px;
+    display: grid;
+    place-items: center;
+    background: var(--surface);
+    border: 1px solid var(--line-strong);
+    color: var(--accent-text);
+    font-size: 0.8rem;
+    margin-top: 0.2rem;
+  }
+  .todo-chip {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    padding: 0.2rem 0.55rem;
+    border-radius: 999px;
+    border: 1px dashed var(--line-strong);
+    color: var(--text-3);
+  }
+  .team-card {
+    border: 1px dashed var(--line-strong);
+    border-radius: var(--radius-card);
+    padding: 2.25rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6rem;
+    text-align: center;
+  }
+  .team-avatar {
+    width: 4rem;
+    height: 4rem;
+    border-radius: 999px;
+    display: grid;
+    place-items: center;
+    background: color-mix(in srgb, var(--gold) 10%, transparent);
+    color: var(--text-3);
+    margin-bottom: 0.4rem;
+  }
+  .team-line {
+    height: 0.55rem;
+    border-radius: 999px;
+    background: var(--line);
+  }
+</style>

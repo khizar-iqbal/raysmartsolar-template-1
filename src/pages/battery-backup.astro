@@ -1,0 +1,397 @@
+---
+import { Image } from 'astro:assets';
+import Layout from '~/layouts/Layout.astro';
+import PageHero from '~/components/PageHero.astro';
+import SectionHead from '~/components/SectionHead.astro';
+import CTABand from '~/components/CTABand.astro';
+import FAQ from '~/components/FAQ.astro';
+import Icon from '~/components/Icon.astro';
+import { site } from '~/config/site';
+import { BATTERY, PRICES_AS_OF } from '~/data/facts';
+import { cityBySlug } from '~/data/cities';
+import hwBattery from '~/assets/photos/hw-battery.jpg';
+import fanLamp from '~/assets/photos/fan.jpg';
+
+const lahore = cityBySlug('lahore')!;
+
+const title = 'Solar Battery Backup — honest sizing & prices | RaySmartSolar';
+const description =
+  'What a 5 kWh lithium battery actually runs and for how long, what backup costs in Pakistan, and when you honestly don’t need one — sizing without the sales fog.';
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: 'Solar battery backup and hybrid systems',
+    description,
+    provider: { '@id': `${site.url}/#business` },
+    areaServed: ['Lahore', 'Karachi', 'Islamabad', 'Rawalpindi', 'Faisalabad', 'Multan'],
+    serviceType: 'Lithium battery backup sizing and hybrid solar installation',
+  },
+];
+
+const loads = [
+  { load: 'Ceiling fan', draw: '70–80 W each' },
+  { load: 'LED light', draw: '8–12 W each' },
+  { load: 'Wi-Fi router', draw: '10–15 W' },
+  { load: 'Fridge', draw: '~150 W averaged (compressor cycles)' },
+  { load: 'Inverter AC (1.5 ton)', draw: '1,000–1,500 W while running' },
+];
+
+const compare = [
+  { what: 'Usable capacity', li: '80–90% of rated', tub: '~50%, if you want it to last' },
+  { what: 'Deep cycles', li: '3,000–6,000', tub: '500–1,200' },
+  { what: 'Footprint', li: 'a slim wall-mounted cabinet', tub: 'a rack of cells, acid and fumes' },
+  { what: 'Upkeep', li: 'none', tub: 'monthly water top-ups' },
+  { what: 'Typical service life', li: '8–15 years', tub: '2–4 years' },
+  { what: 'Day-one price', li: 'higher', tub: 'lower — its only win' },
+];
+
+const faqs = [
+  {
+    q: 'How long will a 5 kWh battery run my house?',
+    a: 'Essentials — a few fans, LED lights, the router and the fridge — draw about 0.4–0.5 kWh an hour, so a 5 kWh block (roughly 4.5 kWh usable) carries them 8–10 hours. Add more fans and a freezer and think 6–8. Add an air conditioner and read the next answer before deciding anything.',
+  },
+  {
+    q: 'Can I run an AC on battery?',
+    a: 'Honestly: one 1.5-ton inverter AC draws 1–1.5 kW, so a 5 kWh battery gives you roughly 3 hours of AC and nothing else — about 2.5 hours with essentials running too. If AC-through-outage is the requirement, we size 10–15 kWh, or design the system to run the AC straight off the panels in daytime and keep the battery for the evening.',
+  },
+  {
+    q: 'What’s the lifespan and warranty?',
+    a: `LiFePO4 batteries are rated for 3,000–6,000 cycles — at a cycle a day, that’s 8–15 years of service — with written manufacturer warranties typically in the 5–10 year band. We quote brands with real local backing (${BATTERY.brands.join(', ')}) and hand you the actual warranty document, never a verbal promise.`,
+  },
+  {
+    q: 'Can I add a battery later?',
+    a: 'Yes — cleanly, if we plan for it. A hybrid inverter installed today accepts a battery whenever you’re ready, zero rework. A plain on-grid inverter can’t: adding storage later then means a swap or an extra unit. Say “battery later” at the survey and we design the path in from day one — it’s the default advice on our <a href="/homes">homes page</a>.',
+  },
+  {
+    q: 'What’s the difference between my old UPS and a hybrid inverter?',
+    a: 'Your UPS buys grid units at full price, stores them with losses, and gives them back. A hybrid inverter charges the battery from sunshine, runs the house solar-first all day, and switches over in milliseconds during an outage — the UPS’s job plus actual savings, in one box. And your existing UPS wiring usually makes our installation simpler, so none of it was wasted money.',
+  },
+];
+---
+
+<Layout {title} {description} {jsonLd} heroNav>
+  <PageHero
+    eyebrow="Battery backup · hybrid systems"
+    title="When the feeder trips, your evening shouldn’t."
+    titleHtml="When the feeder trips, <em>your evening shouldn’t.</em>"
+    lede="Load-shedding in 2026 is uneven — modest on good urban feeders, brutal on rural ones, unannounced everywhere. Here’s what a battery actually runs, what it costs, and when you honestly don’t need one."
+    image={hwBattery}
+    imageAlt="Technician installing a wall-mounted battery and hybrid inverter"
+    imagePosition="50% 45%"
+  >
+    <Fragment slot="actions">
+      <a href="/calculator" class="btn btn-gold" data-evt="calc_open" data-evt-src="battery_hero">
+        <Icon name="calculator" size={18} /> Size my system
+      </a>
+      <a href="/quote?src=battery" class="btn btn-ghost" data-evt="quote_open" data-evt-src="battery_hero">
+        Ask about backup <Icon name="arrow-right" size={17} />
+      </a>
+    </Fragment>
+  </PageHero>
+
+  <!-- The honest frame -->
+  <section class="section">
+    <div class="wrap">
+      <SectionHead
+        eyebrow="First, the honest frame"
+        title="How bad are outages, really?"
+        titleHtml="How bad are outages, <em>really?</em>"
+        lede="Depends entirely on your feeder — so we’ll skip the fear marketing and give you the real map, plus the price tag, up front."
+      />
+      <div class="grid gap-4 md:grid-cols-3 mt-12" data-reveal-group>
+        <div class="card p-7" data-reveal-child>
+          <span class="bb-icon"><Icon name="home" size={18} /></span>
+          <p class="font-display text-[1.15rem] mt-4">Urban, low-loss feeders</p>
+          <p class="text-sm text-ink-2 mt-2">{lahore.disco.sheddingReality}</p>
+        </div>
+        <div class="card p-7" data-reveal-child>
+          <span class="bb-icon"><Icon name="moon" size={18} /></span>
+          <p class="font-display text-[1.15rem] mt-4">Rural & high-loss feeders</p>
+          <p class="text-sm text-ink-2 mt-2">
+            Feeders with heavy losses face 4–6+ hours of curtailment as standing policy, and parts
+            of South Punjab see the longest cuts in the country. If that’s your feeder, backup
+            isn’t a luxury — it’s infrastructure.
+          </p>
+        </div>
+        <div class="card p-7 border-gold/30" data-reveal-child>
+          <span class="bb-icon"><Icon name="banknote" size={18} /></span>
+          <p class="font-display text-[1.15rem] mt-4">What backup costs</p>
+          <p class="text-sm text-ink-2 mt-2">
+            Adding lithium backup to a system typically adds
+            <strong class="text-ink">Rs {BATTERY.per5kwhLow / 100000}–{BATTERY.per5kwhHigh / 100000} lakh per 5 kWh block</strong>
+            — battery plus the step up to a hybrid inverter (as of {PRICES_AS_OF}; module-only,
+            {BATTERY.perKwhNote}). Exact figure lands in your written quote after the survey.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- What backup means -->
+  <section class="section pt-0">
+    <div class="wrap">
+      <SectionHead
+        eyebrow="Sizing without fog"
+        title="What “backup” actually means"
+        lede="Backup design is a list of what you refuse to live without, multiplied by hours. Let’s make the list honestly."
+      />
+      <div class="grid gap-10 md:grid-cols-2 mt-12 items-start">
+        <div data-reveal-group>
+          <p class="text-ink-2" data-reveal-child>
+            Every household knows the moment — <em lang="ur-Latn">light chali gayi</em> — and the
+            mental checklist that follows: fans, lights, Wi-Fi, the fridge. That checklist is the
+            design brief. Here’s what each item pulls:
+          </p>
+          <div class="overflow-x-auto mt-6" data-reveal-child>
+            <table class="bb-table">
+              <thead>
+                <tr><th>Load</th><th>Typical draw</th></tr>
+              </thead>
+              <tbody>
+                {
+                  loads.map((l) => (
+                    <tr>
+                      <td>{l.load}</td>
+                      <td class="mono-num">{l.draw}</td>
+                    </tr>
+                  ))
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="grid gap-4">
+          <div class="card p-7 border-gold/30" data-reveal>
+            <p class="font-mono text-[0.68rem] uppercase tracking-[0.18em] text-ink-3">The essentials math</p>
+            <p class="text-ink-2 mt-3">
+              Three fans + six LED lights + router + fridge ≈ <strong class="text-ink">450 W</strong>
+              — call it 0.4–0.5 kWh per hour. A 5 kWh battery holds ~4.5 kWh usable, so essentials
+              run roughly <strong class="text-ink">8–10 hours</strong>: a full evening outage, with
+              margin for the fridge’s moods.
+            </p>
+            <p class="text-ink-2 mt-3">
+              Add one inverter AC and the same battery empties in about
+              <strong class="text-ink">2.5–3 hours</strong>. That’s not a flaw — it’s physics — and
+              it’s why we size from your list, not from a package name.
+            </p>
+          </div>
+          <figure class="ph rounded-2xl overflow-hidden" data-reveal>
+            <Image
+              src={fanLamp}
+              alt="A ceiling lamp glowing warmly in a dim room"
+              widths={[480, 800, 1200]}
+              sizes="(min-width: 768px) 50vw, 100vw"
+              format="avif"
+              quality={60}
+              loading="lazy"
+            />
+          </figure>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Lithium vs tubular -->
+  <section class="section theme-night">
+    <div class="wrap">
+      <SectionHead
+        eyebrow="The chemistry question"
+        title="Lithium vs the old tubular bank"
+        lede="Tubular lead-acid wins exactly one column: the price tag on day one. Every other column belongs to lithium."
+      />
+      <div class="overflow-x-auto mt-10" data-reveal>
+        <table class="bb-table bb-table-wide">
+          <thead>
+            <tr>
+              <th></th>
+              <th>LiFePO4 lithium</th>
+              <th>Tubular lead-acid</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              compare.map((row) => (
+                <tr>
+                  <td>{row.what}</td>
+                  <td class="mono-num">{row.li}</td>
+                  <td class="mono-num">{row.tub}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+      <p class="text-sm text-ink-3 mt-5 max-w-2xl" data-reveal>
+        Per delivered unit over its life, lithium is the cheaper battery. Per rupee this month,
+        tubular is. We’ll tell you which trade-off fits — some households genuinely just need two
+        fans through a rare outage, and we’ll say so.
+      </p>
+    </div>
+  </section>
+
+  <!-- Hybrid inverter + brands -->
+  <section class="section">
+    <div class="wrap">
+      <SectionHead
+        eyebrow="The box that runs the show"
+        title="One hybrid inverter, three jobs"
+        lede="The battery gets the attention; the hybrid inverter does the thinking."
+      />
+      <div class="grid gap-4 md:grid-cols-3 mt-12" data-reveal-group>
+        <div class="card p-7" data-reveal-child>
+          <span class="bb-icon"><Icon name="sun" size={18} /></span>
+          <p class="font-display text-[1.15rem] mt-4">Solar first, always</p>
+          <p class="text-sm text-ink-2 mt-2">
+            Runs the house from panels while the sun is up, tops the battery next, touches the grid
+            last. The priorities are automatic — and visible in an app on your account, not ours.
+          </p>
+        </div>
+        <div class="card p-7" data-reveal-child>
+          <span class="bb-icon"><Icon name="bolt" size={18} /></span>
+          <p class="font-display text-[1.15rem] mt-4">Switchover you won’t notice</p>
+          <p class="text-sm text-ink-2 mt-2">
+            When the grid drops, transfer takes milliseconds — Wi-Fi stays up, fans keep turning,
+            the fridge never notices. None of the old UPS clunk-and-flicker.
+          </p>
+        </div>
+        <div class="card p-7" data-reveal-child>
+          <span class="bb-icon"><Icon name="shield" size={18} /></span>
+          <p class="font-display text-[1.15rem] mt-4">Voltage bodyguard</p>
+          <p class="text-sm text-ink-2 mt-2">
+            Summer sags that murder compressors get smoothed before they reach your appliances —
+            backup earns its keep even on days the power technically stays on.
+          </p>
+        </div>
+      </div>
+
+      <div class="card p-6 mt-6" data-reveal>
+        <div class="flex flex-wrap items-center gap-x-6 gap-y-3">
+          <p class="font-mono text-[0.68rem] uppercase tracking-[0.2em] text-ink-3">Batteries we quote</p>
+          {BATTERY.brands.map((b) => <span class="brand-chip">{b}</span>)}
+          <p class="text-sm text-ink-3">
+            LiFePO4 with written warranties, sized in 5 kWh steps — prices as of {PRICES_AS_OF},
+            confirmed at your free survey.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Do you even need one -->
+  <section class="section pt-0">
+    <div class="wrap">
+      <SectionHead
+        eyebrow="The honesty section"
+        title="Do you even need a battery?"
+        titleHtml="Do you even <em>need</em> a battery?"
+        lede="Sometimes the right answer is no — and we’d rather say it now than after you’ve paid for it."
+      />
+      <div class="grid gap-4 md:grid-cols-3 mt-12" data-reveal-group>
+        <div class="card p-7" data-reveal-child>
+          <span class="bb-icon"><Icon name="x" size={18} /></span>
+          <p class="font-display text-[1.15rem] mt-4">Maybe not, if…</p>
+          <p class="text-sm text-ink-2 mt-2">
+            your feeder rarely cuts, voltage holds, and nobody depends on the house running at 9pm.
+            An on-grid system is the faster payback — panels first, battery never. Or later.
+          </p>
+        </div>
+        <div class="card p-7" data-reveal-child>
+          <span class="bb-icon"><Icon name="trending" size={18} /></span>
+          <p class="font-display text-[1.15rem] mt-4">Maybe yes, even so</p>
+          <p class="text-sm text-ink-2 mt-2">
+            Under 2026 net billing, an evening unit bought from the grid costs several times what an
+            exported one earns — a battery moves your cheap solar into those expensive hours. It
+            pays back slower than panels, but it can still pay. We run both numbers for you.
+          </p>
+        </div>
+        <div class="card p-7" data-reveal-child>
+          <span class="bb-icon"><Icon name="battery" size={18} /></span>
+          <p class="font-display text-[1.15rem] mt-4">Definitely, if…</p>
+          <p class="text-sm text-ink-2 mt-2">
+            your feeder does 4+ hour cuts, someone works from home or depends on medical equipment,
+            or summer evenings without fans are simply not negotiable in your house. Then it’s
+            comfort — priced honestly, sized to your list.
+          </p>
+        </div>
+      </div>
+      <p class="text-sm text-ink-3 mt-6" data-reveal>
+        Not ready either way? Go <strong class="text-ink">battery-ready</strong> instead — hybrid
+        inverter now, battery whenever. The upgrade path is on the
+        <a href="/homes" class="link-gold">homes page</a>.
+      </p>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section pt-0">
+    <div class="wrap max-w-3xl">
+      <SectionHead eyebrow="Straight answers" title="The backup questions everyone asks" />
+      <div class="mt-10">
+        <FAQ items={faqs} schema />
+      </div>
+    </div>
+  </section>
+
+  <section class="section pt-0">
+    <div class="wrap">
+      <CTABand
+        heading="Size the backup to the life you run."
+        sub="Tell us your evening loads and your feeder’s honest behaviour — we’ll quote the battery you need, or tell you that you don’t need one."
+        primaryHref="/quote?src=battery"
+        primaryLabel="Get a backup quote"
+        primaryIcon="arrow-right"
+        evtSrc="battery_final"
+      />
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .bb-icon {
+    display: grid;
+    place-items: center;
+    width: 2.4rem;
+    height: 2.4rem;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--gold) 15%, transparent);
+    color: var(--gold);
+  }
+  .brand-chip {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    padding: 0.3rem 0.7rem;
+    border-radius: 999px;
+    border: 1px solid var(--line-strong);
+    color: var(--text-2);
+  }
+  .bb-table {
+    width: 100%;
+    min-width: 22rem;
+    border-collapse: collapse;
+  }
+  .bb-table-wide {
+    min-width: 34rem;
+  }
+  .bb-table th {
+    text-align: left;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--text-3);
+    padding: 0.7rem 1rem;
+    border-bottom: 1px solid var(--line-strong);
+  }
+  .bb-table td {
+    padding: 0.85rem 1rem;
+    border-bottom: 1px solid var(--line);
+    color: var(--text-2);
+  }
+  .bb-table td:first-child {
+    color: var(--text);
+    font-weight: 540;
+  }
+</style>

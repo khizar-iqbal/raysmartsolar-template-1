@@ -1,0 +1,146 @@
+---
+/**
+ * Sub-page hero. Two modes:
+ *  - with `image`: compact cinematic banner (night bookend, graded photo)
+ *  - without: typographic hero on the page background
+ * Keeps every inner page composed without re-inventing the top.
+ */
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  eyebrow: string;
+  title: string;
+  /** Rich title with <em> accents — overrides `title` rendering */
+  titleHtml?: string;
+  lede?: string;
+  image?: ImageMetadata;
+  imageAlt?: string;
+  /** e.g. "Photo: Muddiii · CC BY-SA 4.0 · Wikimedia Commons" */
+  imageCredit?: string;
+  /** Focal point, e.g. "50% 30%" */
+  imagePosition?: string;
+}
+const { eyebrow, title, titleHtml, lede, image, imageAlt = '', imageCredit, imagePosition = '50% 45%' } =
+  Astro.props;
+---
+
+{
+  image ? (
+    <header class="phero theme-night" data-hero>
+      <div class="phero-media" data-hero-media aria-hidden={imageAlt ? undefined : 'true'}>
+        <Image
+          src={image}
+          alt={imageAlt}
+          widths={[480, 800, 1200, 1600, 2400]}
+          sizes="100vw"
+          format="avif"
+          quality={60}
+          loading="eager"
+          fetchpriority="high"
+          style={`object-position: ${imagePosition}`}
+        />
+        <div class="phero-scrim" />
+      </div>
+      <div class="wrap phero-content">
+        <p class="eyebrow mb-4" data-hero-stage style="--stage:0">
+          {eyebrow}
+        </p>
+        {titleHtml ? (
+          <h1 class="font-display phero-title text-balance" data-hero-title set:html={titleHtml} />
+        ) : (
+          <h1 class="font-display phero-title text-balance" data-hero-title>
+            {title}
+          </h1>
+        )}
+        {lede && (
+          <p class="text-lede text-ink-2 max-w-2xl mt-5" data-hero-stage style="--stage:1">
+            {lede}
+          </p>
+        )}
+        <div class="mt-8 flex flex-wrap gap-3.5" data-hero-stage style="--stage:2">
+          <slot name="actions" />
+        </div>
+      </div>
+      {imageCredit && <p class="phero-credit">{imageCredit}</p>}
+    </header>
+  ) : (
+    <header class="pt-28 lg:pt-36 pb-4">
+      <div class="wrap">
+        <p class="eyebrow mb-4" data-reveal>
+          {eyebrow}
+        </p>
+        {titleHtml ? (
+          <h1
+            class="font-display text-h2 max-w-[22ch] text-balance"
+            data-reveal
+            set:html={titleHtml}
+          />
+        ) : (
+          <h1 class="font-display text-h2 max-w-[22ch] text-balance" data-reveal>
+            {title}
+          </h1>
+        )}
+        {lede && (
+          <p class="text-lede text-ink-2 max-w-2xl mt-5" data-reveal>
+            {lede}
+          </p>
+        )}
+        <div class="mt-8 flex flex-wrap gap-3.5 empty:hidden" data-reveal>
+          <slot name="actions" />
+        </div>
+      </div>
+    </header>
+  )
+}
+
+<style>
+  .phero {
+    position: relative;
+    min-height: 72svh;
+    display: flex;
+    align-items: flex-end;
+    overflow: clip;
+    background: var(--n-bg);
+    color: var(--n-text);
+  }
+  .phero-media {
+    position: absolute;
+    inset: 0;
+  }
+  .phero-media :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: saturate(0.88) contrast(1.05) brightness(0.8);
+  }
+  .phero-scrim {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(to top, rgb(8 12 24 / 0.94) 0%, rgb(8 12 24 / 0.5) 40%, rgb(8 12 24 / 0.25) 70%, rgb(8 12 24 / 0.45) 100%),
+      linear-gradient(100deg, rgb(8 12 24 / 0.5) 0%, transparent 60%);
+  }
+  .phero-content {
+    position: relative;
+    z-index: 1;
+    padding-top: 8rem;
+    padding-bottom: clamp(3rem, 7vh, 5rem);
+  }
+  .phero-title {
+    font-size: clamp(2.2rem, 5vw + 0.8rem, 4.2rem);
+    line-height: 1.06;
+    font-weight: 490;
+    max-width: 18ch;
+  }
+  .phero-credit {
+    position: absolute;
+    z-index: 1;
+    right: 0.9rem;
+    bottom: 0.55rem;
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.05em;
+    color: rgb(242 237 222 / 0.5);
+  }
+</style>

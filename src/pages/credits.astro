@@ -1,0 +1,137 @@
+---
+import Layout from '~/layouts/Layout.astro';
+import PageHero from '~/components/PageHero.astro';
+import Prose from '~/components/Prose.astro';
+
+const title = 'Image & font credits — RaySmartSolar';
+const description =
+  'Every photograph on this site, credited by author, source and license — plus the typefaces we set it in. Credit where due, even when licenses don’t require it.';
+
+/** Mirrors IMAGE-MANIFEST.md — every shipped photo, grouped by source. */
+const unsplash = [
+  { file: 'hero-home.jpg', author: 'Nuno Marques', url: 'https://unsplash.com/photos/black-and-white-solar-panels-0GbrjL3vZF4' },
+  { file: 'hero-business.jpg', author: 'Dad hotel', url: 'https://unsplash.com/photos/the-sun-is-setting-over-the-roof-of-a-building-bRudQ2tGxto' },
+  { file: 'dusk-array.jpg', author: 'Karsten Würth', url: 'https://unsplash.com/photos/black-solar-panel-under-red-and-gray-clouds--tzkyLKPvL4' },
+  { file: 'roof-pano.jpg', author: 'Pramod Kumar Sharma', url: 'https://unsplash.com/photos/a-house-with-a-solar-panel-on-the-roof-nZPep_gHfwg' },
+  { file: 'night-city.jpg', author: 'Ehtesham Chaudhary', url: 'https://unsplash.com/photos/a-view-of-a-city-at-night-from-a-hill-jjvYJreVKm4' },
+  { file: 'inst-hands.jpg', author: 'Markus Spiske', url: 'https://unsplash.com/photos/rNn_TU8dvoY' },
+  { file: 'city-lahore-2.jpg', author: 'Syed Bilal Javaid', url: 'https://unsplash.com/photos/brown-concrete-tower-during-daytime-NDw1gxtfglY' },
+  { file: 'city-lahore-3.jpg', author: 'Ayesha Asif', url: 'https://unsplash.com/photos/birds-flying-over-brown-and-white-dome-building-during-daytime-vzkQ10YQSO8' },
+  { file: 'city-karachi.jpg', author: 'Muneer ahmed ok', url: 'https://unsplash.com/photos/city-buildings-near-body-of-water-during-daytime-WhL6zAjjlUc' },
+  { file: 'city-islamabad.jpg', author: 'Syed Bilal Javaid', url: 'https://unsplash.com/photos/4-post-museum-under-golden-hour-uc9GjDHj1yA' },
+  { file: 'sky-rays.jpg', author: 'Todd Quackenbush', url: 'https://unsplash.com/photos/cumulunimbus-clouds-with-sun-rays-RmNAdoJNFJs' },
+  { file: 'sky-sun.jpg', author: 'Trevor Gerzen', url: 'https://unsplash.com/photos/photo-of-clouds-covering-the-sun-IUUoaVtL7NE' },
+  { file: 'sky-gradient.jpg', author: 'Pop & Zebra', url: 'https://unsplash.com/photos/sunset-yiU9gyMFFuc' },
+  { file: 'pylon.jpg', author: 'Andrey Metelev', url: 'https://unsplash.com/photos/qpAOxji4dAo' },
+];
+
+const pexels = [
+  { file: 'field-sunset.jpg', author: 'Diego Vivanco', url: 'https://www.pexels.com/photo/solar-panels-on-a-field-at-sunset-16586150/' },
+  { file: 'roof-lahore.jpg', author: 'Jamshaid Anwar', url: 'https://www.pexels.com/photo/solar-panels-on-the-roof-14673396/' },
+  { file: 'roof-aerial.jpg', author: 'vgbingi', url: 'https://www.pexels.com/photo/solar-panels-on-road-21832812/' },
+  { file: 'roof-rural.jpg', author: 'Nisar Ahmed Jamali', url: 'https://www.pexels.com/photo/solar-panels-in-rustic-outdoor-setting-31512224/' },
+  { file: 'comm-warehouse.jpg', author: 'RDNE Stock project', url: 'https://www.pexels.com/photo/an-aerial-shot-of-solar-panels-on-a-rooftop-8783541/' },
+  { file: 'comm-grid.jpg', author: 'Tom Fisk', url: 'https://www.pexels.com/photo/directly-above-solar-farm-9893731/' },
+  { file: 'hw-macro.jpg', author: 'Kindel Media', url: 'https://www.pexels.com/photo/close-up-of-a-solar-panel-9799702/' },
+  { file: 'hw-inverter.jpg', author: 'Elite Power Group', url: 'https://www.pexels.com/photo/solar-technician-installing-sungrow-inverter-36085778/' },
+  { file: 'hw-battery.jpg', author: 'Elite Power Group', url: 'https://www.pexels.com/photo/technician-installing-solar-power-system-in-australia-33751638/' },
+  { file: 'hw-rails.jpg', author: 'Vladimirs Rajbers', url: 'https://www.pexels.com/photo/close-up-of-solar-panels-on-a-roof-of-a-house-17965455/' },
+  { file: 'night-candle.jpg', author: 'Busranur Aydin', url: 'https://www.pexels.com/photo/reflective-woman-holding-candle-in-rainy-atmosphere-28571057/' },
+  { file: 'fan.jpg', author: 'nguyendesigner', url: 'https://www.pexels.com/photo/retro-traditional-lamp-on-ceiling-in-home-12689254/' },
+  { file: 'inst-lift.jpg', author: 'Nadeem Jafar', url: 'https://www.pexels.com/photo/men-holding-solar-panels-6158868/' },
+  { file: 'inst-roof.jpg', author: 'Nadeem Jafar', url: 'https://www.pexels.com/photo/solar-technicians-installing-solar-panels-6158914/' },
+  { file: 'inst-clean.jpg', author: 'Trinh Trần', url: 'https://www.pexels.com/photo/men-working-with-solar-panels-14614266/' },
+  { file: 'inst-carry.jpg', author: 'Cristian Rojas', url: 'https://www.pexels.com/photo/solar-technician-carrying-solar-panel-8853504/' },
+  { file: 'meters-old.jpg', author: 'Gezel Remy', url: 'https://www.pexels.com/photo/abandoned-electricity-meter-boxes-on-a-wall-of-old-building-6678587/' },
+  { file: 'meters-new.jpg', author: 'RobertKSO', url: 'https://www.pexels.com/photo/photo-of-a-smart-meters-of-electricity-12274476/' },
+];
+
+const wikimedia = [
+  { file: 'city-lahore.jpg', author: 'Muddiii', license: 'CC BY-SA 4.0', url: 'https://commons.wikimedia.org/wiki/File:Badshahi_Mosque_Sunset.jpg' },
+  { file: 'city-karachi-2.jpg', author: 'King Eliot', license: 'CC BY-SA 4.0', url: 'https://commons.wikimedia.org/wiki/File:Mazar-e-Quaid_from_a_distance.jpg' },
+  { file: 'city-faisalabad.jpg', author: 'Usman Nadeem', license: 'CC BY-SA 4.0', url: 'https://commons.wikimedia.org/wiki/File:Clock_Tower_Faisalabad_by_Usman_Nadeem.jpg' },
+  { file: 'city-multan.jpg', author: 'Junaidahmadj', license: 'CC BY-SA 3.0', url: 'https://commons.wikimedia.org/wiki/File:Tomb_of_Shah_Rukn-e-Alam_Multan.jpg' },
+];
+
+const totalPhotos = unsplash.length + pexels.length + wikimedia.length;
+---
+
+<Layout {title} {description}>
+  <PageHero
+    eyebrow="Good manners"
+    title="Credit where it’s due."
+    lede="Most of these licenses don’t require attribution. We credit anyway — a site built on “verify us” should be traceable right down to its pictures."
+  />
+
+  <section class="section pt-8">
+    <div class="wrap">
+      <Prose>
+        <p>
+          Two honest notes before the list. First: these photographs are here for atmosphere and
+          comprehension — they are <strong>not</strong> our installations, our team, or our
+          customers, and we never caption them as such. Our own project photography joins the site
+          as it’s documented. Second: all {totalPhotos} photographs shipped with this site are
+          listed below — nothing is uncredited.
+        </p>
+
+        <h2>Photography</h2>
+
+        <h3>Unsplash · <a href="https://unsplash.com/license" target="_blank" rel="noopener">Unsplash License</a></h3>
+        <ul>
+          {
+            unsplash.map((r) => (
+              <li>
+                <a href={r.url} target="_blank" rel="noopener">{r.file}</a> — photo by {r.author}
+              </li>
+            ))
+          }
+        </ul>
+
+        <h3>Pexels · <a href="https://www.pexels.com/license/" target="_blank" rel="noopener">Pexels License</a></h3>
+        <ul>
+          {
+            pexels.map((r) => (
+              <li>
+                <a href={r.url} target="_blank" rel="noopener">{r.file}</a> — photo by {r.author}
+              </li>
+            ))
+          }
+        </ul>
+
+        <h3>Wikimedia Commons · Creative Commons (attribution required — also shown where each image appears)</h3>
+        <ul>
+          {
+            wikimedia.map((r) => (
+              <li>
+                <a href={r.url} target="_blank" rel="noopener">{r.file}</a> — photo by {r.author} · {r.license}
+              </li>
+            ))
+          }
+        </ul>
+
+        <h2>Typefaces</h2>
+        <ul>
+          <li>
+            <strong>Fraunces</strong> (display) — via
+            <a href="https://fonts.google.com/specimen/Fraunces" target="_blank" rel="noopener">Google Fonts</a>,
+            SIL Open Font License.
+          </li>
+          <li>
+            <strong>Spline Sans Mono</strong> (numbers &amp; labels) — via
+            <a href="https://fonts.google.com/specimen/Spline+Sans+Mono" target="_blank" rel="noopener">Google Fonts</a>,
+            SIL Open Font License.
+          </li>
+          <li>
+            <strong>Satoshi</strong> (text) — via
+            <a href="https://www.fontshare.com/fonts/satoshi" target="_blank" rel="noopener">Fontshare</a>,
+            ITF Free Font License.
+          </li>
+        </ul>
+        <p>
+          All three are self-hosted with this site — no font CDN calls, nothing phoning home. The
+          icons are drawn in-house, so there’s no icon library to credit.
+        </p>
+      </Prose>
+    </div>
+  </section>
+</Layout>

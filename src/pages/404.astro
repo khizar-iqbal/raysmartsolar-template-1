@@ -1,0 +1,102 @@
+---
+import Layout from '~/layouts/Layout.astro';
+import Icon from '~/components/Icon.astro';
+import { site, waLink, WA_DEFAULT_MESSAGE } from '~/config/site';
+
+const title = 'Page not found — RaySmartSolar';
+const description =
+  'That link leads nowhere, but the sun’s still out. Head back home, run the honest savings calculator, or start your free solar quote instead.';
+
+const waHref = site.phone.live ? waLink(WA_DEFAULT_MESSAGE) : '/quote?src=404';
+---
+
+<Layout {title} {description} noIndex>
+  <section class="nf theme-night">
+    <div class="wrap nf-inner">
+      <div class="nf-sun" aria-hidden="true">
+        <Icon name="sunrise" size={42} class="text-gold" />
+      </div>
+      <p class="eyebrow nf-eyebrow mb-5">404 · page not found</p>
+      <h1 class="font-display text-display text-balance" lang="ur-Latn">Yeh raasta band hai.</h1>
+      <p class="text-lede text-ink-2 mt-5 max-w-xl mx-auto">
+        This page doesn’t exist — but the sun’s still out.
+      </p>
+      <div class="mt-9 flex flex-wrap justify-center gap-3.5">
+        <a href="/" class="btn btn-gold" data-evt="cta_primary" data-evt-src="404">
+          <Icon name="home" size={18} /> Take me home
+        </a>
+        <a href="/calculator" class="btn btn-ghost" data-evt="calc_open" data-evt-src="404">
+          <Icon name="calculator" size={18} /> Savings calculator
+        </a>
+        <a href="/quote?src=404" class="btn btn-ghost" data-evt="quote_open" data-evt-src="404">
+          <Icon name="filecheck" size={18} /> Get a quote
+        </a>
+        <a
+          href={waHref}
+          target={site.phone.live ? '_blank' : undefined}
+          rel={site.phone.live ? 'noopener' : undefined}
+          class="btn btn-wa"
+          data-evt={site.phone.live ? 'wa_click' : 'quote_open'}
+          data-evt-src="404"
+        >
+          <Icon name="whatsapp" size={18} />
+          {site.phone.live ? 'WhatsApp us' : 'Talk to us'}
+        </a>
+      </div>
+      <p class="mt-10 text-sm text-ink-3">
+        Followed a broken signpost to get here? <a href="/contact" class="link-gold">Tell us</a> and we’ll fix it.
+      </p>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .nf {
+    min-height: 100svh;
+    display: grid;
+    place-items: center;
+    padding-block: 7.5rem 4.5rem;
+    background:
+      radial-gradient(52% 38% at 50% 102%, rgb(242 166 60 / 0.14), transparent 70%),
+      var(--n-bg);
+    color: var(--n-text);
+  }
+  .nf-inner {
+    text-align: center;
+  }
+  .nf-eyebrow {
+    justify-content: center;
+  }
+  .nf-eyebrow::after {
+    content: '';
+    width: 1.75rem;
+    height: 1px;
+    background: linear-gradient(90deg, var(--gold), transparent);
+    flex: none;
+  }
+  .nf-sun {
+    width: 5.5rem;
+    height: 5.5rem;
+    margin: 0 auto 1.9rem;
+    border-radius: 999px;
+    display: grid;
+    place-items: center;
+    background: color-mix(in srgb, var(--gold) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--gold) 40%, transparent);
+    animation: nf-float 5s var(--ease-inout) infinite;
+  }
+  @keyframes nf-float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-9px);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .nf-sun {
+      animation: none;
+    }
+  }
+</style>

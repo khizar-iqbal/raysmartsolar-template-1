@@ -1,0 +1,326 @@
+---
+import { Image } from 'astro:assets';
+import Layout from '~/layouts/Layout.astro';
+import PageHero from '~/components/PageHero.astro';
+import SectionHead from '~/components/SectionHead.astro';
+import CTABand from '~/components/CTABand.astro';
+import FAQ from '~/components/FAQ.astro';
+import Icon from '~/components/Icon.astro';
+import { site } from '~/config/site';
+import { cityBySlug } from '~/data/cities';
+import { NET_BILLING, PAYBACK_TYPICAL } from '~/data/facts';
+import heroImg from '~/assets/photos/city-karachi.jpg';
+import mazarImg from '~/assets/photos/city-karachi-2.jpg';
+
+const city = cityBySlug('karachi')!;
+
+const title = 'Solar in Karachi — K-Electric handled, built for sea air | RaySmartSolar';
+const description = city.metaDescription;
+
+const areasLine =
+  city.neighbourhoods.slice(0, -1).join(', ') + ' and ' + city.neighbourhoods.at(-1);
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: 'Solar panel installation in Karachi',
+    description,
+    provider: { '@id': `${site.url}/#business` },
+    areaServed: ['Karachi', 'Dhabeji', 'Gharo', 'Uthal', 'Vinder', 'Bela'],
+    serviceType: 'Corrosion-rated solar installation and K-Electric net-metering process handling',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: site.url },
+      { '@type': 'ListItem', position: 2, name: 'Cities', item: `${site.url}/#cities` },
+      { '@type': 'ListItem', position: 3, name: 'Karachi', item: `${site.url}/karachi` },
+    ],
+  },
+];
+
+/* The marine spec — what sea air demands, line by line. */
+const marineSpec = [
+  {
+    icon: 'layers' as const,
+    label: 'Structure',
+    body: 'Hot-dip galvanised steel or anodised aluminium — never painted mild steel, which blisters and streaks rust down your parapet within a couple of monsoons.',
+  },
+  {
+    icon: 'wrench' as const,
+    label: 'Fasteners',
+    body: 'Marine-grade stainless hardware, with isolation washers wherever dissimilar metals meet — so the bolts outlive the panels instead of seizing by year three.',
+  },
+  {
+    icon: 'bolt' as const,
+    label: 'Cabling & boxes',
+    body: 'UV-stable DC cable in conduit, IP-rated enclosures, connectors torqued and sealed against humid, salty air. Loose crimps corrode first and burn worst.',
+  },
+  {
+    icon: 'shield' as const,
+    label: 'Earthing & service',
+    body: 'Earthing designed for a humid coastal city, and corrosion checks written into every service visit — torque, coatings, joints — not just a panel wipe.',
+  },
+];
+
+/* K-Electric's own process, in the order it actually happens. */
+const keSteps = [
+  {
+    n: '01',
+    title: 'File on the KE portal',
+    body: 'K-Electric runs its own online application — there’s also a facilitation centre at Civic Centre if you prefer a counter. We prepare the complete file and submit it for you.',
+  },
+  {
+    n: '02',
+    title: 'Site inspection',
+    body: 'Typically two to four weeks after acceptance. We’re on the roof with the inspector — the same engineers who installed it, answering questions first-hand.',
+  },
+  {
+    n: '03',
+    title: 'Green meter on',
+    body: 'A 10 kW residential case commonly completes in about 4–6 weeks end to end — right now the quickest DISCO turnaround in the country. We track it until it’s live.',
+  },
+];
+
+const faqs = [
+  {
+    q: 'How long does K-Electric net metering take?',
+    a: `${city.disco.netMeteringReality} We prepare and file the whole application, attend the inspection, and keep you posted weekly — and we confirm the live timeline in writing at your survey, since workloads shift.`,
+  },
+  {
+    q: 'Will sea air corrode the panels themselves?',
+    a: 'The panels are the toughest part — tempered glass and anodised aluminium frames, with 25-year performance warranties. What sea air actually eats is cheap mounting structure, mild-steel bolts and badly sealed connectors. That’s why our Karachi spec is marine-grade from rail to washer, and why service visits include corrosion checks.',
+  },
+  {
+    q: 'We live in an apartment building — is solar possible?',
+    a: 'Often, yes — as a building project. Common loads (lifts, water pumps, corridor and compound lighting) are usually the easiest win, arranged with the residents’ association on the shared roof. Individual-flat systems depend on roof rights and meter setup. Send us the building details and we’ll tell you honestly what works.',
+  },
+  {
+    q: 'Karachi doesn’t have load-shedding any more, right?',
+    a: 'Not quite. K-Electric was exempt from the April 2026 national shedding plan, but it applies its own loss-based cuts by area — low-loss feeders see almost none, high-loss feeders can lose power for hours. We check how your specific area behaves before recommending (or talking you out of) a battery.',
+  },
+  {
+    q: 'Do KE’s high tariffs mean solar pays back faster here?',
+    a: `Generally, yes — the more a grid unit costs, the more each self-generated unit is worth, and Karachi combines expensive units with the strongest sunshine of our five cities. Under 2026 net billing, self-used units offset full retail while exports earn a floating ${NET_BILLING.exportRateRange}/unit, so we size for daytime self-consumption first. Typical payback lands around ${PAYBACK_TYPICAL} — the <a href="/calculator?city=karachi">calculator</a> models yours from your actual KE bill.`,
+  },
+];
+---
+
+<Layout {title} {description} {jsonLd} heroNav>
+  <PageHero
+    eyebrow="Karachi · K-Electric territory"
+    title="Solar in Karachi, built for sea air."
+    titleHtml="Solar in Karachi, <em>built for sea air.</em>"
+    lede="K-Electric charges some of the highest effective rates in Pakistan — and, credit where due, runs the country’s fastest net-metering process. Both work in your favour, if the hardware on your roof takes the salt seriously."
+    image={heroImg}
+    imageAlt="Karachi skyline along the waterfront"
+  >
+    <Fragment slot="actions">
+      <a href="/calculator?city=karachi" class="btn btn-gold" data-evt="city_calc" data-evt-src="karachi_hero">
+        <Icon name="calculator" size={18} /> Run my KE numbers
+      </a>
+      <a href="/quote?src=karachi" class="btn btn-ghost" data-evt="quote_open" data-evt-src="karachi_hero">
+        Book a free survey <Icon name="arrow-right" size={17} />
+      </a>
+    </Fragment>
+  </PageHero>
+
+  <!-- The numbers -->
+  <section class="section">
+    <div class="wrap">
+      <SectionHead
+        eyebrow="Measured, not marketed"
+        title="The numbers in Karachi"
+        lede="The city of lights gets more of the useful kind than anywhere else we work — with one caveat we’d rather flag than bury."
+      />
+      <div class="grid gap-4 md:grid-cols-3 mt-12" data-reveal-group>
+        <div class="card p-7" data-reveal-child>
+          <p class="font-mono text-[0.68rem] uppercase tracking-[0.18em] text-ink-3">Yield</p>
+          <p class="mono-num text-5xl text-accent mt-3">
+            ≈{city.monthlyUnitsPerKw}<span class="text-2xl"> units</span>
+          </p>
+          <p class="text-ink-2 mt-3">
+            per installed kW per month across the year — about {city.yieldPerKwYear.toLocaleString('en-PK')}
+            kWh per kW annually, the highest average of our five cities. Coastal estimates carry a
+            wider band than Punjab’s measured figures, so we quote it as a range, not a promise.
+          </p>
+        </div>
+        <div class="card p-7" data-reveal-child>
+          <p class="font-mono text-[0.68rem] uppercase tracking-[0.18em] text-ink-3">Your utility</p>
+          <p class="font-display text-h3 mt-3 text-accent">{city.disco.code}</p>
+          <p class="text-ink-2 mt-3">
+            Pakistan’s only vertically-integrated private utility, covering {city.disco.areas}. Its
+            own tariffs, its own portal, its own shedding rules — this page is written for them.
+          </p>
+        </div>
+        <div class="card p-7" data-reveal-child>
+          <p class="font-mono text-[0.68rem] uppercase tracking-[0.18em] text-ink-3">The honest note</p>
+          <p class="text-ink-2 mt-3">{city.climateNote}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sea-air engineering — the Karachi section -->
+  <section class="section pt-0">
+    <div class="wrap">
+      <div class="grid gap-10 lg:grid-cols-[1.2fr_1fr] lg:items-start">
+        <div>
+          <SectionHead
+            eyebrow="The marine spec"
+            title="Salt eats cheap installs. Ours is specced against it."
+            titleHtml="Salt eats cheap installs. Ours is <em>specced against it.</em>"
+            lede="Corrosion is Karachi’s real solar tax. Sea air works on every joint, bolt and rail from day one — invisibly for the first year, expensively after that. It’s entirely preventable, but only at install time."
+          />
+          <div class="grid gap-4 sm:grid-cols-2 mt-10" data-reveal-group>
+            {
+              marineSpec.map((s) => (
+                <div class="card p-6" data-reveal-child>
+                  <p class="flex items-center gap-2.5">
+                    <span class="ico-dot">
+                      <Icon name={s.icon} size={15} />
+                    </span>
+                    <span class="font-mono text-[0.68rem] uppercase tracking-[0.18em] text-ink-3">{s.label}</span>
+                  </p>
+                  <p class="text-ink-2 mt-3">{s.body}</p>
+                </div>
+              ))
+            }
+          </div>
+          <p class="text-sm text-ink-3 mt-6 max-w-2xl" data-reveal>
+            Every line of this spec is itemised on your written quote — so if someone quotes you
+            cheaper, you can see exactly which of these they left off your roof.
+          </p>
+        </div>
+        <figure data-reveal>
+          <div class="ph rounded-2xl">
+            <Image
+              src={mazarImg}
+              alt="Mazar-e-Quaid seen from a distance, Karachi"
+              widths={[480, 800, 1200]}
+              sizes="(min-width: 1024px) 40vw, 100vw"
+              format="avif"
+              quality={60}
+              loading="lazy"
+            />
+          </div>
+          <figcaption class="text-[0.62rem] font-mono text-ink-3 mt-2">
+            Photo: King Eliot · CC BY-SA 4.0 · Wikimedia Commons
+          </figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- KE process -->
+  <section class="section pt-0">
+    <div class="wrap">
+      <SectionHead
+        eyebrow="Paperwork, KE edition"
+        title="K-Electric runs its own race — a short one"
+        lede="No WAPDA-era queue here. KE’s prosumer process is portal-based, inspection-led, and currently the fastest in Pakistan. Ours to run; yours to watch."
+      />
+      <div class="grid gap-4 md:grid-cols-3 mt-12" data-reveal-group>
+        {
+          keSteps.map((s) => (
+            <div class="card p-7" data-reveal-child>
+              <p class="mono-num text-4xl text-accent">{s.n}</p>
+              <p class="font-display text-h3 mt-3">{s.title}</p>
+              <p class="text-ink-2 mt-3">{s.body}</p>
+            </div>
+          ))
+        }
+      </div>
+      <div class="mt-8 flex flex-wrap items-center gap-4" data-reveal>
+        <a href="/quote?src=karachi" class="btn btn-gold" data-evt="quote_open" data-evt-src="karachi_process">
+          <Icon name="filecheck" size={18} /> Start my KE file
+        </a>
+        <p class="text-sm text-ink-3">
+          The 2026 net-billing rules apply here too — <a href="/net-metering" class="link-gold">how they work</a>.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tariff pain & area-based cuts -->
+  <section class="section theme-night">
+    <div class="wrap">
+      <SectionHead
+        eyebrow="Bills & blackouts"
+        title="Expensive units, selective outages"
+        lede="Two Karachi realities decide your system design — what a unit costs you, and whether your feeder actually goes dark."
+      />
+      <div class="grid gap-10 lg:grid-cols-2 mt-12">
+        <div data-reveal>
+          <p class="flex items-center gap-2.5 font-medium">
+            <span class="ico-dot"><Icon name="banknote" size={15} /></span> The tariff pain
+          </p>
+          <p class="text-ink-2 mt-4">
+            Karachi bills sting twice: KE’s effective per-unit rates sit among the country’s
+            highest at typical household slabs, and air-conditioning summers push consumption into
+            the punishing upper tiers. Every degree of humidity shows up on the meter.
+          </p>
+          <p class="text-ink-2 mt-4">
+            The flip side is pure arithmetic: the more a grid unit costs, the more each unit off
+            your own roof is worth. Paired with the strongest sunshine of our five cities, Karachi
+            payback tends toward the fast end of {PAYBACK_TYPICAL} — modelled from your actual KE
+            bill, not a brochure’s.
+          </p>
+        </div>
+        <div data-reveal>
+          <p class="flex items-center gap-2.5 font-medium">
+            <span class="ico-dot"><Icon name="moon" size={15} /></span> Your area decides your outages
+          </p>
+          <p class="text-ink-2 mt-4">{city.disco.sheddingReality}</p>
+          <p class="text-ink-2 mt-4">
+            Which makes battery advice here street-specific. A low-loss Clifton feeder rarely
+            justifies backup on outage grounds alone; a high-loss feeder absolutely does. We ask
+            how your area actually behaves — and if the honest answer is “skip the battery for
+            now”, that’s the answer you get.
+          </p>
+        </div>
+      </div>
+      <p class="text-sm text-ink-3 mt-10 max-w-3xl" data-reveal>
+        Recent surveys across {areasLine} — both sides of the bridge, same crew, same marine spec.
+      </p>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section">
+    <div class="wrap max-w-3xl">
+      <SectionHead eyebrow="Asked in Karachi" title="Karachi questions, straight answers" />
+      <div class="mt-10">
+        <FAQ items={faqs} schema />
+      </div>
+    </div>
+  </section>
+
+  <section class="section pt-0">
+    <div class="wrap">
+      <CTABand
+        heading="Karachi sun is free. KE units aren’t."
+        sub="Marine-grade installs, the fastest DISCO process in the country, and math from your actual bill."
+        primaryHref="/calculator?city=karachi"
+        primaryLabel="Run my KE numbers"
+        primaryIcon="calculator"
+        evtSrc="karachi_final"
+      />
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .ico-dot {
+    flex: none;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 999px;
+    display: grid;
+    place-items: center;
+    background: color-mix(in srgb, var(--gold) 15%, transparent);
+    color: var(--gold);
+  }
+</style>

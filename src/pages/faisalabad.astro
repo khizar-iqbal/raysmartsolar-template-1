@@ -1,0 +1,293 @@
+---
+import Layout from '~/layouts/Layout.astro';
+import PageHero from '~/components/PageHero.astro';
+import SectionHead from '~/components/SectionHead.astro';
+import CTABand from '~/components/CTABand.astro';
+import FAQ from '~/components/FAQ.astro';
+import Icon from '~/components/Icon.astro';
+import { site } from '~/config/site';
+import { cityBySlug } from '~/data/cities';
+import { COMMERCIAL_RATE, FINANCING, NET_BILLING, PRICES_AS_OF } from '~/data/facts';
+import heroImg from '~/assets/photos/city-faisalabad.jpg';
+
+const city = cityBySlug('faisalabad')!;
+
+const title = 'Solar in Faisalabad — factories & homes, FESCO handled | RaySmartSolar';
+const description = city.metaDescription;
+
+const areasLine =
+  city.neighbourhoods.slice(0, -1).join(', ') + ' and ' + city.neighbourhoods.at(-1);
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: 'Solar panel installation in Faisalabad',
+    description,
+    provider: { '@id': `${site.url}/#business` },
+    areaServed: [
+      'Faisalabad',
+      'Jhang',
+      'Toba Tek Singh',
+      'Chiniot',
+      'Sargodha',
+      'Khushab',
+      'Mianwali',
+      'Bhakkar',
+    ],
+    serviceType: 'Industrial, commercial and residential solar with FESCO net-metering paperwork',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: site.url },
+      { '@type': 'ListItem', position: 2, name: 'Cities', item: `${site.url}/#cities` },
+      { '@type': 'ListItem', position: 3, name: 'Faisalabad', item: `${site.url}/faisalabad` },
+    ],
+  },
+];
+
+const faqs = [
+  {
+    q: 'What does solar actually save a textile unit?',
+    a: `It depends on your shift pattern and tariff category, which is why we won’t print one shiny number here. The shape of the answer: daytime-heavy operations self-consume most of what the roof generates, each of those units offsets grid power bought at roughly Rs ${COMMERCIAL_RATE.low}–${COMMERCIAL_RATE.high} all-in for commercial connections (industrial B-tariffs run lower), and exports earn the smaller ${NET_BILLING.exportRateRange}/unit. We model it from twelve months of your actual FESCO bills — start with the <a href="/calculator?city=faisalabad&type=business">business calculator</a>.`,
+  },
+  {
+    q: 'Can we go solar with zero upfront cost?',
+    a: 'For larger roofs, yes. Lease and Ijarah structures suit the 50–500 kW band; pay-per-unit PPA/BOOT arrangements are standard in Pakistan above 500 kW; and bank financing covers the range in between. Markups track KIBOR, so we bring live bank terms to the table instead of printing rates that go stale. Sometimes the boring answer — buy it outright — still wins; we’ll show you all four side by side.',
+  },
+  {
+    q: 'How long does FESCO net metering take?',
+    a: `FESCO is one of the better-run DISCOs, but every application still moves at the speed of its paperwork. Across DISCOs, approvals are ${NET_BILLING.approvalReality} — we file complete, first-time-right, chase weekly, and give you the live FESCO figure in writing at the survey. Your panels save on self-used power from commissioning day either way.`,
+  },
+  {
+    q: 'Does lint really affect solar panels?',
+    a: 'In textile areas, noticeably. Lint and processing dust settle as a film that soft-blocks output — less dramatic than smog, more persistent. The fix is boring and effective: a regular cleaning cadence, built into the maintenance plan we hand over, sized to how close your roof sits to the works.',
+  },
+];
+---
+
+<Layout {title} {description} {jsonLd} heroNav>
+  <PageHero
+    eyebrow="Faisalabad · FESCO territory"
+    title="Solar in Faisalabad means business."
+    titleHtml="Solar in Faisalabad <em>means business.</em>"
+    lede="In Pakistan’s textile capital, electricity is a cost of production before it’s a household bill — so this page talks to factories first, and to the homes around them right after. FESCO paperwork handled either way."
+    image={heroImg}
+    imageAlt="Faisalabad Clock Tower at the heart of the eight bazaars"
+    imageCredit="Photo: Usman Nadeem · CC BY-SA 4.0 · Wikimedia Commons"
+  >
+    <Fragment slot="actions">
+      <a
+        href="/calculator?city=faisalabad&type=business"
+        class="btn btn-gold"
+        data-evt="city_calc"
+        data-evt-src="faisalabad_hero"
+      >
+        <Icon name="building" size={18} /> Run factory numbers
+      </a>
+      <a href="/quote?src=faisalabad" class="btn btn-ghost" data-evt="quote_open" data-evt-src="faisalabad_hero">
+        Book a free survey <Icon name="arrow-right" size={17} />
+      </a>
+    </Fragment>
+  </PageHero>
+
+  <!-- Industry first — the Faisalabad section -->
+  <section class="section">
+    <div class="wrap">
+      <SectionHead
+        eyebrow="Industrial & textile"
+        title="Here, the kilowatt is a raw material"
+        titleHtml="Here, the kilowatt is a <em>raw material</em>"
+        lede="Looms, stenters, compressors and chillers run straight through the daylight hours — which is exactly when a roof generates. Few industries fit solar’s shape as naturally as textiles."
+      />
+      <div class="grid gap-10 lg:grid-cols-[1.25fr_1fr] lg:items-start mt-12">
+        <div data-reveal-group>
+          <p class="text-ink-2" data-reveal-child>
+            Every metre of cloth leaving this city carries an electricity cost inside it.
+            Commercial connections pay roughly Rs {COMMERCIAL_RATE.low}–{COMMERCIAL_RATE.high} per
+            unit all-in ({PRICES_AS_OF} estimate — we confirm from your actual bills); industrial
+            B-tariffs run lower after the 2026 cuts, but both still lose to a unit generated on
+            your own shed. Solar turns a cost that scales with production into an asset that
+            depreciates politely.
+          </p>
+          <p class="text-ink-2 mt-4" data-reveal-child>
+            The 2026 net-billing rules made this fit even better. Oversized, export-everything
+            arrays are now punished — exports earn {NET_BILLING.exportRateRange}/unit while
+            self-used units offset full retail — and a six-day, daylight-heavy factory is the
+            single best-shaped load in the country for self-consumption. Size to the shift, not to
+            the roof’s maximum.
+          </p>
+          <p class="text-ink-2 mt-4" data-reveal-child>
+            The D-type industrial estates, Khurrianwala and the Sargodha Road belt share a useful
+            trait: big, flat, structurally simple sheds. If your roof is currently just keeping
+            rain off inventory, it’s underemployed. Survey to sizing study is free, and we present
+            it to whoever signs the cheques.
+          </p>
+        </div>
+        <div class="card p-7" data-reveal>
+          <p class="font-mono text-[0.68rem] uppercase tracking-[0.18em] text-ink-3">
+            How factories pay for it
+          </p>
+          <div class="grid gap-3.5 mt-5">
+            {
+              FINANCING.commercial.map((f) => (
+                <p class="flex items-start gap-3 text-ink-2">
+                  <span class="ico-dot ico-sm mt-0.5">
+                    <Icon name="check" size={13} />
+                  </span>
+                  {f}
+                </p>
+              ))
+            }
+          </div>
+          <p class="text-sm text-ink-3 mt-5">
+            We model all four against your bills — sometimes the boring answer (buy it) wins,
+            sometimes zero-upfront does. {FINANCING.markupContext}.
+          </p>
+          <a
+            href="/business"
+            class="link-gold inline-flex items-center gap-1.5 mt-5 font-medium"
+            data-evt="fork"
+            data-evt-src="faisalabad_industrial"
+          >
+            The full business treatment <Icon name="arrow-up-right" size={15} />
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- The numbers -->
+  <section class="section pt-0">
+    <div class="wrap">
+      <SectionHead
+        eyebrow="Measured, not marketed"
+        title="The numbers in Faisalabad"
+        lede="Sun, wires and the one local quirk your maintenance plan should already know about."
+      />
+      <div class="grid gap-4 md:grid-cols-3 mt-12" data-reveal-group>
+        <div class="card p-7" data-reveal-child>
+          <p class="font-mono text-[0.68rem] uppercase tracking-[0.18em] text-ink-3">Yield</p>
+          <p class="mono-num text-5xl text-accent mt-3">
+            ≈{city.monthlyUnitsPerKw}<span class="text-2xl"> units</span>
+          </p>
+          <p class="text-ink-2 mt-3">
+            per installed kW per month, averaged across the year —
+            {city.yieldPerKwYear.toLocaleString('en-PK')} kWh per kW annually. Central Punjab sun,
+            slightly less smog than Lahore.
+          </p>
+        </div>
+        <div class="card p-7" data-reveal-child>
+          <p class="font-mono text-[0.68rem] uppercase tracking-[0.18em] text-ink-3">Your DISCO</p>
+          <p class="font-display text-h3 mt-3 text-accent">{city.disco.code}</p>
+          <p class="text-ink-2 mt-3">
+            {city.disco.fullName} — covering {city.disco.areas}. Regularly rated among the
+            better-disciplined ex-WAPDA DISCOs.
+          </p>
+        </div>
+        <div class="card p-7" data-reveal-child>
+          <p class="font-mono text-[0.68rem] uppercase tracking-[0.18em] text-ink-3">The honest note</p>
+          <p class="text-ink-2 mt-3">{city.climateNote}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FESCO reality -->
+  <section class="section pt-0">
+    <div class="wrap">
+      <div class="grid gap-10 lg:grid-cols-2 lg:items-start">
+        <SectionHead
+          eyebrow="Your DISCO"
+          title="FESCO runs a tighter ship than most"
+          lede="Recovery, losses, current tariff schedules — the boring indicators that predict how your solar file will be treated. Here they point the right way."
+        />
+        <div data-reveal-group>
+          <p class="text-ink-2" data-reveal-child>{city.disco.netMeteringReality}</p>
+          <p class="text-ink-2 mt-4" data-reveal-child>
+            “Complete and correctly sequenced” is doing the heavy lifting in that sentence:
+            sanctioned-load verification, approved-inverter documentation, a single-line diagram
+            that matches what’s actually on the roof. A disciplined DISCO processes good files
+            quickly and parks bad ones politely. Ours go in good, then get chased weekly until the
+            bidirectional meter is on the wall.
+          </p>
+          <p class="text-ink-2 mt-4" data-reveal-child>{city.disco.sheddingReality}</p>
+          <p class="text-ink-2 mt-4" data-reveal-child>
+            For a house, an evening cut is an annoyance. For a stitching floor mid-order, it’s
+            counted in missed shipments — one reason this city’s mills led Pakistan’s commercial
+            solar wave instead of following it. Daytime solar carries the machines; whether backup
+            is worth it for your night shift is a math question we’ll answer honestly.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Homes too -->
+  <section class="section pt-0">
+    <div class="wrap">
+      <div class="card p-7 sm:p-10" data-reveal>
+        <p class="eyebrow mb-4" lang="ur-Latn">{city.greeting}</p>
+        <h2 class="font-display text-h2 text-balance max-w-[22ch]">
+          The homes here work hard too.
+        </h2>
+        <div class="grid gap-8 lg:grid-cols-2 mt-6">
+          <p class="text-ink-2">
+            The same daylight that runs the looms lands on Peoples Colony and Madina Town, and the
+            household math is the classic one: size to your daytime use, batteries only if your
+            evenings need them, honest winter expectations up front. Most Faisalabad homes sit
+            comfortably in the 3–10 kW band — the <a href="/calculator?city=faisalabad" class="link-gold" data-evt="city_calc" data-evt-src="faisalabad_homes">calculator</a>
+            finds yours from the bill.
+          </p>
+          <p class="text-ink-2">
+            Recent surveys across {areasLine}. Closer to the works, the cleaning cadence matters
+            more — lint is gentle, but it’s persistent — and it’s already budgeted in the
+            maintenance plan you get at handover.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section pt-0">
+    <div class="wrap max-w-3xl">
+      <SectionHead eyebrow="Asked in Faisalabad" title="Faisalabad questions, straight answers" />
+      <div class="mt-10">
+        <FAQ items={faqs} schema />
+      </div>
+    </div>
+  </section>
+
+  <section class="section pt-0">
+    <div class="wrap">
+      <CTABand
+        heading="Turn the roof into the cheapest machine you own."
+        sub="Free survey for factories and homes across FESCO territory — numbers from your actual bills, not ours."
+        primaryHref="/calculator?city=faisalabad"
+        primaryLabel="Run my numbers"
+        primaryIcon="calculator"
+        evtSrc="faisalabad_final"
+      />
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .ico-dot {
+    flex: none;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 999px;
+    display: grid;
+    place-items: center;
+    background: color-mix(in srgb, var(--gold) 15%, transparent);
+    color: var(--gold);
+  }
+  .ico-dot.ico-sm {
+    width: 1.45rem;
+    height: 1.45rem;
+  }
+</style>

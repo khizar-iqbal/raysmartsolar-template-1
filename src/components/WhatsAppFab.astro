@@ -1,0 +1,77 @@
+---
+import Icon from './Icon.astro';
+import { site, waLink, WA_DEFAULT_MESSAGE } from '~/config/site';
+
+interface Props {
+  /** Page-specific pre-filled WhatsApp message */
+  message?: string;
+}
+const { message = WA_DEFAULT_MESSAGE } = Astro.props;
+
+// While the number is being provisioned (site.phone.live === false)
+// the pill routes to the quote funnel so no visitor ever messages a
+// dead number. Flip `live` in src/config/site.ts to activate.
+const live = site.phone.live;
+const href = live ? waLink(message) : '/quote?src=fab';
+---
+
+<a
+  {href}
+  target={live ? '_blank' : undefined}
+  rel={live ? 'noopener' : undefined}
+  class="wa-fab"
+  data-evt={live ? 'wa_click' : 'quote_open'}
+  data-evt-src="fab"
+  aria-label={live ? 'Chat with us on WhatsApp' : 'Talk to us — get a quote'}
+>
+  <span class="wa-fab-ring" aria-hidden="true"></span>
+  <Icon name="whatsapp" size={22} />
+  <span class="wa-fab-label">{live ? 'WhatsApp' : 'Talk to us'}</span>
+</a>
+
+<style>
+  .wa-fab {
+    position: fixed;
+    z-index: 90;
+    right: max(1rem, env(safe-area-inset-right));
+    bottom: max(1.1rem, env(safe-area-inset-bottom));
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    min-height: 3.4rem;
+    padding: 0.85rem 1.35rem;
+    border-radius: 999px;
+    background: #133527;
+    border: 1px solid color-mix(in srgb, var(--wa) 55%, transparent);
+    color: #eafff3;
+    font-weight: 560;
+    font-size: 0.98rem;
+    box-shadow: 0 12px 40px -10px rgb(0 0 0 / 0.55), 0 0 0 1px rgb(0 0 0 / 0.15);
+    transition: transform 250ms var(--ease-out), box-shadow 250ms var(--ease-out);
+  }
+  .wa-fab:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 16px 48px -10px rgb(37 211 102 / 0.35);
+  }
+  .wa-fab :global(svg) {
+    color: var(--wa);
+  }
+  .wa-fab-ring {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    border: 1px solid var(--wa);
+    opacity: 0;
+    animation: wa-pulse 7s var(--ease-out) infinite;
+    animation-delay: 3s;
+    pointer-events: none;
+  }
+  @keyframes wa-pulse {
+    0% { opacity: 0.7; transform: scale(1); }
+    18% { opacity: 0; transform: scale(1.35); }
+    100% { opacity: 0; transform: scale(1); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .wa-fab-ring { animation: none; }
+  }
+</style>

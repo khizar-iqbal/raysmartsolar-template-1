@@ -1,0 +1,97 @@
+---
+import Layout from '~/layouts/Layout.astro';
+import PageHero from '~/components/PageHero.astro';
+import Prose from '~/components/Prose.astro';
+import { site } from '~/config/site';
+
+const title = 'Privacy policy — RaySmartSolar';
+const description =
+  'Plain-language privacy policy: what our forms collect, where it goes, what stays on your device, and how to ask us to delete it. No legalese walls.';
+---
+
+<Layout {title} {description}>
+  <PageHero
+    eyebrow="The fine print"
+    title="Privacy, in plain words."
+    lede="What we collect, why, where it goes, and how to make us forget you — written to be read, not to protect us from you."
+  />
+
+  <section class="section pt-8">
+    <div class="wrap">
+      <Prose>
+        <p class="mono-num" style="font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.14em;">
+          Effective 6 July 2026
+        </p>
+
+        <div class="note">
+          <strong>The short version:</strong> we collect what you type into our forms so we can
+          reply to you. It goes to {site.email} and stays confidential. Nothing is sold. Your
+          calculator fiddling stays on your own device. Email us to see or delete anything we hold.
+        </div>
+
+        <h2>What we collect</h2>
+        <ul>
+          <li>
+            <strong>Forms</strong> (quote, contact, call-back, guide): your name, phone number, and
+            whatever else the form asks — city, monthly bill figure, your message, sometimes an
+            email address.
+          </li>
+          <li>
+            <strong>Calculator &amp; quote drafts:</strong> inputs like your bill amount are saved
+            in your browser’s local storage so you don’t lose your place. They stay on your device
+            and reach us only if you press submit.
+          </li>
+          <li>
+            <strong>Analytics, if enabled:</strong> anonymous event counts (e.g. “calculator
+            opened”) so we know which pages actually help. No advertising trackers, no cross-site
+            profiles, no behavioural data brokers.
+          </li>
+        </ul>
+
+        <h2>Why we collect it</h2>
+        <p>
+          One reason: to answer you. A name and a number let us respond to your inquiry, arrange
+          the survey you asked for, and prepare your quote. We don’t add you to broadcast marketing
+          lists — if we ever want to send you anything beyond your own inquiry, we’ll ask first.
+        </p>
+
+        <h2>Where your information goes</h2>
+        <p>
+          Form submissions are delivered by email to
+          <a href={`mailto:${site.email}`}>{site.email}</a> and read by the small number of people
+          who need them to reply. Leads stay confidential: we don’t sell, rent, trade or “share
+          with partners”. Ever.
+        </p>
+
+        <h2>A note on WhatsApp</h2>
+        <p>
+          If you talk to us on WhatsApp, that conversation lives on WhatsApp and is governed by
+          WhatsApp’s (Meta’s) own terms and privacy policy, in addition to ours. Ask us anytime and
+          we’ll delete our side of a chat.
+        </p>
+
+        <h2>Cookies &amp; local storage</h2>
+        <p>
+          We set no cookies. Your browser’s local storage holds a few conveniences — your theme
+          choice (day or dusk) and any unsent form or calculator drafts. All of it stays on your
+          device, never reaches our servers by itself, and disappears if you clear your browsing
+          data.
+        </p>
+
+        <h2>Your rights</h2>
+        <p>
+          Email <a href={`mailto:${site.email}`}>{site.email}</a> — from the address you used, or
+          mentioning the phone number you gave us — and we’ll tell you what we hold about you,
+          correct it, or delete it. Deletion requests are honoured promptly and confirmed back to
+          you.
+        </p>
+
+        <h2>Changes</h2>
+        <p>
+          If this policy changes, the new version appears here with a new effective date. Anything
+          unclear? <a href="/contact">Ask a human</a> — that offer covers the fine print too.
+        </p>
+      </Prose>
+    </div>
+  </section>
+</Layout>
