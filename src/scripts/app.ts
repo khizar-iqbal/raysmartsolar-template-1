@@ -141,6 +141,28 @@ function bindCounters() {
   cleanups.push(() => io.disconnect());
 }
 
+/* ── Rotating headline word ──────────────────────────────────── */
+function bindRotator() {
+  const rotator = document.querySelector<HTMLElement>('[data-rotator]');
+  if (!rotator) return;
+  const words = Array.from(rotator.querySelectorAll<HTMLElement>('.rot-word'));
+  if (words.length < 2) return;
+  // Reduced motion: leave the shipped is-on word in place, don't cycle.
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  let i = 0;
+  const id = window.setInterval(() => {
+    const prev = words[i];
+    prev.classList.remove('is-on');
+    prev.classList.add('is-off'); // slides up and out
+    i = (i + 1) % words.length;
+    words[i].classList.add('is-on'); // rises into place
+    window.setTimeout(() => prev.classList.remove('is-off'), 550);
+  }, 2600);
+
+  cleanups.push(() => window.clearInterval(id));
+}
+
 /* ── Nav state ───────────────────────────────────────────────── */
 function bindNav() {
   const nav = document.querySelector<HTMLElement>('[data-nav]');
@@ -251,6 +273,7 @@ async function boot() {
   bindTracking();
   bindReveals();
   bindCounters();
+  bindRotator();
   bindNav();
   bindMenu();
   bindTheme();

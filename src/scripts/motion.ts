@@ -97,18 +97,24 @@ function heroScene() {
     tl.fromTo(glow, { opacity: 0 }, { opacity: 1, duration: 1.6, ease: 'power1.inOut' }, 0.1);
   }
   if (title) {
-    const split = new SplitText(title, { type: 'words,chars', charsClass: 'hero-char' });
     gsap.set(title, { opacity: 1 });
-    tl.from(
-      split.chars,
-      {
-        opacity: 0,
-        yPercent: 55,
-        duration: 0.7,
-        stagger: { each: 0.016, from: 'start' },
-      },
-      0.18
-    );
+    if (title.querySelector('[data-rotator]')) {
+      // Headline cycles its own words (app.ts) — reveal it as one block
+      // instead of char-splitting, which would tear the stacked rotator.
+      tl.from(title, { opacity: 0, yPercent: 8, duration: 0.7 }, 0.18);
+    } else {
+      const split = new SplitText(title, { type: 'words,chars', charsClass: 'hero-char' });
+      tl.from(
+        split.chars,
+        {
+          opacity: 0,
+          yPercent: 55,
+          duration: 0.7,
+          stagger: { each: 0.016, from: 'start' },
+        },
+        0.18
+      );
+    }
   }
   if (stages.length) {
     tl.to(stages, { opacity: 1, y: 0, duration: 0.8, stagger: 0.09 }, 0.55);

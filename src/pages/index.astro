@@ -93,10 +93,15 @@ const steps = [
 
     <div class="wrap hero-content">
       <p class="eyebrow mb-5" data-hero-stage style="--stage:0">
-        Solar, done properly · Pakistan
+        Power Smarter. Live Brighter.
       </p>
-      <h1 class="font-display text-display max-w-[13ch] text-balance" data-hero-title>
-        The sun doesn’t do load&#8209;shedding.
+      <h1 class="hero-headline font-display text-display max-w-[16ch] text-balance" data-hero-title>
+        <span class="hero-fixed">Let the sun</span>
+        <span class="rotator" data-rotator aria-label="power your home.">
+          <span class="rot-word is-on" aria-hidden="true">work for you.</span>
+          <span class="rot-word" aria-hidden="true">beat load shedding.</span>
+          <span class="rot-word" aria-hidden="true">pay your bill.</span>
+        </span>
       </h1>
       <p class="text-lede text-ink-2 max-w-xl mt-6" data-hero-stage style="--stage:1">
         Cut your bill by up to <strong class="text-ink">90%</strong>, keep the fans turning through
@@ -124,20 +129,15 @@ const steps = [
         <li class="chip"><Icon name="pin" size={15} class="text-gold" /> A Lahore office you can visit</li>
       </ul>
     </div>
-
-    <div class="hero-cue" data-hero-stage style="--stage:4" aria-hidden="true">
-      <span class="hero-cue-line"></span>
-      <span class="font-mono text-[0.65rem] tracking-[0.25em] uppercase text-ink-3">Scroll</span>
-    </div>
   </section>
 
   <!-- ═══════════════ HONEST NUMBERS ═══════════════ -->
   <section class="section">
     <div class="wrap">
       <SectionHead
-        eyebrow="The honest math"
-        title="Numbers first. Sales talk never."
-        titleHtml="Numbers first. <em>Sales talk</em> never."
+        eyebrow="Math You Can Trust"
+        title="Data First. Decisions Second."
+        titleHtml="Data First. <br><em>Decisions Second.</em>"
         lede="Pakistan’s tariffs are brutal and its sunshine is free — solar here pays back faster than almost anywhere on earth. Here’s the honest shape of it, before you give us a single detail."
       />
       <div class="grid gap-4 sm:grid-cols-3 mt-12" data-reveal-group>
@@ -173,56 +173,62 @@ const steps = [
 
   <!-- ═══════════════ BILL SLIDER TEASER ═══════════════ -->
   <section class="section pt-0" id="bill-slider">
-    <div class="wrap max-w-3xl">
-      <div class="card p-7 sm:p-10 slider-card" data-reveal>
-        <p class="eyebrow mb-3">The 10-second answer</p>
-        <h2 class="font-display text-h3">Drag your bill. Watch it shrink.</h2>
-
-        <div class="mt-8">
-          <div class="flex items-baseline justify-between gap-4 flex-wrap">
-            <p class="text-sm text-ink-3">Your monthly bill</p>
-            <p class="mono-num text-3xl text-ink" data-bs="bill">Rs 25,000</p>
-          </div>
-          <input
-            type="range"
-            min="8000"
-            max="200000"
-            step="1000"
-            value="25000"
-            class="bill-range mt-3"
-            aria-label="Monthly electricity bill in rupees"
-            data-bs-range
-          />
+    <div class="wrap max-w-5xl">
+      <div class="slider-grid" data-reveal>
+        <!-- Left: the pitch — outside the card -->
+        <div class="slider-intro">
+          <p class="eyebrow mb-3">The 10-second answer</p>
+          <h2 class="font-display text-h2">Drag your bill. Watch it shrink.</h2>
+          <p class="text-lg text-ink-3 mt-6">
+            Quick estimate — Lahore home with evening battery, 2026 net-billing rules. The full
+            calculator shows every assumption.
+          </p>
         </div>
 
-        <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 mt-8">
+        <!-- Right: the live numbers — the only thing inside the card -->
+        <div class="card p-7 sm:p-10 slider-card slider-panel">
           <div>
-            <p class="text-xs font-mono uppercase tracking-[0.16em] text-ink-3">New bill ≈</p>
-            <p class="mono-num text-xl sm:text-2xl text-money mt-1" data-bs="newBill">—</p>
+            <div class="flex items-baseline justify-between gap-4 flex-wrap">
+              <p class="text-sm text-ink-3">Your monthly bill</p>
+              <p class="mono-num text-3xl text-ink" data-bs="bill">Rs 25,000</p>
+            </div>
+            <input
+              type="range"
+              min="8000"
+              max="200000"
+              step="1000"
+              value="25000"
+              class="bill-range mt-3"
+              aria-label="Monthly electricity bill in rupees"
+              data-bs-range
+            />
           </div>
-          <div>
-            <p class="text-xs font-mono uppercase tracking-[0.16em] text-ink-3">System</p>
-            <p class="mono-num text-xl sm:text-2xl mt-1"><span data-bs="size">—</span> kW</p>
-          </div>
-          <div class="col-span-2 sm:col-span-1">
-            <p class="text-xs font-mono uppercase tracking-[0.16em] text-ink-3">Pays back in</p>
-            <p class="mono-num text-xl sm:text-2xl mt-1" data-bs="payback">—</p>
-          </div>
-        </div>
 
-        <p class="text-xs text-ink-3 mt-6">
-          Quick estimate — Lahore home with evening battery, 2026 net-billing rules. The full
-          calculator shows every assumption.
-        </p>
-        <a
-          href="/calculator"
-          class="btn btn-gold mt-5"
-          data-bs-link
-          data-evt="calc_open"
-          data-evt-src="slider"
-        >
-          Open the honest calculator <Icon name="arrow-right" size={17} />
-        </a>
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 mt-8">
+            <div>
+              <p class="text-xs font-mono uppercase tracking-[0.16em] text-ink-3">New bill ≈</p>
+              <p class="mono-num text-xl sm:text-2xl text-money mt-1" data-bs="newBill">—</p>
+            </div>
+            <div>
+              <p class="text-xs font-mono uppercase tracking-[0.16em] text-ink-3">System</p>
+              <p class="mono-num text-xl sm:text-2xl mt-1"><span data-bs="size">—</span> kW</p>
+            </div>
+            <div class="col-span-2 sm:col-span-1">
+              <p class="text-xs font-mono uppercase tracking-[0.16em] text-ink-3">Pays back in</p>
+              <p class="mono-num text-xl sm:text-2xl mt-1" data-bs="payback">—</p>
+            </div>
+          </div>
+
+          <a
+            href="/calculator"
+            class="btn btn-gold mt-8"
+            data-bs-link
+            data-evt="calc_open"
+            data-evt-src="slider"
+          >
+            Open the honest calculator <Icon name="arrow-right" size={17} />
+          </a>
+        </div>
       </div>
     </div>
   </section>
@@ -231,8 +237,8 @@ const steps = [
   <section class="section pt-0">
     <div class="wrap">
       <SectionHead
-        eyebrow="Two different problems"
-        title="A house feels the outage. A business counts it."
+        eyebrow="Solar Solutions for Every Property"
+        title="A home loses comfort. A business loses revenue."
         lede="Different pains, different math, different paperwork — so we treat them as different worlds."
       />
       <div class="grid gap-5 md:grid-cols-2 mt-12" data-reveal-group>
@@ -272,43 +278,7 @@ const steps = [
     </div>
   </section>
 
-  <!-- ═══════════════ JOURNEY ═══════════════ -->
-  <section class="section" id="journey" data-scene="steps">
-    <div class="wrap">
-      <SectionHead
-        eyebrow="How it works"
-        title="From first call to a meter that finally behaves."
-        lede="Four steps. You’ll know exactly where things stand at every one of them — starting with whether solar even makes sense for you."
-      />
-      <div class="journey mt-14">
-        <div class="journey-line" aria-hidden="true"><span data-steps-line></span></div>
-        <ol class="journey-list">
-          {
-            steps.map((s) => (
-              <li class="journey-step" data-reveal>
-                <div class="journey-dot" aria-hidden="true">
-                  <span class="mono-num">{s.n}</span>
-                </div>
-                <div class="journey-card card p-6 sm:p-7">
-                  <div class="flex flex-wrap items-baseline justify-between gap-2">
-                    <h3 class="font-display text-h3">{s.title}</h3>
-                    <p class="font-mono text-[0.7rem] uppercase tracking-[0.15em] text-accent">{s.meta}</p>
-                  </div>
-                  <p class="text-ink-2 mt-3 max-w-2xl">{s.body}</p>
-                </div>
-              </li>
-            ))
-          }
-        </ol>
-      </div>
-      <div class="mt-10 flex justify-center" data-reveal>
-        <a href="/quote" class="btn btn-gold btn-lg" data-evt="quote_open" data-evt-src="journey">
-          Start with the free survey <Icon name="arrow-right" size={18} />
-        </a>
-      </div>
-    </div>
-  </section>
-
+  
   <!-- ═══════════════ METER SCROLLY (2026 rules) ═══════════════ -->
   <section class="meter-scene theme-night" data-scene="meter">
     <div class="meter-pin" data-meter-pin>
@@ -414,49 +384,6 @@ const steps = [
     </div>
   </section>
 
-  <!-- ═══════════════ PACKAGES TEASER ═══════════════ -->
-  <section class="section">
-    <div class="wrap">
-      <SectionHead
-        eyebrow={`Straight prices · ${PRICES_AS_OF}`}
-        title="“5kW solar price?” Asked constantly. Answered here."
-        lede="Turnkey bands for Tier-1 hardware, honestly ranged — because panel prices move with the dollar. Your exact quote gets locked in writing after the free survey."
-      />
-      <div class="grid gap-4 md:grid-cols-3 mt-12" data-reveal-group>
-        {
-          teaserPackages.map((p) => (
-            <a href="/pricing" class="pkg card p-7 block" data-reveal-child data-evt="pkg_card" data-evt-kw={String(p.kw)}>
-              <div class="flex items-baseline justify-between">
-                <p class="mono-num text-5xl text-accent">
-                  {p.kw}
-                  <span class="text-2xl">kW</span>
-                </p>
-                <Icon name="arrow-up-right" size={20} class="text-ink-3 pkg-arrow" />
-              </div>
-              <p class="mono-num text-xl mt-4">
-                Rs {(p.low / 100000).toFixed(1)} – {(p.high / 100000).toFixed(1)} lakh
-              </p>
-              <p class="text-sm text-ink-3 mt-1">installed · on-grid · Tier-1</p>
-              <hr class="rule my-5" />
-              <p class="text-sm text-ink-2">
-                Fits bills around{' '}
-                <strong class="text-ink">
-                  Rs {Math.round(p.billLow / 1000)}–{Math.round(p.billHigh / 1000)}k
-                </strong>
-                /month ({p.unitsLow}–{p.unitsHigh} units)
-              </p>
-            </a>
-          ))
-        }
-      </div>
-      <div class="mt-8 flex flex-wrap items-center gap-4" data-reveal>
-        <a href="/pricing" class="btn btn-ghost" data-evt="pricing_all">
-          All sizes &amp; what’s inside the price <Icon name="arrow-right" size={16} />
-        </a>
-        <p class="text-sm text-ink-3">Hybrid &amp; battery options priced on the <a href="/pricing" class="link-gold">pricing page</a>.</p>
-      </div>
-    </div>
-  </section>
 
   <!-- ═══════════════ TRUST / ANTI-SCAM ═══════════════ -->
   <section class="section theme-night trust-band">
@@ -637,6 +564,46 @@ const steps = [
     padding-top: 7.5rem;
     padding-bottom: clamp(6.5rem, 13vh, 9rem);
   }
+
+  /* ── Rotating headline word ── */
+  .hero-fixed {
+    display: block;
+  }
+  .rotator {
+    display: inline-grid;
+    position: relative;
+  }
+  .rot-word {
+    grid-area: 1 / 1; /* every word stacks in one cell — height = tallest */
+    /* Room for descenders (g, y, p): background-clip:text only paints
+       inside the line box, so the tight display line-height would clip
+       the glyph tails. */
+    line-height: 1.18;
+    padding-bottom: 0.14em;
+    background: linear-gradient(92deg, var(--gold-bright), var(--gold) 55%, var(--gold-deep));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    opacity: 0;
+    transform: translateY(0.5em);
+    transition:
+      opacity 0.5s var(--ease-out),
+      transform 0.5s var(--ease-out);
+  }
+  .rot-word.is-on {
+    opacity: 1;
+    transform: none;
+  }
+  .rot-word.is-off {
+    opacity: 0;
+    transform: translateY(-0.5em);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    /* No cycling (see app.ts); the shipped is-on word just sits there. */
+    .rot-word {
+      transition: none;
+    }
+  }
   .hero-chips {
     display: flex;
     flex-wrap: wrap;
@@ -649,42 +616,22 @@ const steps = [
     backdrop-filter: blur(6px);
     -webkit-backdrop-filter: blur(6px);
   }
-  .hero-cue {
-    position: absolute;
-    z-index: 2;
-    left: 50%;
-    bottom: 1.1rem;
-    transform: translateX(-50%);
-    display: none;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;
-  }
-  @media (min-width: 768px) {
-    .hero-cue {
-      display: flex;
-    }
-  }
-  .hero-cue-line {
-    width: 1px;
-    height: 2.4rem;
-    background: linear-gradient(to bottom, transparent, var(--gold));
-    animation: cue 2.6s var(--ease-inout) infinite;
-    transform-origin: top;
-  }
-  @keyframes cue {
-    0%, 100% { transform: scaleY(0.35); opacity: 0.4; }
-    50% { transform: scaleY(1); opacity: 1; }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .hero-cue-line { animation: none; }
-  }
-
   /* ── bill slider ── */
   .slider-card {
     background:
       radial-gradient(70% 120% at 100% 0%, rgb(242 166 60 / 0.07), transparent 55%),
       var(--surface);
+  }
+  .slider-grid {
+    display: grid;
+    gap: 2rem;
+  }
+  @media (min-width: 1024px) {
+    .slider-grid {
+      grid-template-columns: 0.9fr 1.1fr;
+      align-items: center;
+      gap: 3.5rem;
+    }
   }
   .bill-range {
     -webkit-appearance: none;
